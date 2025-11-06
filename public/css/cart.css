@@ -1,0 +1,101 @@
+/* General Body Styling */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f9f9f9;
+}
+
+/* Alert Messages */
+.alert {
+    margin-top: 15px;
+    width: 80%;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+/* Login Section */
+.login_part {
+    padding: 60px 0;
+    background-color: #ffffff;
+}
+
+.login_part .login_part_text {
+    background: #f1f1f1;
+    padding: 50px 15px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.login_part .login_part_text h2 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #222;
+}
+
+.login_part .login_part_text p {
+    font-size: 15px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.login_part .login_part_text .btn_3 {
+    background-color: #ff477e;
+    color: #fff;
+    padding: 12px 30px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+.login_part .login_part_text .btn_3:hover {
+    background-color: #e93a6b;
+}
+
+/* Login Form */
+.login_part_form {
+    padding: 50px 30px;
+    background: #f7f7f7;
+    border-radius: 10px;
+}
+
+.login_part_form h3 {
+    font-weight: 600;
+    font-size: 24px;
+    color: #222;
+    margin-bottom: 30px;
+}
+
+.form-control {
+    height: 50px;
+    border-radius: 30px;
+    padding-left: 20px;
+    border: 1px solid #ddd;
+}
+
+.form-control:focus {
+    border-color: #ff477e;
+    box-shadow: none;
+}
+
+.btn_3 {
+    width: 100%;
+    background-color: #ff477e;
+    padding: 12px;
+    border-radius: 30px;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+}
+
+.btn_3:hover {
+    background-color: #e93a6b;
+}
+
+.lost_pass {
+    display: block;
+    margin-top: 15px;
+    text-align: right;
+    color: #ff477e;
+}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup | LunaLoom</title>
+    <link rel="stylesheet" href="/css/signup.css">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="left-box">
+        <h1>New to our Shop?</h1>
+        <p>
+            There are advances being made in science and technology everyday,
+            and a good example of this is the...
+        </p>
+        <a href="/login"><button class="login-btn">LOG IN</button></a>
+    </div>
+
+    <div class="right-box">
+        <h2>Create an Account</h2>
+
+        <!-- ✅ SUCCESS MESSAGE -->
+        <% if (success) { %>
+            <div class="alert success"><%= success %></div>
+        <% } %>
+
+        <!-- ❌ ERROR MESSAGE -->
+        <% if (error) { %>
+            <div class="alert error"><%= error %></div>
+        <% } %>
+
+        <form action="/signup" method="POST">
+
+            <input type="text" name="username" class="form-control" placeholder="Username"  required>
+
+            <input type="email" name="email"  class="form-control" placeholder="Email"  required>
+
+            <input type="text" name="phone"  class="form-control" placeholder="Phone No"  required>
+
+            <input type="password" name="password"  class="form-control" placeholder="Password" required>
+
+            <input type="password" name="confirmPassword"  class="form-control" placeholder="Confirm Password" required>
+
+            <button type="submit" class="signup-btn">SIGN UP</button>
+        </form>
+
+        <a href="/auth/google" class="google-btn">
+            <img src="/images/google-icon.png" alt=""> Sign in with Google
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,57 @@
+/* Login page specific styles */
+
+.login_part {
+    background: #f9f9f9;
+}
+
+.login_part_text {
+    background: #ff9d9d;
+    padding: 40px;
+    border-radius: 10px;
+}
+
+.login_part_text_iner h2 {
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.login_part_form {
+    background: white;
+    padding: 40px 30px;
+    border-radius: 10px;
+    box-shadow: 0px 8px 20px rgba(0,0,0,0.1);
+}
+
+.login_part_form_iner h3 {
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+
+.creat_account {
+    margin-bottom: 15px;
+}
+
+.btn_3 {
+    background: #ff6f61;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    display: inline-block;
+    padding: 10px 30px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn_3:hover {
+    background: #ff4d4d;
+}
+
+.lost_pass {
+    color: #ff6f61;
+    font-size: 14px;
+    float: right;
+}
