@@ -28,9 +28,17 @@
         <% } %>
 
         <!-- ❌ ERROR MESSAGE -->
-        <% if (error) { %>
-            <div class="alert error"><%= error %></div>
-        <% } %>
+      
+   <% if (error && error.length > 0) { %>
+    <div class="alert error">
+        <ul style="margin: 0; padding-left: 20px;">
+            <% error.forEach(err => { %>
+                <li><%= err.msg %></li>
+            <% }) %>
+        </ul>
+    </div>
+    <% } %>
+
 
         <form action="/signup" method="POST">
 

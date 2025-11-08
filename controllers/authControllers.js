@@ -24,7 +24,7 @@ async function signupUser(req,res) {
     const newUser = new User({name:username,email,phoneNumber:phone,password:hashedPassword})
 
     await newUser.save();
-    return res.redirect('user/login')
+    return res.redirect('/login')
 
 
 
@@ -60,7 +60,7 @@ async function loginUser(req,res) {
     }
 
 
-    return res.redirect('user/home')
+    return res.redirect('/home')
 
   } catch (error) {
     console.error(error)
