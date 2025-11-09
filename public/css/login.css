@@ -45,13 +45,15 @@
     cursor: pointer;
     transition: 0.3s;
 }
-
+/* 
 .btn_3:hover {
-    background: #ff4d4d;
-}
+    background: #ff4d4d; 
+    
+} */
 
 .lost_pass {
-    color: #ff6f61;
+    /* color: #ff6f61; */
+    color :purple #6f42c1;
     font-size: 14px;
     float: right;
 }

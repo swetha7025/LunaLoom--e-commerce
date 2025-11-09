@@ -20,13 +20,11 @@ router.get("/login", (req, res) => {
 
 router.post("/login",loginValidator, authControllers.loginUser);
 
-router.get("/home", (req, res) => {
+ router.get("/home", (req, res) => {
   res.render('user/home', { user: req.user,success:null,error:null }); 
   
 });
-
-
-
+ 
 
 
 

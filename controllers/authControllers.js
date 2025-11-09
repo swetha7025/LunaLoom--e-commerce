@@ -58,8 +58,7 @@ async function loginUser(req,res) {
     if(!isMatch){
       return res.render('user/login',{success : null, error : 'Password do not match'})
     }
-
-
+    
     return res.redirect('/home')
 
   } catch (error) {

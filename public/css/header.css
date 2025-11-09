@@ -1,0 +1,62 @@
+/* ===== Header Styles ===== */
+
+.main_menu {
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+.navbar {
+  padding: 15px 0;
+}
+
+.navbar-brand img {
+  max-width: 150px;
+}
+
+.navbar-light .navbar-nav .nav-link {
+  color: #333;
+  font-weight: 500;
+  margin-right: 20px;
+  text-transform: capitalize;
+  transition: color 0.3s ease;
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+  color: #007bff;
+}
+
+.navbar-toggler {
+  border: none;
+}
+
+.menu_icon i {
+  color: #333;
+  font-size: 22px;
+}
+
+.header_icon a {
+  color: #333;
+  font-size: 20px;
+  margin-left: 15px;
+  transition: color 0.3s ease;
+}
+
+.header_icon a:hover {
+  color: #007bff;
+}
+
+/* Mobile adjustments */
+@media (max-width: 991px) {
+  .navbar-nav {
+    background: #fff;
+    text-align: center;
+    padding: 10px 0;
+  }
+
+  .navbar-nav .nav-item {
+    margin: 10px 0;
+  }
+}
