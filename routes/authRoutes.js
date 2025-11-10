@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 const authControllers = require("../controllers/authControllers");
 const {signupValidator,loginValidator} = require('../middleware/validateUser')
-
+const passport = require("passport")
 //-------------------signup------------------------------
 
 
@@ -20,15 +20,29 @@ router.get("/login", (req, res) => {
 
 router.post("/login",loginValidator, authControllers.loginUser);
 
+
+//---------------------------------------home------------------------
  router.get("/home", (req, res) => {
   res.render('user/home', { user: req.user,success:null,error:null }); 
   
 });
  
 
+//---------------------------------passport--------------------
 
 
+router.get('/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
 
+
+router.get('/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/login?error=already',failureMessage:true }),
+  (req, res) => {
+    
+    res.redirect('/')
+  }
+);
 
 
 

@@ -11,12 +11,12 @@ const userSchema = new mongoose.Schema({
         type : String,
     },
     phoneNumber : {
-        required : true,
+        required : function(){return !this.googleId},
         unique : true,
         type : Number,
     },
     password : {
-        required : true,
+        required : function(){return !this.googleId},
         type : String,
     },
     isBlock : {
@@ -29,7 +29,11 @@ const userSchema = new mongoose.Schema({
     },
 
 
-
+    googleId :{
+        type : String,
+        unique : true,
+        sparse:true,
+    }
 
 
 
