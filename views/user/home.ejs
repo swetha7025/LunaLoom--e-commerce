@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zxx">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -14,20 +14,21 @@
   <link rel="stylesheet" href="/css/magnific-popup.css">
   <link rel="stylesheet" href="/css/slick.css">
   <link rel="stylesheet" href="/css/style.css">
-  <link rel="stylesheet" href="/css/home.css">
 </head>
 
 <body>
-  <!-- header -->
-  <%- include('../partials/header'); %>
+  <!-- Header -->
+  <%- include('../partials/header') %>
 
-  <!-- success / error messages -->
-  <%- include('../partials/messages'); %>
+  <!-- Flash Messages -->
+  <% if (success) { %>
+    <div class="alert alert-success text-center mt-3"><%= success%></div>
+  <% } %>
+  <% if (error) { %>
+    <div class="alert alert-danger text-center mt-3"><%= error %></div>
+  <% } %>
 
-  
-
-
-  <!-- banner part -->
+  <!-- Banner -->
   <section class="banner_part">
     <div class="container">
       <div class="row align-items-center">
@@ -43,49 +44,164 @@
       </div>
     </div>
     <div class="banner_img">
-      <img src="/img/banner_new.png" alt="LunaLoom Banner" class="img-fluid">
+      <img src="/img/banner_new.png" alt="#" class="img-fluid">
       <img src="/img/banner_pattern.png" alt="#" class="pattern_img img-fluid">
     </div>
   </section>
 
-  <!-- product + content -->
+  <!-- Product list start -->
   <section class="single_product_list">
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
+
+          <% const products = [
+            { img: "single_product_1.png", title: "Printed memory foam brief modern throw pillow case" },
+            { img: "floral_bedsheet.png", title: "Floral printed  premium bedsheet" },
+            { img: "bedsheet1.png", title: "comfort with our premium bedspreads, thoughtfully crafted from soft, hypoallergenic fabrics" }
+          ]; %>
+
+          <% products.forEach(p => { %>
           <div class="single_product_iner">
             <div class="row align-items-center justify-content-between">
               <div class="col-lg-6 col-sm-6">
                 <div class="single_product_img">
-                  <img src="/img/single_product_1.png" class="img-fluid" alt="#">
+                  <img src="/img/<%= p.img %>" class="img-fluid" alt="#">
                   <img src="/img/product_overlay.png" alt="#" class="product_overlay img-fluid">
                 </div>
               </div>
               <div class="col-lg-5 col-sm-6">
                 <div class="single_product_content">
                   <h5>Started from $10</h5>
-                  <h2><a href="/single-product">Printed memory foam brief modern throw pillow case</a></h2>
+                  <h2><a href="/single-product"><%= p.title %></a></h2>
                   <a href="/product_list" class="btn_3">Explore Now</a>
                 </div>
               </div>
             </div>
           </div>
+          <% }) %>
 
-          <!-- Repeat other product sections here (you can copy them from original HTML) -->
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Product list end -->
+
+  <!-- Trending items -->
+  <section class="trending_items">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h2>Trending Items</h2>
+        </div>
+      </div>
+      <div class="row">
+        <% const trending = [
+          { img: "bedspread1.png", name: "Malabar stripe ribbed Bedspread" },
+          { img: "pillow1.png", name: "Foam filling cotton slow rebound pillows" },
+          { img: "bedspread4.png", name: "Diamond Bedspread"},
+          { img: "bedsheet3.png", name: "Pincheck Bedsheet" },
+          { img: "pillow2.png", name: "Blossom Embroidered pillows" },
+          { img: "bedsheet4.png", name: "Bergen Bedsheet" }
+        ]; %>
+        <% trending.forEach(item => { %>
+          <div class="col-lg-4 col-sm-6">
+            <div class="single_product_item">
+              <img src="/img/<%= item.img %>" alt="#" class="img-fluid">
+              <h3><a href="/single-product"><%= item.name %></a></h3>
+              <p>From $5</p>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+
+  <!-- Client review -->
+  <section class="client_review">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="client_review_slider owl-carousel">
+            <% const reviews = [
+              { img: "client.png", name: "Micky Mouse" },
+              { img: "client_1.png", name: "Micky Mouse" },
+              { img: "client_2.png", name: "Micky Mouse" }
+            ]; %>
+            <% reviews.forEach(r => { %>
+              <div class="single_client_review">
+                <div class="client_img">
+                  <img src="/img/<%= r.img %>" alt="#">
+                </div>
+                <p>"Working in conjunction with humanitarian aid agencies, we have supported programmes to help alleviate human suffering."</p>
+                <h5>- <%= r.name %></h5>
+              </div>
+            <% }) %>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- footer -->
-  <%- include('../partials/footer'); %>
+  <!-- Feature part -->
+  <section class="feature_part section_padding">
+    <div class="container">
+      <div class="row justify-content-between">
+        <div class="col-lg-6">
+          <div class="feature_part_tittle">
+            <h3>Credibly innovate granular internal or organic sources whereas standards.</h3>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="feature_part_content">
+            <p>Seamlessly empower fully researched growth strategies and interoperable internal or “organic” sources. Credibly innovate granular internal or “organic” sources whereas high standards in web-readiness.</p>
+          </div>
+        </div>
+      </div>
 
-  <!-- JS -->
+      <div class="row justify-content-center">
+        <% const features = [
+          { img: "feature_icon_1.svg", name: "Credit Card Support" },
+          { img: "feature_icon_2.svg", name: "Online Order" },
+          { img: "feature_icon_3.svg", name: "Free Delivery" },
+          { img: "feature_icon_4.svg", name: "Product with Gift" }
+        ]; %>
+        <% features.forEach(f => { %>
+          <div class="col-lg-3 col-sm-6">
+            <div class="single_feature_part">
+              <img src="/img/icon/<%= f.img %>" alt="#">
+              <h4><%= f.name %></h4>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+
+  <!-- Subscribe -->
+  <section class="subscribe_part section_padding">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+          <h2>Get promotions & updates!</h2>
+          <p>Seamlessly empower fully researched growth strategies and interoperable internal or “organic” sources credibly innovate granular internal.</p>
+          <div class="subscribe_form">
+            <input type="email" placeholder="Enter your mail">
+            <a href="#" class="btn_1">Subscribe</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <%- include('../partials/footer') %>
+
+  <!-- Scripts -->
   <script src="/js/jquery-1.12.1.min.js"></script>
   <script src="/js/popper.min.js"></script>
   <script src="/js/bootstrap.min.js"></script>
   <script src="/js/owl.carousel.min.js"></script>
-  <script src="/js/jquery.magnific-popup.js"></script>
   <script src="/js/slick.min.js"></script>
   <script src="/js/custom.js"></script>
 </body>

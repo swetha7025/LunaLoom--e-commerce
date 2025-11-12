@@ -8,9 +8,9 @@
   border-bottom: 1px solid #ddd;
 }
 
-.footer_logo img {
-  max-width: 150px;
-}
+ .footer_logo img {
+  max-width: 40px;
+} 
 
 .footer_menu {
   display: flex;
@@ -51,3 +51,4 @@
   color: #555;
   font-size: 14px;
 }
+

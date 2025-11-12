@@ -12,9 +12,13 @@
   padding: 15px 0;
 }
 
+
 .navbar-brand img {
-  max-width: 150px;
+  max-width: 40px; 
+  height: auto;
 }
+ 
+
 
 .navbar-light .navbar-nav .nav-link {
   color: #333;
@@ -60,3 +64,4 @@
     margin: 10px 0;
   }
 }
+

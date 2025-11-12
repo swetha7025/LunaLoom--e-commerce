@@ -1,0 +1,93 @@
+body {
+  background-color: #f9f9fb;
+  font-family: 'Poppins', sans-serif;
+}
+
+.profile-container {
+  margin-top: 50px;
+}
+
+.sidebar {
+  background-color: #fff;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.profile-icon {
+  background-color: #ff3b3b;
+  color: #fff;
+  font-size: 36px;
+  font-weight: 600;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 15px;
+}
+
+.profile-name {
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.profile-email,
+.profile-phone {
+  color: #777;
+  font-size: 14px;
+}
+
+.btn-danger {
+  background-color: #ff3b3b;
+  border: none;
+  font-weight: 500;
+}
+
+.nav-link {
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.nav-link.active,
+.nav-link:hover {
+  color: #fff;
+  background-color: #ff3b3b;
+  border-radius: 6px;
+  padding: 8px;
+}
+
+.logout {
+  display: block;
+  margin-top: 15px;
+  color: #ff3b3b;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.orders-section {
+  background-color: #fff;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.orders-title {
+  font-weight: 600;
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+.orders-box {
+  background-color: #f9f9fb;
+  border-radius: 10px;
+  padding: 40px 0;
+}
+
+.no-orders {
+  font-weight: 600;
+  font-size: 18px;
+  color: #333;
+}

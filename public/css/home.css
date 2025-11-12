@@ -53,10 +53,10 @@
   color: #ff7c57;
 }
 
-
+/* 
 .navbar-brand img,
 .footer_logo img,
 .site-log{
-  width: 150px;
-  height: 120px;
-}
+  width: 40px;
+  height: auto;
+} */

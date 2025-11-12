@@ -34,15 +34,20 @@
 
         <!-- ❌ ERROR MESSAGE -->
       
-   <% if (error && error.length > 0) { %>
-    <div class="alert error">
-        <ul style="margin: 0; padding-left: 20px;">
-            <% error.forEach(err => { %>
-                <li><%= err.msg %></li>
-            <% }) %>
-        </ul>
-    </div>
-    <% } %>
+      <% if (error) { %>
+      <div class="alert error">
+       <ul style="margin: 0; padding-left: 20px;">
+        <% if (Array.isArray(error)) { %>
+        <% error.forEach(err => { %>
+          <li><%= err.msg %></li>
+        <% }) %>
+        <% } else { %>
+        <li><%= error %></li>
+        <% } %>
+       </ul>
+       </div>
+           <% } %>
+
 
 
         <form action="/signup" method="POST">

@@ -1,0 +1,43 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify</title>
+  <link rel="stylesheet" href="/css/verify.css">
+</head>
+<body>
+  <div class="verify-container">
+    <% if (success) { %>
+      <div class="success"><%= success %></div>
+    <% } %>
+    <% if (error) { %>
+      <div class="error"><%= error %></div>
+    <% } %>
+
+    <div class="verify-box">
+      <h2>Verify</h2>
+      <p>Your code was sent to you via email</p>
+
+      <form action="/verify" method="POST" class="otp-form">
+        <input type="hidden" name="email" value="<%= email %>" />
+
+        <div class="otp-inputs">
+          <input type="text" name="digit1" maxlength="1" required>
+          <input type="text" name="digit2" maxlength="1" required>
+          <input type="text" name="digit3" maxlength="1" required>
+          <input type="text" name="digit4" maxlength="1" required>
+          <input type="text" name="digit5" maxlength="1" required>
+          <input type="text" name="digit6" maxlength="1" required>
+        </div><br>
+        <button type="submit" class="verify-btn">Verify</button>
+      </form><br>
+
+      <p class="resend-text">
+        Didn't receive code? <a href="/resend">Request again</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>
+ 

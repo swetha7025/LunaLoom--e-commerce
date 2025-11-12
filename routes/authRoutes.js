@@ -3,8 +3,12 @@ const express = require("express");
 const router = express.Router();
 const authControllers = require("../controllers/authControllers");
 const {signupValidator,loginValidator} = require('../middleware/validateUser')
+const {protectedAuth} = require("../middleware/auth")
 const passport = require("passport")
-//-------------------signup------------------------------
+
+
+
+//-------------------signup-----------------------------------------
 
 
 router.get("/signup", (req, res) => {
@@ -13,22 +17,22 @@ router.get("/signup", (req, res) => {
 
 router.post("/signup", signupValidator, authControllers.signupUser);
 
-//--------------------login----------------------
+//--------------------login--------------------------------------------
 router.get("/login", (req, res) => {
     res.render('user/login', { success: null, error: null });
 });
 
-router.post("/login",loginValidator, authControllers.loginUser);
+router.post("/login",loginValidator,protectedAuth,authControllers.loginUser);
 
 
-//---------------------------------------home------------------------
+//---------------------------------------home-----------------------------
  router.get("/home", (req, res) => {
   res.render('user/home', { user: req.user,success:null,error:null }); 
   
 });
  
 
-//---------------------------------passport--------------------
+//---------------------------------passport--------------------------------
 
 
 router.get('/auth/google',
@@ -37,19 +41,21 @@ router.get('/auth/google',
 
 
 router.get('/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/login?error=already',failureMessage:true }),
+  passport.authenticate('google', { failureRedirect: '/login?error=auth_failed',}),
   (req, res) => {
     
-    res.redirect('/')
+    res.redirect('/home')
   }
 );
 
+//----------------------------------------forgot password----------------------
 
 
+router.get('/forgotPassword',(req,res)=>{
+  res.render('user/forgotPassword',{success:null,error:null})
+})
 
-
-
-
+router.post('/forgotPassword',authControllers.forgotpassword)
 
 
 

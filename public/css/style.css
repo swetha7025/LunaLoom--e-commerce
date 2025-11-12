@@ -8691,3 +8691,27 @@ h6 {
 }
 
 /*# sourceMappingURL=../css/style.map */
+
+/* ---- LOGO SIZE FIX ---- */
+.navbar-brand img {
+  height: 55px !important;    /* Adjust this to 30–35px for ideal proportions */
+  width: auto!important;
+  object-fit: contain !important;
+  display: block;
+  transform: scale(3);     /* Shrinks visible area if image has white space */
+  transform-origin: left center;
+}
+
+/* ---- Align Navbar items with logo ---- */
+.navbar {
+  align-items: center !important;
+  padding: 20px 0 !important;
+}
+
+/* ---- Remove extra spacing from brand ---- */
+.navbar-brand {
+  margin-right: 20px !important;
+  padding: 0 !important;
+  display: flex;
+  align-items: center;
+}
