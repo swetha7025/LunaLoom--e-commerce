@@ -139,6 +139,8 @@ async function forgotpassword(req,res) {
   } catch (error) {
     console.error('Error forgot password:',error.message,error.stack);
     res.render('user/forgotPassword',{success:null,error:'Failed to send otp. Try again'})
+ 
+ 
   }
 }
 
