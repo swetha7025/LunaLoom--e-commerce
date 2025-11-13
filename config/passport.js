@@ -26,6 +26,7 @@ passport.use(
           name: profile.displayName,
           email: email.toLowerCase(),
           googleId: profile.id,
+          phoneNumber:'Null'
         });
 
         return done(null, user);

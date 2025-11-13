@@ -13,7 +13,8 @@ const userSchema = new mongoose.Schema({
     phoneNumber : {
         required : function(){return !this.googleId},
         unique : true,
-        type : Number,
+        type : String,
+         sparse: true,
     },
     password : {
         required : function(){return !this.googleId},

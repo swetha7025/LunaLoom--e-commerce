@@ -57,6 +57,41 @@ router.get('/forgotPassword',(req,res)=>{
 
 router.post('/forgotPassword',authControllers.forgotpassword)
 
+//------------------------------verify otp---------------------------------
+
+
+router.get('/verify', (req, res) => {
+  res.render('user/verify', { success: null, error: null });
+});
+
+router.post('/verify', authControllers.verify);
+
+
+//-------------------------------reset password---------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
