@@ -28,7 +28,10 @@ const userSchema = new mongoose.Schema({
         type : Number,
         otpExpires : Date,
     },
-
+     resetotp: {
+      type: String,
+      otpExpires: Date,
+    },
 
     googleId :{
         type : String,

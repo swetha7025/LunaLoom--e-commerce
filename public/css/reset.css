@@ -1,6 +1,6 @@
 body {
     font-family: 'Poppins', sans-serif;
-    background: black;
+    background:white;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -11,7 +11,7 @@ body {
     background: #fff;
     padding: 60px;
     border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 20px  rgb(214, 130, 176);
     text-align: center;
     width: 500px;
 }
@@ -42,7 +42,7 @@ input {
     margin-top: 25px;
     width: 80%;
     padding: 12px;
-    background-color: #0d27ff;
+    background-color:#94196f ;
     color: #fff;
     font-size: 16px;
     font-weight: 600;
@@ -53,7 +53,7 @@ input {
 }
 
 .btn:hover {
-    background-color: #0517cc;
+    background-color: rgb(214, 130, 176) ;
 }
 
 

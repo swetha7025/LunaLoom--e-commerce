@@ -8,7 +8,7 @@ const passport = require("passport")
 
 
 
-//-------------------signup-----------------------------------------
+//---------------------------SIGNUP-----------------------------------------
 
 
 router.get("/signup", (req, res) => {
@@ -17,7 +17,7 @@ router.get("/signup", (req, res) => {
 
 router.post("/signup", signupValidator, authControllers.signupUser);
 
-//--------------------login--------------------------------------------
+//----------------------------LOGIN--------------------------------------
 router.get("/login", (req, res) => {
     res.render('user/login', { success: null, error: null });
 });
@@ -25,30 +25,51 @@ router.get("/login", (req, res) => {
 router.post("/login",loginValidator,protectedAuth,authControllers.loginUser);
 
 
-//---------------------------------------home-----------------------------
+//---------------------------------------HOME-----------------------------
  router.get("/home", (req, res) => {
   res.render('user/home', { user: req.user,success:null,error:null }); 
   
 });
  
 
-//---------------------------------passport--------------------------------
+//---------------------------------PASSPORT--------------------------------
 
 
-router.get('/auth/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] })
+// ---- GOOGLE SIGNUP ----
+router.get(
+  "/auth/google/signup",
+  passport.authenticate("google-signup", { scope: ["profile", "email"] })
 );
 
-
-router.get('/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/login?error=auth_failed',}),
-  (req, res) => {
-    
-    res.redirect('/home')
+router.get(
+  "/auth/google/signup/callback",
+  passport.authenticate("google-signup", {
+    failureRedirect: "/signup?error=google_signup_failed",
+  }),
+  (req, res, next) => {
+    req.login(req.user, (err) => {
+      if (err) return next(err);
+      res.redirect("/home");
+    });
   }
 );
 
-//----------------------------------------forgot password----------------------
+// ---- GOOGLE LOGIN ----
+router.get(
+  "/auth/google/login",
+  passport.authenticate("google-login", { scope: ["profile", "email"] })
+);
+
+router.get(
+  "/auth/google/login/callback",
+  passport.authenticate("google-login", {
+    failureRedirect: "/login?error=google_login_failed",
+    successRedirect: "/home",
+  })
+);
+
+
+//----------------------------------------FORGOT PASSWORD----------------------
 
 
 router.get('/forgotPassword',(req,res)=>{
@@ -57,7 +78,7 @@ router.get('/forgotPassword',(req,res)=>{
 
 router.post('/forgotPassword',authControllers.forgotpassword)
 
-//------------------------------verify otp---------------------------------
+//------------------------------VERIFY OTP---------------------------------
 
 
 router.get('/verify', (req, res) => {
@@ -67,12 +88,14 @@ router.get('/verify', (req, res) => {
 router.post('/verify', authControllers.verify);
 
 
-//-------------------------------reset password---------------------------------
+//-------------------------------RESET PASSWORD---------------------------------
 
 
+router.get('/resetPassword',(req,res)=>{
+  res.render('user/resetPassword',{success : null, error : null})
+})
 
-
-
+router.post('/resetPassword',authControllers.resetPassword)
 
 
 

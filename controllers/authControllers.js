@@ -6,7 +6,7 @@ const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 
-//-----------------------------signup---------------------------------------
+//-----------------------------SIGN UP---------------------------------------
 async function signupUser(req,res) {
   try {
     const {username,email,phone,password,confirmPassword} = req.body
@@ -45,7 +45,7 @@ async function signupUser(req,res) {
 }
 
 
-//----------------------------------login------------------------------------
+//----------------------------------LOGIN------------------------------------
 async function loginUser(req,res) {
 
   try {
@@ -97,7 +97,7 @@ async function loginUser(req,res) {
   
 }
 
-//-------------------------------forgot password----------------------------------
+//-------------------------------FORGOT PASSWORD----------------------------------
 
 
 async function forgotpassword(req,res) {
@@ -147,7 +147,7 @@ async function forgotpassword(req,res) {
 }
 
 
-//--------------------------------------verify otp-----------------------------------
+//--------------------------------------VERIFY OTP-----------------------------------
 
 
 async function verify(req, res) {
@@ -161,15 +161,13 @@ async function verify(req, res) {
       return res.render("user/forgotPassword", { email, success: null, error: "User not found." });
     }
 
-    if (Number(otpJoin) !== user.resetotp) {
-      return res.render("user/verify", { email, success: null, error: "Invalid OTP." });
+    console.log("Entered OTP:", otpJoin);
+    console.log("Stored OTP:", user.resetotp);
+
+    if (otpJoin !== user.resetotp.toString()) {
+      return res.render("user/forgotPassword", { email, success: null, error: "Invalid OTP." });
     }
 
-    if (user.otpExpires < new Date()) {
-      return res.render("user/verify", { email, success: null, error: "OTP expired." });
-    }
-
-    
     return res.render("user/resetPassword", {
       userId: user._id,
       email: user.email,
@@ -179,7 +177,7 @@ async function verify(req, res) {
 
   } catch (error) {
     console.error("Error from verifyOtp:", error.message);
-    return res.render("user/verify", {
+    return res.render("user/forgotPassword", {
       email,
       success: null,
       error: "Something went wrong. Please try again."
@@ -187,10 +185,29 @@ async function verify(req, res) {
   }
 }
 
-//--------------------------------------reset password---------------------------------
+//--------------------------------------RESET PASSWORD---------------------------------
 
 
+async function resetPassword(req,res) {
+  const {id,email,password,confirmPassword} = req.body
+  
+  try {
+    if(password!==confirmPassword){
+      return res.render('user/resetPassword',{email,id,success:null, error:'Password do not match'})
+    }
 
+    const hashedPassword = await bcrypt.hash(password,10)
+
+    const user = await User.findByIdAndUpdate(id,{password:hashedPassword},{new:true})
+    res.render('user/login',{success:'Password changed successfully',error:null})  
+
+  
+  } catch (error) {
+    console.error('Error during reset password:',error.message,error.stack)
+
+    return res.render('user/resetPassword',{email,userId:id,success:null,error:'Something went wrong. Please try again'})
+  }
+}
 
 
 
@@ -210,5 +227,6 @@ module.exports = {
   signupUser,
   loginUser,
   forgotpassword,
-  verify
+  verify,
+  resetPassword
 }
