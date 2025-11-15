@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - LunaLoom</title>
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="/css/admin-dashboard.css">
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>LunaLoom Admin</h2>
+        <ul>
+            <li class="active"><i class="fa fa-chart-line"></i> Dashboard</li>
+            <li><i class="fa fa-receipt"></i> Orders</li>
+            <li><i class="fa fa-box"></i> Products</li>
+            <li><i class="fa fa-users"></i> Customers</li>
+            <li><i class="fa fa-tags"></i> Coupons</li>
+            <li><i class="fa fa-cog"></i> Settings</li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+
+        <div class="header">
+            <h1>Dashboard</h1>
+
+            <div class="profile">
+                <span><%= adminName %></span>&nbsp;&nbsp;
+                <img src="<%= adminImage %>" alt="Admin Avatar">
+            </div>
+        </div>
+
+        <!-- SUCCESS MESSAGE -->
+        <% if (success) { %>
+            <div class="alert success">
+                <%= success %>
+            </div>
+        <% } %>
+
+        <!-- ERROR MESSAGE -->
+        <% if (error) { %>
+            <div class="alert error">
+                <%= error %>
+            </div>
+        <% } %>
+
+        <!-- Stats Section -->
+        <div class="stats-container">
+
+            <div class="card">
+                <i class="fa fa-dollar-sign"></i>
+                <div>
+                    <h3>Total Sales</h3>
+                    <p><%= totalSales %></p>
+                </div>
+            </div>
+
+            <div class="card">
+                <i class="fa fa-receipt"></i>
+                <div>
+                    <h3>Total Orders</h3>
+                    <p><%= totalOrders %></p>
+                </div>
+            </div>
+
+            <div class="card">
+                <i class="fa fa-box"></i>
+                <div>
+                    <h3>Products</h3>
+                    <p><%= products %></p>
+                </div>
+            </div>
+
+            <div class="card">
+                <i class="fa fa-users"></i>
+                <div>
+                    <h3>Customers</h3>
+                    <p><%= customers %></p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

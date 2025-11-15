@@ -6,13 +6,10 @@
     <title>Signup | LunaLoom</title>
     <link rel="stylesheet" href="/css/signup.css">
     
-   
-
+     
 </head>
+
 <body>
-
-
-
 
 <div class="container">
 
@@ -28,50 +25,54 @@
     <div class="right-box">
         <h2>Create an Account</h2>
 
-        <!-- ✅ SUCCESS MESSAGE -->
+        <!-- Success Message -->
         <% if (success) { %>
             <div class="alert success"><%= success %></div>
         <% } %>
 
-        <!-- ❌ ERROR MESSAGE -->
-      
-      <% if (error) { %>
-      <div class="alert error">
-       <ul style="margin: 0; padding-left: 20px;">
-        <% if (Array.isArray(error)) { %>
-        <% error.forEach(err => { %>
-          <li><%= err.msg %></li>
-        <% }) %>
-        <% } else { %>
-        <li><%= error %></li>
+        <!-- Error Message -->
+        <% if (error) { %>
+        <div class="alert error">
+            <ul style="margin: 0; padding-left: 20px;">
+                <% if (Array.isArray(error)) { %>
+                    <% error.forEach(err => { %>
+                        <li><%= err.msg %></li>
+                    <% }) %>
+                <% } else { %>
+                    <li><%= error %></li>
+                <% } %>
+            </ul>
+        </div>
         <% } %>
-       </ul>
-       </div>
-           <% } %>
 
-
-
+        <!-- Signup Form -->
         <form action="/signup" method="POST">
 
-            <input type="text" name="username" class="form-control" placeholder="Username"  required>
+            <input type="text" name="username" class="form-control" placeholder="Username" required>
 
-            <input type="email" name="email"  class="form-control" placeholder="Email"  required>
+            <input type="email" name="email" class="form-control" placeholder="Email" required>
 
-            <input type="text" name="phone"  class="form-control" placeholder="Phone No"  required>
+            <input type="text" name="phone" class="form-control" placeholder="Phone No" required>
 
-            <input type="password" name="password"  class="form-control" placeholder="Password" required>
+            <input type="password" name="password" class="form-control" placeholder="Password" required>
 
-            <input type="password" name="confirmPassword"  class="form-control" placeholder="Confirm Password" required>
+            <input type="password" name="confirmPassword" class="form-control" placeholder="Confirm Password" required>
 
             <button type="submit" class="signup-btn">SIGN UP</button>
-        </form><br>
+        </form>
 
-        <a href="/auth/google/signup" class="google-btn">
-            <img src="/img/google-icon.png" alt=""> Sign in with Google
+        <br>
+
+        <!-- Google Sign-In -->
+        <a href="/auth/google" class="google-btn">
+            <img src="/img/google-icon.png" alt="Google Icon"> Sign in with Google
         </a>
     </div>
 
 </div>
 
+
+
 </body>
+
 </html>

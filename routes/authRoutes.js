@@ -35,37 +35,20 @@ router.post("/login",loginValidator,protectedAuth,authControllers.loginUser);
 //---------------------------------PASSPORT--------------------------------
 
 
-// ---- GOOGLE SIGNUP ----
 router.get(
-  "/auth/google/signup",
-  passport.authenticate("google-signup", { scope: ["profile", "email"] })
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
+
 router.get(
-  "/auth/google/signup/callback",
-  passport.authenticate("google-signup", {
-    failureRedirect: "/signup?error=google_signup_failed",
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "/login?error=auth_failed",
   }),
-  (req, res, next) => {
-    req.login(req.user, (err) => {
-      if (err) return next(err);
-      res.redirect("/home");
-    });
+  (req, res) => {
+    res.redirect("/home"); 
   }
-);
-
-// ---- GOOGLE LOGIN ----
-router.get(
-  "/auth/google/login",
-  passport.authenticate("google-login", { scope: ["profile", "email"] })
-);
-
-router.get(
-  "/auth/google/login/callback",
-  passport.authenticate("google-login", {
-    failureRedirect: "/login?error=google_login_failed",
-    successRedirect: "/home",
-  })
 );
 
 
