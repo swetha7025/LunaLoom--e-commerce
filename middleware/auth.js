@@ -26,6 +26,25 @@ async function protectedAuth(req,res,next) {
 }
 
 
+async function protectedAuthAdmin(req, res, next) {
+  const adminToken = req.cookies?.adminToken;
+
+  if (!adminToken) {
+    return res.redirect('/adminLogin');
+  }
+
+  try {
+    const payload = jwt.verify(adminToken, process.env.JWT_SECRET);
+    req.auth = payload;
+    next();
+  } catch (error) {
+    console.error('Token not verified:', error.message);
+    res.clearCookie('adminToken');
+    return res.redirect('/adminLogin');
+  }
+}
+
+
 
 
 
@@ -45,5 +64,6 @@ async function protectedAuth(req,res,next) {
 
 
 module.exports = {
-    protectedAuth
+    protectedAuth,
+    protectedAuthAdmin
 }
