@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Products - LunaLoom</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="/css/adminProducts.css">
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>LunaLoom Admin</h2>
+        <ul>
+            <li><i class="fa fa-chart-line"></i> Dashboard</li>
+            <li><i class="fa fa-receipt"></i> Orders</li>
+            <li class="active"><i class="fa fa-box"></i> Products</li>
+            <li><i class="fa fa-users"></i> Customers</li>
+            <li><i class="fa fa-tags"></i> Coupons</li>
+            <li><i class="fa fa-cog"></i> Settings</li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+
+        <div class="header">
+            <h1>Products</h1>
+            <a href="/admin/add-product">
+                <button class="add-btn">+ Add New Product</button>
+            </a>
+        </div>
+
+        <!-- Success & Error Messages -->
+        <% if (success) { %>
+            <div class="alert success"><%= success %></div>
+        <% } %>
+
+        <% if (error) { %>
+            <div class="alert error"><%= error %></div>
+        <% } %>
+
+        <!-- Categories Dropdown -->
+        <div class="select-container">
+            <div class="select-box">
+                <select>
+                    <option>All Categories</option>
+                    <option>Automatic</option>
+                    <option>Quartz</option>
+                    <option>Digital</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Product Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <% if (products && products.length > 0) { %>
+
+                    <% products.forEach((item, index) => { %>
+                        <tr>
+                            <td><%= index + 1 %></td>
+
+                            <td>
+                                <img src="<%= item.image %>" class="product-image" alt="Product">
+                            </td>
+
+                            <td><%= item.name %></td>
+
+                            <td><%= item.category %></td>
+
+                            <td>₹<%= item.price %></td>
+
+                            <td><%= item.stock %></td>
+
+                            <td>
+                                <% if (item.stock > 0) { %>
+                                    <span class="status available">Available</span>
+                                <% } else { %>
+                                    <span class="status out-of-stock">Out of Stock</span>
+                                <% } %>
+                            </td>
+
+                            <td>
+                                <a href="/admin/edit-product/<%= item._id %>">
+                                    <button class="btn btn-edit">Edit</button>
+                                </a>
+
+                                <form action="/admin/delete-product/<%= item._id %>" method="POST" style="display:inline;">
+                                    <button class="btn btn-delete" onclick="return confirm('Delete this product?');">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }); %>
+
+                <% } else { %>
+
+                    <tr>
+                        <td colspan="8" style="text-align:center; padding:20px;">
+                            No products found.
+                        </td>
+                    </tr>
+
+                <% } %>
+
+            </tbody>
+        </table>
+
+    </div>
+
+</body>
+</html>
