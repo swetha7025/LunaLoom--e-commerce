@@ -18,6 +18,9 @@ router.post('/adminlogin',adminControllers.adminLogin);
 router.get('/dashboard',protectedAuthAdmin,adminControllers.adminDashboard)
 
 
+router.get("/products", adminControllers.adminProducts);
+
+
 
 
 

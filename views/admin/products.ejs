@@ -7,7 +7,6 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <!-- External CSS -->
     <link rel="stylesheet" href="/css/adminProducts.css">
 </head>
 
@@ -17,12 +16,12 @@
     <div class="sidebar">
         <h2>LunaLoom Admin</h2>
         <ul>
-            <li><i class="fa fa-chart-line"></i> Dashboard</li>
-            <li><i class="fa fa-receipt"></i> Orders</li>
-            <li class="active"><i class="fa fa-box"></i> Products</li>
-            <li><i class="fa fa-users"></i> Customers</li>
-            <li><i class="fa fa-tags"></i> Coupons</li>
-            <li><i class="fa fa-cog"></i> Settings</li>
+            <li><a href="/dashboard"><i class="fa fa-chart-line"></i> Dashboard</a></li>
+            <li><a href="/orders"><i class="fa fa-receipt"></i> Orders</a></li>
+            <li class="active"><a href="/products"><i class="fa fa-box"></i> Products</a></li>
+            <li><a href="/customers"><i class="fa fa-users"></i> Customers</a></li>
+            <li><a href="/coupons"><i class="fa fa-tags"></i> Coupons</a></li>
+            <li><a href="/settings"><i class="fa fa-cog"></i> Settings</a></li>
         </ul>
     </div>
 
@@ -36,7 +35,6 @@
             </a>
         </div>
 
-        <!-- Success & Error Messages -->
         <% if (success) { %>
             <div class="alert success"><%= success %></div>
         <% } %>
@@ -45,19 +43,17 @@
             <div class="alert error"><%= error %></div>
         <% } %>
 
-        <!-- Categories Dropdown -->
         <div class="select-container">
             <div class="select-box">
                 <select>
                     <option>All Categories</option>
-                    <option>Automatic</option>
+                    <option>Bedsheet</option>
                     <option>Quartz</option>
                     <option>Digital</option>
                 </select>
             </div>
         </div>
 
-        <!-- Product Table -->
         <table>
             <thead>
                 <tr>

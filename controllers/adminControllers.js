@@ -1,4 +1,5 @@
 const adminModel = require('../models/admin');
+const productModel = require('../models/products')
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
@@ -84,6 +85,25 @@ async function adminDashboard(req, res) {
 
 
 
+async function adminProducts(req, res) {
+  try {
+    const products = await productModel.find();
+
+    res.render("admin/products", {
+      products,
+      success: null,
+      error: null
+    });
+
+  } catch (err) {
+    res.render("admin/products", {
+      products: [],
+      success: null,
+      error : null
+     // error: "Failed to load products"
+    });
+  }
+}
 
 
 
@@ -97,5 +117,6 @@ async function adminDashboard(req, res) {
 
 module.exports = {
     adminLogin,
-    adminDashboard
+    adminDashboard,
+    adminProducts
 }
