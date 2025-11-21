@@ -105,6 +105,69 @@ async function adminProducts(req, res) {
   }
 }
 
+//------------------------------------------ADD PRODUCTS-----------------------
+
+async function addProducts(req, res) {
+    res.render("admin/addProducts", {
+        success: null,
+        error: null
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -118,5 +181,6 @@ async function adminProducts(req, res) {
 module.exports = {
     adminLogin,
     adminDashboard,
-    adminProducts
+    adminProducts,
+    addProducts
 }

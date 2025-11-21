@@ -21,8 +21,9 @@ router.get('/dashboard',protectedAuthAdmin,adminControllers.adminDashboard)
 router.get("/products", adminControllers.adminProducts);
 
 
+router.get("/addProducts",adminControllers.addProducts)
 
-
+router.post("/addProducts", adminControllers.addProducts);
 
 
 
