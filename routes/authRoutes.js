@@ -1,4 +1,4 @@
-
+const User = require('../models/user')
 const express = require("express");
 const router = express.Router();
 const authControllers = require("../controllers/authControllers");
@@ -22,7 +22,9 @@ router.get("/login", (req, res) => {
     res.render('user/login', { success: null, error: null });
 });
 
-router.post("/login",loginValidator,protectedAuth,authControllers.loginUser);
+//router.post("/login",loginValidator,protectedAuth,authControllers.loginUser);
+router.post("/login", loginValidator, authControllers.loginUser);
+
 
 
 //---------------------------------------HOME-----------------------------
@@ -81,6 +83,9 @@ router.get('/resetPassword',(req,res)=>{
 router.post('/resetPassword',authControllers.resetPassword)
 
 
+//-----------------------------------PROFILE------------------------------
+
+router.get('/profile', protectedAuth,authControllers.profilePage);
 
 
 

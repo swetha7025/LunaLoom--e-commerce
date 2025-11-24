@@ -108,30 +108,6 @@ async function adminProducts(req, res) {
 
 //------------------------------------------ADD PRODUCTS-----------------------
 
-// async function addProducts(req, res) {
-
-//  const { name, category, price, stock, status } = req.body
-
-//      let imagePath =  null
-    
-//     if (req.file.filename) {
-//         imagePath = `/img/${req.file.filename}`;
-//     }
-
-    
-//     await productModel.create({
-//         name,
-//         category,
-//         price,
-//         stock,
-//         status,
-//         image: imagePath
-//     });
-
-//     console.log("addProducts - product created");
-
-//     return res.redirect("/admin/products");
-// };
 
 async function addProducts(req, res) {
   try {
@@ -169,6 +145,8 @@ async function addProducts(req, res) {
     return res.status(500).send("Error adding product");
   }
 }
+
+//----------------------------EDIT PRODUCT-----------------------------------
 
 
 

@@ -1,0 +1,262 @@
+/* -----------------------------------------------------------
+   BASIC STYLES
+------------------------------------------------------------*/
+
+/* Breadcrumb */
+.breadcrumb_part {
+    background: #f6f6f6;
+    padding: 60px 0;
+    text-align: center;
+}
+
+.breadcrumb_iner h2 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #333;
+}
+
+/* Product List Section */
+.product_list {
+    margin-top: 30px;
+}
+
+/* Sidebar */
+.product_sidebar {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+}
+
+.single_sedebar {
+    margin-bottom: 20px;
+}
+
+/* Input */
+.single_sedebar input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    outline: none;
+}
+
+/* -----------------------------------------------------------
+   DROPDOWN ANIMATION
+------------------------------------------------------------*/
+
+.select_option {
+    position: relative;
+    cursor: pointer;
+}
+
+.select_option_list {
+    background: #f9f9f9;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.select_option_list i {
+    float: right;
+    transition: 0.3s;
+}
+
+.select_option.active .select_option_list i {
+    transform: rotate(180deg);
+}
+
+/* Dropdown animated */
+.select_option_dropdown {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: all 0.4s ease;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    padding: 0 12px;
+    margin-top: 6px;
+}
+
+.select_option.active .select_option_dropdown {
+    max-height: 300px;
+    opacity: 1;
+    padding: 12px;
+}
+
+/* -----------------------------------------------------------
+   PRODUCT CARDS + HOVER EFFECT
+------------------------------------------------------------*/
+
+.single_product_item {
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    text-align: center;
+    transition: 0.35s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.single_product_item img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    border-radius: 15px;
+    transition: 0.35s;
+}
+
+/* Hover effect */
+.single_product_item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.single_product_item:hover img {
+    transform: scale(1.04);
+}
+
+.single_product_item h3 a {
+    text-decoration: none;
+    font-size: 18px;
+    color: #333;
+    display: block;
+    margin-top: 12px;
+}
+
+.single_product_item p {
+    color: #ff3d00;
+    font-weight: 600;
+    font-size: 17px;
+}
+
+/* -----------------------------------------------------------
+   LOAD MORE BUTTON
+------------------------------------------------------------*/
+
+.btn_3 {
+    padding: 10px 35px;
+    border-radius: 8px;
+    background: #ff3d00;
+    color: #fff !important;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.btn_3:hover {
+    background: #e03500;
+}
+
+/* -----------------------------------------------------------
+   RESPONSIVE FIXES
+------------------------------------------------------------*/
+
+@media (max-width: 991px) {
+    .product_sidebar {
+        margin-bottom: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .single_product_item img {
+        height: 220px;
+    }
+
+    .breadcrumb_iner h2 {
+        font-size: 26px;
+    }
+}
+
+@media (max-width: 576px) {
+    .single_product_item {
+        padding: 10px;
+    }
+
+    .single_product_item img {
+        height: 200px;
+    }
+
+    .subscribe_form {
+        flex-direction: column;
+    }
+
+    .subscribe_form input {
+        width: 100%;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
+
+    .btn_1 {
+        border-radius: 8px;
+        width: 100%;
+    }
+}
+
+/* -----------------------------------------------------------
+   DARK MODE (Auto-detect system preference)
+------------------------------------------------------------*/
+
+@media (prefers-color-scheme: dark) {
+
+    body {
+        background: #111 !important;
+        color: #eee;
+    }
+
+    .breadcrumb_part {
+        background: #1a1a1a;
+    }
+
+    .breadcrumb_iner h2 {
+        color: #eee;
+    }
+
+    .product_sidebar {
+        background: #1c1c1c;
+        border: 1px solid #333;
+    }
+
+    .single_sedebar input {
+        background: #222;
+        color: #eee;
+        border: 1px solid #444;
+    }
+
+    .select_option_list {
+        background: #222;
+        color: #eee;
+        border: 1px solid #333;
+    }
+
+    .select_option_dropdown {
+        background: #222;
+        border: 1px solid #333;
+    }
+
+    .single_product_item {
+        background: #1c1c1c;
+        box-shadow: none;
+        border: 1px solid #333;
+    }
+
+    .single_product_item h3 a {
+        color: #eee;
+    }
+
+    .btn_3 {
+        background: #ff5722;
+    }
+
+    .single_product_item p {
+        color: #ff7043;
+    }
+
+    .subscribe_part {
+        background: #1a1a1a;
+    }
+
+    .feature_part {
+        background: #1a1a1a;
+    }
+}

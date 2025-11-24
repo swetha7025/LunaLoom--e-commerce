@@ -73,20 +73,29 @@ async function loginUser(req,res) {
           name:user.name,
           email:user.email,
           googleId:user.googleId,
-          phone:user.phone
+          phoneNumber:user.phoneNumber
      },process.env.JWT_SECRET,{expiresIn:'7d'})
-
+      
+   
 
      res.cookie('token',token,{
       httpOnly: true,
       secure: process.env.NODE_ENV==='production',
-      sameSite: 'strict',
+      //sameSite: 'strict',
       maxAge: 7*24*60*60*1000,
      })
+
+     req.session.user = {
+    id: user._id,
+    name: user.name,
+    email: user.email,
+    phoneNumber: user.phoneNumber,
+    googleId: user.googleId
+    };
     
      return res.redirect('/home')
 
-
+ 
 
     
 
@@ -209,7 +218,29 @@ async function resetPassword(req,res) {
   }
 }
 
+//---------------------------------------PROFILE----------------------------------------
 
+
+
+async function profilePage(req, res) {
+  try {
+    const user = await User.findById(req.auth.id).lean();
+
+    if (!user) {
+      return res.render("user/login", { success: null, error: "User not found" });
+    }
+
+    res.render("user/profile", {
+      user,
+      success: null,
+      error: null
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.render("user/profile", { user: null, success: null, error: "Something went wrong" });
+  }
+}
 
 
 
@@ -228,5 +259,6 @@ module.exports = {
   loginUser,
   forgotpassword,
   verify,
-  resetPassword
+  resetPassword,
+  profilePage
 }

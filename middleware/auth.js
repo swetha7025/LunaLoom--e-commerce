@@ -8,7 +8,8 @@ async function protectedAuth(req,res,next) {
     const token = getToken(req)
 
     if(!token){
-        return res.render('user/login',{success:null,error:'Login again'})
+       // return res.render('user/login',{success:null,error:'Login again'})
+        return res.redirect('/login');
     }
 
     try {
@@ -24,6 +25,9 @@ async function protectedAuth(req,res,next) {
     }
     
 }
+ 
+
+
 
 
 async function protectedAuthAdmin(req, res, next) {

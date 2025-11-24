@@ -15,7 +15,7 @@ body {
 }
 
 .profile-icon {
-  background-color: #ff3b3b;
+  background-color: rgb(214, 130, 176);
   color: #fff;
   font-size: 36px;
   font-weight: 600;
@@ -40,7 +40,7 @@ body {
 }
 
 .btn-danger {
-  background-color: #ff3b3b;
+  background-color: rgb(214, 130, 176);
   border: none;
   font-weight: 500;
 }
@@ -51,10 +51,19 @@ body {
   margin-bottom: 8px;
 }
 
-.nav-link.active,
-.nav-link:hover {
+.nav-link.active{
+  
   color: #fff;
-  background-color: #ff3b3b;
+  background-color: rgb(214, 130, 176);  
+  border-radius: 6px;
+  padding: 8px;
+}
+
+
+
+.nav-link:hover {
+  color: rgb(214, 130, 176);  
+  /* background-color: rgb(214, 130, 176);  */
   border-radius: 6px;
   padding: 8px;
 }
@@ -91,3 +100,13 @@ body {
   font-size: 18px;
   color: #333;
 }
+
+/* .custom-edit-btn {
+    background-color: rgb(214, 130, 176);
+    color:rgb(214, 130, 176);
+    border: none;
+    font-weight: 600;
+}
+.custom-edit-btn:hover {
+    background-color:rgb(214, 130, 176);
+} */

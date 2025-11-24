@@ -33,14 +33,22 @@ const productSchema = new mongoose.Schema({
     },
 
     images: {
-    type: [String],  
-    default: [],
-},
+
+       type: [String],  
+       default: [],
+    },
 
     reviews: {
         type: String,
         trim: true
+    },
+
+    stock : {
+        type : Number,
+      
     }
+
+
 
 }, { timestamps: true });
 
