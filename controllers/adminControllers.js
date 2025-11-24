@@ -1,5 +1,6 @@
 const adminModel = require('../models/admin');
 const productModel = require('../models/products')
+const { upload } = require("../middleware/multer");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
@@ -107,12 +108,69 @@ async function adminProducts(req, res) {
 
 //------------------------------------------ADD PRODUCTS-----------------------
 
+// async function addProducts(req, res) {
+
+//  const { name, category, price, stock, status } = req.body
+
+//      let imagePath =  null
+    
+//     if (req.file.filename) {
+//         imagePath = `/img/${req.file.filename}`;
+//     }
+
+    
+//     await productModel.create({
+//         name,
+//         category,
+//         price,
+//         stock,
+//         status,
+//         image: imagePath
+//     });
+
+//     console.log("addProducts - product created");
+
+//     return res.redirect("/admin/products");
+// };
+
 async function addProducts(req, res) {
-    res.render("admin/addProducts", {
-        success: null,
-        error: null
+  try {
+
+    if (req.method === "GET") {
+      return res.render("admin/addProducts", { success: null, error: null });
+    }
+
+
+
+    const { name, category, price, stock, status } = req.body;
+
+  
+    let imagePaths = [];
+
+    if (req.files && req.files.length > 0) {
+      imagePaths = req.files.map(file => `/img/${file.filename}`);
+    }
+
+    await productModel.create({
+      name,
+      category,
+      price,
+      stock,
+      status,
+      images: imagePaths   
     });
+
+    console.log("addProducts - product created");
+
+    return res.redirect("/products");
+
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send("Error adding product");
+  }
 }
+
+
 
 
 

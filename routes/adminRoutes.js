@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const adminControllers = require("../controllers/adminControllers");
 const {protectedAuthAdmin} = require("../middleware/auth")
+const {upload} = require('../middleware/multer')
 
 
 //-------------------------ADMIN LOGIN----------------------------
@@ -23,7 +24,11 @@ router.get("/products", adminControllers.adminProducts);
 
 router.get("/addProducts",adminControllers.addProducts)
 
-router.post("/addProducts", adminControllers.addProducts);
+//router.post("/add-product", upload.single("image"),adminControllers.addProducts);
+
+router.post("/addProducts", upload.array("images", 10), adminControllers.addProducts);
+
+
 
 
 

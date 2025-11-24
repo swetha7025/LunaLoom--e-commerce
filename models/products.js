@@ -7,17 +7,11 @@ const productSchema = new mongoose.Schema({
         trim: true,
     },
 
-    description: {
-        type: String,
-        required: true,
-        trim: true,
-    },
-
-    brand: {
-        type: String,
-        required: true,
-        trim: true,
-    },
+    // description: {
+    //     type: String,
+    //     required: true,
+    //     trim: true,
+    // },
 
     price: {
         type: Number,
@@ -38,10 +32,10 @@ const productSchema = new mongoose.Schema({
         required: true
     },
 
-    image: {
-        type: String,
-        trim: true
-    },
+    images: {
+    type: [String],  
+    default: [],
+},
 
     reviews: {
         type: String,
@@ -49,6 +43,14 @@ const productSchema = new mongoose.Schema({
     }
 
 }, { timestamps: true });
+
+
+
+
+
+
+
+
 
 const productModel = mongoose.model('Product', productSchema);
 
