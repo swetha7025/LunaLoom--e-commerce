@@ -88,6 +88,8 @@ router.post('/resetPassword',authControllers.resetPassword)
 router.get('/profile', protectedAuth,authControllers.profilePage);
 
 
+router.get('/editProfile',authControllers.editProfile)
+
 
 
 

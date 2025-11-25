@@ -244,6 +244,22 @@ async function profilePage(req, res) {
 
 
 
+async function editProfile(req, res) {
+    try {
+        const userId = req.body.user._id;
+
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.render("user/editProfile", { user: {}, success:null,error : null });
+        }
+
+        res.render("user/editProfile", { user , success :null, error : null });
+    } catch (error) {
+        console.log(error);
+        res.render("user/editProfile", { user: {}, success:null,error:null });
+    }
+}
 
 
 
@@ -260,5 +276,6 @@ module.exports = {
   forgotpassword,
   verify,
   resetPassword,
-  profilePage
+  profilePage,
+  editProfile
 }
