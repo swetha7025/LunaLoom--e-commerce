@@ -28,11 +28,21 @@ router.post("/login", loginValidator, authControllers.loginUser);
 
 
 //---------------------------------------HOME-----------------------------
- router.get("/home", (req, res) => {
+ /* router.get("/home", (req, res) => {
+  
   res.render('user/home', { user: req.user,success:null,error:null }); 
   
-});
+}); */
  
+/* 
+router.get('/home', protectedAuth, (req, res) => {
+    res.render("user/home", { user: req.auth,success:null,error:null});
+});
+
+ */
+
+router.get("/home", authControllers.loadHome);
+
 
 //---------------------------------PASSPORT--------------------------------
 
@@ -85,10 +95,17 @@ router.post('/resetPassword',authControllers.resetPassword)
 
 //-----------------------------------PROFILE------------------------------
 
+
 router.get('/profile', protectedAuth,authControllers.profilePage);
 
 
-router.get('/editProfile',authControllers.editProfile)
+router.get("/logout", authControllers.logoutUser);
+
+router.get('/editProfile',protectedAuth, authControllers.editProfile)
+
+
+router.post('/editProfile',protectedAuth, authControllers.updateProfile)
+
 
 
 

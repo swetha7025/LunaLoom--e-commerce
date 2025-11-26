@@ -1,10 +1,11 @@
-const jwt = require("jsonwebtoken")
-
+ const jwt = require("jsonwebtoken")
+ 
 function getToken(req){
     return req.cookies?.token||null
 }
 
 async function protectedAuth(req,res,next) {
+  
     const token = getToken(req)
 
     if(!token){
@@ -23,9 +24,10 @@ async function protectedAuth(req,res,next) {
         res.clearCookie('token')
         return res.redirect('/login')
     }
-    
+     
 }
  
+
 
 
 

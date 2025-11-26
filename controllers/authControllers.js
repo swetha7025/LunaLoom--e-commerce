@@ -52,7 +52,14 @@ async function loginUser(req,res) {
     
     const {email,password} = req.body
 
-    const user =await User.findOne({email})
+    // const user =await User.findOne({email})
+
+     const user = await User.findOne({
+      $or: [
+        { email: email },
+        { phoneNumber: email }
+      ]
+    });
 
     if(!user){
       return res.render('user/login',{success : null, error : 'User does not exist'})
@@ -85,19 +92,11 @@ async function loginUser(req,res) {
       maxAge: 7*24*60*60*1000,
      })
 
-     req.session.user = {
-    id: user._id,
-    name: user.name,
-    email: user.email,
-    phoneNumber: user.phoneNumber,
-    googleId: user.googleId
-    };
-    
+     
+  
      return res.redirect('/home')
 
  
-
-    
 
   } catch (error) {
     console.error(error)
@@ -218,48 +217,132 @@ async function resetPassword(req,res) {
   }
 }
 
-//---------------------------------------PROFILE----------------------------------------
+//--------------------------------------------------HOME-----------------------------------
 
+async function loadHome(req,res) {
 
-
-async function profilePage(req, res) {
   try {
-    const user = await User.findById(req.auth.id).lean();
+    
+     const token = req.cookies?.token || null
 
-    if (!user) {
-      return res.render("user/login", { success: null, error: "User not found" });
-    }
+     
+     
 
-    res.render("user/profile", {
-      user,
-      success: null,
-      error: null
-    });
+     if(!token){
 
+      return res.render('user/home',{user : null, success : null, error : null})
+     }
+
+      const payload = jwt.verify(token,process.env.JWT_SECRET)
+
+      res.render('user/home',{user : payload, success : null, error : null})
+
+      
   } catch (error) {
-    console.log(error);
-    res.render("user/profile", { user: null, success: null, error: "Something went wrong" });
+    
+    res.clearCookie("token");
+
+    return res.render('user/home',{user : null, success : null,  error : null})
   }
+  
+}
+
+//--------------------------------------LOGOUT-------------------------------------
+
+async function logoutUser(req,res) {
+
+  res.clearCookie('token',{httpOnly:true, sameSite : 'strict',})
+
+  res.redirect('/login')
+  
 }
 
 
 
-async function editProfile(req, res) {
+//---------------------------------------PROFILE----------------------------------------
+
+
+async function profilePage(req, res) {
     try {
-        const userId = req.body.user._id;
+        const userId = req.auth?.id;   
+
+        if(!userId){
+          return res.redirect('/login')
+        }
 
         const user = await User.findById(userId);
 
         if (!user) {
-            return res.render("user/editProfile", { user: {}, success:null,error : null });
+            return res.render("user/profile", { user: {}, success: null, error: "User not found" });
+        }
+
+        res.render("user/profile", { user, success: null, error: null });
+
+    } catch (error) {
+        console.log(error);
+        res.render("user/profile", { user: {}, success: null, error: "Something went wrong" });
+    }
+}
+
+//---------------------------------------EDIT PROFILE------------------------------------------
+
+async function editProfile(req, res) {
+    try {
+         const userId = req.auth?.id; 
+        
+
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.render("user/editProfile", { user: {}, success:null,error : 'User not found' });
         }
 
         res.render("user/editProfile", { user , success :null, error : null });
     } catch (error) {
         console.log(error);
-        res.render("user/editProfile", { user: {}, success:null,error:null });
+        res.render("user/editProfile", { user: {}, success:null,error:'Something went wrong' });
+    }
+} 
+
+  
+async function updateProfile(req, res) {
+    try {
+        const { name, email, phoneNumber } = req.body;
+
+        const user = await User.findByIdAndUpdate(
+            req.auth.id,   
+            {
+                name,
+                email,
+                phoneNumber
+            },
+            { new: true }
+        );
+
+        return res.redirect('/profile'); 
+    } catch (error) {
+        console.log(error);
+        return res.render("user/editProfile", { user: {}, success: null, error: "Something went wrong" });
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -277,5 +360,8 @@ module.exports = {
   verify,
   resetPassword,
   profilePage,
-  editProfile
+  editProfile,
+  updateProfile,
+  loadHome,
+  logoutUser
 }
