@@ -18,13 +18,11 @@ router.post('/adminlogin',adminControllers.adminLogin);
 
 router.get('/dashboard',protectedAuthAdmin,adminControllers.adminDashboard)
 
+//---------------------------------------PRODUCTS------------------------------
 
 router.get("/products", adminControllers.adminProducts);
 
-
 router.get("/addProducts",adminControllers.addProducts)
-
-//router.post("/add-product", upload.single("image"),adminControllers.addProducts);
 
 router.post("/addProducts", upload.array("images", 10), adminControllers.addProducts);
 

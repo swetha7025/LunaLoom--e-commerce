@@ -192,3 +192,21 @@ table tbody tr:hover {
 .btn-delete:hover {
     background-color: #c82333;
 }
+
+.product-image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.delete-form {
+    display: inline;
+}
+ 

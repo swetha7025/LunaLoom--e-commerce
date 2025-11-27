@@ -68,61 +68,64 @@
                 </tr>
             </thead>
 
-            <tbody>
+           <tbody>
 
-                <% if (products && products.length > 0) { %>
+<% if (products && products.length > 0) { %>
 
-                    <% products.forEach((item, index) => { %>
-                        <tr>
-                            <td><%= index + 1 %></td>
+    <% products.forEach((item, index) => { %>
 
-                            <td>
-                                <!-- <img src="<%= item.image %>" class="product-image" alt="Product"> -->
-                                 <img src="/img/<%= item.image %>" class="product-image" alt="Product">
+        <tr>
+            <td><%= index + 1 %></td>
 
-                            </td>
+            <td>
+                <img src="<%= item.images[0] || '/img/placeholder.png' %>" 
+                     alt="Product"
+                     class="product-image">
+            </td>
 
-                            <td><%= item.name %></td>
+            <td><%= item.name %></td>
 
-                            <td><%= item.category %></td>
+            <td><%= item.category %></td>
 
-                            <td>₹<%= item.price %></td>
+            <td>₹<%= item.price %></td>
 
-                            <td><%= item.stock %></td>
+            <td><%= item.stock %></td>
 
-                            <td>
-                                <% if (item.stock > 0) { %>
-                                    <span class="status available">Available</span>
-                                <% } else { %>
-                                    <span class="status out-of-stock">Out of Stock</span>
-                                <% } %>
-                            </td>
-
-                            <td>
-                                <a href="/admin/edit-product/<%= item._id %>">
-                                    <button class="btn btn-edit">Edit</button>
-                                </a>
-
-                                <form action="/admin/delete-product/<%= item._id %>" method="POST" style="display:inline;">
-                                    <button class="btn btn-delete" onclick="return confirm('Delete this product?');">
-                                        Delete
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    <% }); %>
-
+            <td>
+                <% if (item.stock > 0) { %>
+                    <span class="status available">Available</span>
                 <% } else { %>
-
-                    <tr>
-                        <td colspan="8" style="text-align:center; padding:20px;">
-                            No products found.
-                        </td>
-                    </tr>
-
+                    <span class="status out-of-stock">Out of Stock</span>
                 <% } %>
+            </td>
 
-            </tbody>
+            <td class="action-buttons">
+                <a href="/admin/edit-product/<%= item._id %>">
+                    <button class="btn btn-edit">Edit</button>
+                </a>
+
+                <form action="/admin/delete-product/<%= item._id %>" method="POST" class="delete-form">
+                    <button class="btn btn-delete" onclick="return confirm('Delete this product?');">
+                        Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
+
+    <% }) %>
+
+<% } else { %>
+
+    <tr>
+        <td colspan="8" style="text-align:center; padding:20px;">
+            No products found.
+        </td>
+    </tr>
+
+<% } %>
+
+</tbody>
+
         </table>
 
     </div>

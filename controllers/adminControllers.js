@@ -101,7 +101,6 @@ async function adminProducts(req, res) {
     res.render("admin/products", {
       products: [],
       success: null,
-      //error : null
      error: "Failed to load products"
     });
   }
@@ -116,8 +115,6 @@ async function addProducts(req, res) {
     if (req.method === "GET") {
       return res.render("admin/addProducts", { success: null, error: null });
     }
-
-
 
     const { name, category, price, stock, status } = req.body;
 
