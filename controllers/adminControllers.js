@@ -12,8 +12,9 @@ async function adminLogin(req, res) {
   try {
     const admin = await adminModel.findOne({ email });
 
-    if (!admin) {
-      return res.render('admin/login', { success: null, error: 'Invalid email or password' });
+    if (!admin || password !==admin.password) {
+
+      return res.render('admin/adminlogin', { success: null, error: 'Invalid email or password' });
     }
 
     
@@ -36,7 +37,7 @@ async function adminLogin(req, res) {
 
   } catch (error) {
     console.error(error);
-    res.render('admin/login', { success: null, error: 'Server error' });
+    res.render('admin/adminlogin', { success: null, error: 'Server error' });
   }
 }
 
@@ -100,8 +101,8 @@ async function adminProducts(req, res) {
     res.render("admin/products", {
       products: [],
       success: null,
-      error : null
-     // error: "Failed to load products"
+      //error : null
+     error: "Failed to load products"
     });
   }
 }

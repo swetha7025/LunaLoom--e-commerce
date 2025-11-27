@@ -225,9 +225,6 @@ async function loadHome(req,res) {
     
      const token = req.cookies?.token || null
 
-     
-     
-
      if(!token){
 
       return res.render('user/home',{user : null, success : null, error : null})
@@ -304,7 +301,8 @@ async function editProfile(req, res) {
     }
 } 
 
-  
+//----------------------------------------------UPDATE PROFILE------------------------------------
+
 async function updateProfile(req, res) {
     try {
         const { name, email, phoneNumber } = req.body;
@@ -320,6 +318,7 @@ async function updateProfile(req, res) {
         );
 
         return res.redirect('/profile'); 
+
     } catch (error) {
         console.log(error);
         return res.render("user/editProfile", { user: {}, success: null, error: "Something went wrong" });
