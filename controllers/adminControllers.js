@@ -1,6 +1,7 @@
 const adminModel = require('../models/admin');
 const productModel = require('../models/products')
 const { upload } = require("../middleware/multer");
+ const fs = require("fs");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
@@ -112,8 +113,8 @@ async function adminProducts(req, res) {
 async function addProducts(req, res) {
   try {
 
-    if (req.method === "GET") {
-      return res.render("admin/addProducts", { success: null, error: null });
+     if (req.method === "GET") {
+       return res.render("admin/addProducts", { success: null, error: null });
     }
 
     const { name, category, price, stock, status } = req.body;
@@ -121,7 +122,7 @@ async function addProducts(req, res) {
   
     let imagePaths = [];
 
-    if (req.files && req.files.length > 0) {
+    if (req.files) {
       imagePaths = req.files.map(file => `/img/${file.filename}`);
     }
 
@@ -147,16 +148,95 @@ async function addProducts(req, res) {
 //----------------------------EDIT PRODUCT-----------------------------------
 
 
+async function editProducts(req, res) {
+  try {
+    const productId = req.params.id;
+
+    
+    if (req.method === "GET") {
+      const product = await productModel.findById(productId);
+
+      if (!product) {
+        return res.render("admin/editProducts", { 
+          product: {}, 
+          success: null, 
+          error: "Product not found" 
+        });
+      }
+
+      return res.render("admin/editProducts", { 
+        product, 
+        success: null, 
+        error: null 
+      });
+    }
+
+    const { name, category, price, stock, status } = req.body;
+
+    const product = await productModel.findById(productId);
+    if (!product) {
+      return res.render("admin/editProducts",{product:{},success : null, error : "Product not found"});
+    }
+
+    let oldImages = product.images || [];
+    let newImages = [];
+
+ 
+    if (req.files) {
+      newImages = req.files.map(file => `/img/${file.filename}`);
+    }
+
+    
+    const updatedImages = [...oldImages, ...newImages];
+
+    await productModel.findByIdAndUpdate(productId, {
+      name,
+      category,
+      price,
+      stock,
+      status,
+      images: updatedImages
+    });
+
+    console.log("editProducts - product updated");
+
+    return res.redirect("/products");
+
+  } catch (error) {
+    console.log(error);
+    return res.render("admin/editProducts",{product,success : null, error : "Error editing product"})
+  }
+}
 
 
+//---------------------------------DELETE PRODUCT-----------------------------------
 
+async function deleteProduct(req, res) {
+  try {
+    const productId = req.params.id
 
+    const product = await productModel.findById(productId);
+    if (!product){
 
+      return res.render("admin/editProducts",{product:{},success : null, error : "Product not found"});
 
+    }     
+     product.images.forEach(imgPath => {
+       const path = __dirname + "/../public" + imgPath
+     if (fs.existsSync(path)) fs.unlinkSync(path);
+     });
 
+    await productModel.findByIdAndDelete(productId)
 
+    console.log("deleteProduct - product deleted")
 
-
+    res.redirect("/products")
+  } catch (error) {
+    console.log(error)
+    return res.render("admin/products",{product : {} ,success : null, error : "Error editing product"})
+    
+  }
+}
 
 
 
@@ -216,5 +296,8 @@ module.exports = {
     adminLogin,
     adminDashboard,
     adminProducts,
-    addProducts
+    addProducts,
+    editProducts,
+    deleteProduct
+  
 }

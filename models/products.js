@@ -28,7 +28,7 @@ const productSchema = new mongoose.Schema({
 
     category: {
         type: String,
-        enum: ['Bedsheet', 'Bedspread', 'Pillows'],
+        enum: ['Bedding', 'Pillows & Cushions'],
         required: true
     },
 

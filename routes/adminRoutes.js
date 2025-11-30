@@ -28,8 +28,11 @@ router.post("/addProducts", upload.array("images", 10), adminControllers.addProd
 
 
 
+router.get("/editProducts/:id", adminControllers.editProducts);
+router.post("/editProducts/:id", upload.array("images", 4), adminControllers.editProducts);
 
 
+router.post("/deleteProducts/:id", adminControllers.deleteProduct);
 
 
 

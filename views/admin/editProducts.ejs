@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product</title>
+    <link rel="stylesheet" href="/css/editProducts.css">
+</head>
+
+<body>
+
+<div class="modal-container">
+    <div class="modal-header">
+        <h2>Edit Product</h2>
+    </div>
+
+    <% if (success) { %>
+        <div class="alert success"><%= success %></div>
+    <% } %>
+
+    <% if (error) { %>
+        <div class="alert error"><%= error %></div>
+    <% } %>
+
+    <form action="/editProducts/<%= product._id %>" method="POST" enctype="multipart/form-data" class="product-form">
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" name="name" value="<%= product.name %>" required>
+            </div>
+
+            <div class="form-group">
+                <label>Category</label>
+                <select name="category" required>
+                    <option value="Bedding" <%= product.category === 'Bedding' ? 'selected' : '' %>>Bedding</option>
+                    <option value="Pillows & Cushions" <%= product.category === 'Pillows & Cushions' ? 'selected' : '' %>>Pillows & Cushions</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Price (₹)</label>
+                <input type="number" name="price" value="<%= product.price %>" required>
+            </div>
+
+            <div class="form-group">
+                <label>Stock</label>
+                <input type="number" name="stock" value="<%= product.stock %>" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Status</label>
+                <select name="status">
+                    <option value="Available" <%= product.status === 'Available' ? 'selected' : '' %>>Available</option>
+                    <option value="Not available" <%= product.status === 'Not available' ? 'selected' : '' %>>Not available</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group full">
+            <label>Current Images</label>
+
+            <div class="image-preview">
+                <% product.images.forEach(img => { %>
+                    <img src="<%= img %>" class="preview-image" alt="Product Image">
+                <% }) %>
+            </div>
+        </div>
+
+        <div class="form-group full">
+            <label>Upload New Images (optional)</label>
+            <input type="file" name="images" multiple accept="image/*">
+        </div>
+
+        <button type="submit" class="save-btn">Save Changes</button>
+
+        <div class="image-preview">
+  <!-- <% product.images.forEach((img, index) => { %>
+    <div class="preview-image-box">
+      <img src="<%= img %>" class="preview-image">
+      <form action="/editProducts/<%= product._id %>/removeImage" method="POST">
+        <input type="hidden" name="imageIndex" value="<%= index %>">
+        <button type="submit" class="remove-btn">×</button>
+      </form>
+    </div>
+  <% }) %> -->
+</div>
+
+    </form>
+</div>
+
+</body>
+</html>
