@@ -110,3 +110,51 @@ body {
 .custom-edit-btn:hover {
     background-color:rgb(214, 130, 176);
 } */
+.profile-photo-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 20px;
+}
+
+.profile-photo,
+.profile-initial {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* For initial letter */
+.profile-initial {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #d682b0;
+  color: #fff;
+  font-size: 40px;
+  font-weight: 600;
+}
+
+/* Small camera/edit icon */
+.edit-icon {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 32px;
+  height: 32px;
+  background: #fff;
+  border: 2px solid #d682b0;
+  color: #d682b0;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-icon:hover {
+  background: #d682b0;
+  color: #fff;
+}

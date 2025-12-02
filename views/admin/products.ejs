@@ -7,11 +7,13 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="/css/adminProducts.css">
+    <link rel="stylesheet" href="/css/admin.css">
 </head>
 
 <body>
+<%- include('../partials/adminSidebar', { activePage: 'products' }) %>
 
-    <div class="sidebar">
+    <!-- <div class="sidebar">
         <h2>LunaLoom Admin</h2>
         <ul>
             <li><a href="/dashboard"><i class="fa fa-chart-line"></i> Dashboard</a></li>
@@ -21,7 +23,7 @@
             <li><a href="/coupons"><i class="fa fa-tags"></i> Coupons</a></li>
             <li><a href="/settings"><i class="fa fa-cog"></i> Settings</a></li>
         </ul>
-    </div>
+    </div> -->
 
     <div class="main-content">
 
@@ -87,6 +89,7 @@
 
                             <td><%= item.name %></td>
                             <td><%= item.category %></td>
+                             <td><%= item.brand %></td>
                             <td>₹<%= item.price %></td>
                             <td><%= item.stock %></td>
 

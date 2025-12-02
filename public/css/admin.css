@@ -1,0 +1,60 @@
+/* Sidebar full panel */
+.sidebar {
+    width: 250px;
+    background-color: #B08EAD;   /* main purple */
+    color: black;
+    min-height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 0;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);   /* subtle right shadow exactly like screenshot */
+}
+
+/* Top title bar */
+.sidebar h2 {
+    background-color: #A4859F;   /* slightly darker purple strip */
+    margin: 0;
+    padding: 22px 0;
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: black;
+}
+
+/* Menu list */
+.sidebar ul {
+    list-style: none;
+    padding: 15px 0;
+    margin: 0;
+}
+
+/* Each item */
+.sidebar ul li {
+    padding: 12px 20px;
+    margin-bottom: 2px;
+}
+
+/* Hover + Active — exact darker shade from screenshot */
+.sidebar ul li:hover,
+.sidebar ul li.active {
+    background-color: #A4859F;
+}
+
+/* Anchor styling */
+.sidebar ul li a {
+    color: black;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+}
+
+/* Icons EXACT like screenshot */
+.sidebar ul li i {
+    font-size: 16px;                 /* slightly smaller */
+    margin-right: 12px;
+    color: black;                    /* same as screenshot */
+    opacity: 0.9;                    /* slight softness */
+}

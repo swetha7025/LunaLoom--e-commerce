@@ -50,7 +50,9 @@ const productSchema = new mongoose.Schema({
 
     brand : {
 
-        type : String
+        type : String,
+        require : true,
+        trim : true,
     },
     
 

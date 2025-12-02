@@ -35,10 +35,44 @@
       <!-- Sidebar -->
       <div class="col-md-3 sidebar">
         <div class="profile-card text-center">
-
+<!-- 
           <div class="profile-icon">
             <span><%= user.name ? user.name.charAt(0).toUpperCase() : "U" %></span>
           </div>
+           -->
+      <div class="profile-photo-container">
+
+    <% if (user.profileImage) { %>
+        <!-- Show uploaded profile image -->
+        <img 
+            src="/uploads/profile/<%= user.profileImage %>" 
+            class="profile-photo"
+            alt="profile"
+        >
+    <% } else { %>
+        <!-- Show initial letter -->
+        <div class="profile-initial">
+            <%= user.name ? user.name.charAt(0).toUpperCase() : "U" %>
+        </div>
+    <% } %>
+
+    <!-- Edit icon -->
+    <label for="profileUpload" class="edit-icon">
+        <i class="fas fa-camera"></i>
+    </label>
+
+    <!-- File upload form -->
+    <form action="/uploadProfileImage" method="POST" enctype="multipart/form-data">
+        <input 
+            type="file" 
+            id="profileUpload" 
+            name="profile" 
+            style="display: none;" 
+            onchange="this.form.submit()"
+        >
+    </form>
+</div>
+
 
           <h4 class="profile-name"><%= user.name %></h4>
           <p class="profile-email"><%= user.email %></p>

@@ -4,30 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Profile</title>
+
     <link rel="stylesheet" href="/css/bootstrap.min.css">
-     <link rel="stylesheet" href="/css/animate.css">
-     <link rel="stylesheet" href="/css/owl.carousel.min.css">
-   <link rel="stylesheet" href="/css/all.css">
-  <link rel="stylesheet" href="/css/flaticon.css">
-  <link rel="stylesheet" href="/css/themify-icons.css">
-  <link rel="stylesheet" href="/css/magnific-popup.css">
-  <link rel="stylesheet" href="/css/slick.css">
-
-<!-- IMPORTANT -->
-<link rel="stylesheet" href="/css/style.css">
-<link rel="stylesheet" href="/css/header.css">
-
-<!-- Page-specific -->
-<link rel="stylesheet" href="/css/profile.css">
-
+    <link rel="stylesheet" href="/css/all.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/profile.css">
 </head>
+
 <body>
 
 <%- include('../partials/header') %>
 
 <div class="container mt-5">
     <h3>Edit Profile</h3>
-    
+
     <% if (success) { %>
         <div class="alert alert-success"><%= success %></div>
     <% } %>
@@ -36,7 +27,43 @@
         <div class="alert alert-danger"><%= error %></div>
     <% } %>
 
+    <!-- Profile Image Section -->
+    <div class="profile-photo-container">
+
+        <% if (user && user.profileImage) { %>
+            <!-- Show uploaded image -->
+            <img 
+                src="/uploads/profile/<%= user.profileImage %>" 
+                class="profile-photo"
+                alt="Profile Image"
+            >
+        <% } else { %>
+            <!-- Show initial letter -->
+            <div class="profile-initial">
+                <%= user && user.name ? user.name.charAt(0).toUpperCase() : "U" %>
+            </div>
+        <% } %>
+
+        <!-- Camera Icon -->
+        <label for="profileUpload" class="edit-icon">
+            <i class="fas fa-camera"></i>
+        </label>
+
+        <!-- Hidden Upload Form -->
+        <form action="/uploadProfileImage" method="POST" enctype="multipart/form-data">
+            <input 
+                type="file" 
+                id="profileUpload" 
+                name="profile" 
+                style="display:none" 
+                onchange="this.form.submit()"
+            >
+        </form>
+    </div>
+
+    <!-- Edit Profile Form -->
     <form action="/editProfile" method="POST">
+
         <div class="mb-3">
             <label>Name</label>
             <input 
@@ -69,10 +96,13 @@
 
         <button class="btn btn-success">Save Changes</button>
 
-        <button class="btn btn-danger ms-2" type="button" onclick="window.location.href='/profile'">
-        Cancel
-    </button>
-
+        <button 
+            class="btn btn-danger ms-2" 
+            type="button" 
+            onclick="window.location.href='/profile'"
+        >
+            Cancel
+        </button>
 
     </form>
 

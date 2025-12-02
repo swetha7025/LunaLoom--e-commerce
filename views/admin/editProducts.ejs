@@ -5,11 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Product</title>
     <link rel="stylesheet" href="/css/editProducts.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 
 <body>
 
+ <%- include('../partials/adminSidebar', { activePage: 'editProducts' }) %>
+
 <div class="modal-container">
+
+    <!-- Close button -->
+    <div class="close-btn">
+        <a href="javascript:history.back()">
+            <i class="fa-solid fa-xmark"></i>
+        </a>
+    </div>
+
     <div class="modal-header">
         <h2>Edit Product</h2>
     </div>
@@ -24,6 +36,7 @@
 
     <form action="/editProducts/<%= product._id %>" method="POST" enctype="multipart/form-data" class="product-form">
 
+        <!-- Row 1 -->
         <div class="form-row">
             <div class="form-group">
                 <label>Name</label>
@@ -39,19 +52,30 @@
             </div>
         </div>
 
+        <!-- Row 2 -->
         <div class="form-row">
+            <div class="form-group">
+                <label>Brand</label>
+                <select name="brand" required>
+                    <option value="Welspun Living" <%= product.brand === 'Welspun Living' ? 'selected' : '' %>>Welspun Living</option>
+                    <option value="Sleepwell" <%= product.brand === 'Sleepwell' ? 'selected' : '' %>>Sleepwell</option>
+                    <option value="Zara Home" <%= product.brand === 'Zara Home' ? 'selected' : '' %>>Zara Home</option>
+                </select>
+            </div>
+
             <div class="form-group">
                 <label>Price (₹)</label>
                 <input type="number" name="price" value="<%= product.price %>" required>
             </div>
+        </div>
 
+        <!-- Row 3 -->
+        <div class="form-row">
             <div class="form-group">
                 <label>Stock</label>
                 <input type="number" name="stock" value="<%= product.stock %>" required>
             </div>
-        </div>
 
-        <div class="form-row">
             <div class="form-group">
                 <label>Status</label>
                 <select name="status">
@@ -61,34 +85,32 @@
             </div>
         </div>
 
+        <!-- Current Images -->
         <div class="form-group full">
             <label>Current Images</label>
-
             <div class="image-preview">
-                <% product.images.forEach(img => { %>
-                    <img src="<%= img %>" class="preview-image" alt="Product Image">
-                <% }) %>
+                <% if (product.images && product.images.length > 0) { %>
+                    <% product.images.forEach(img => { %>
+                        <div class="preview-image-box">
+                            <img src="<%= img %>" class="preview-image" alt="Product Image">
+                            <label>
+                                <input type="checkbox" name="deleteImages" value="<%= img %>"/> Delete
+                            </label>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <p>No images uploaded yet.</p>
+                <% } %>
             </div>
         </div>
 
+        <!-- Upload New Images -->
         <div class="form-group full">
             <label>Upload New Images (optional)</label>
             <input type="file" name="images" multiple accept="image/*">
         </div>
 
         <button type="submit" class="save-btn">Save Changes</button>
-
-        <div class="image-preview">
-  <!-- <% product.images.forEach((img, index) => { %>
-    <div class="preview-image-box">
-      <img src="<%= img %>" class="preview-image">
-      <form action="/editProducts/<%= product._id %>/removeImage" method="POST">
-        <input type="hidden" name="imageIndex" value="<%= index %>">
-        <button type="submit" class="remove-btn">×</button>
-      </form>
-    </div>
-  <% }) %> -->
-</div>
 
     </form>
 </div>

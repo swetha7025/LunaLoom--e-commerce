@@ -149,22 +149,81 @@ async function addProducts(req, res) {
 //------------------------------EDIT PRODUCT-------------------------------------
 
 
+// async function editProducts(req, res) {
+//   try {
+//     const productId = req.params.id;
+
+    
+//     if (req.method === "GET") {
+//       const product = await productModel.findById(productId);
+
+//       if (!product) {
+//         return res.render("admin/editProducts", { 
+//           product: {}, 
+//           success: null, 
+//           error: "Product not found" 
+//         });
+//       }
+
+//       return res.render("admin/editProducts", { 
+//         product, 
+//         success: null, 
+//         error: null 
+//       });
+//     }
+
+//     const { name, category, brand, price, stock, status } = req.body;
+
+//     const product = await productModel.findById(productId);
+//     if (!product) {
+//       return res.render("admin/editProducts",{product:{},success : null, error : "Product not found"});
+//     }
+
+//     let oldImages = product.images || [];
+//     let newImages = [];
+
+ 
+//     if (req.files) {
+//       newImages = req.files.map(file => `/img/${file.filename}`);
+//     }
+
+    
+//     const updatedImages = [...oldImages, ...newImages];
+
+//     await productModel.findByIdAndUpdate(productId, {
+//       name,
+//       category,
+//       brand,
+//       price,
+//       stock,
+//       status,
+//       images: updatedImages
+//     });
+
+//     console.log("editProducts - product updated");
+
+//     return res.redirect("/products");
+
+//   } catch (error) {
+//     console.log(error);
+//     return res.render("admin/editProducts",{product,success : null, error : "Error editing product"})
+//   }
+// }
+
 async function editProducts(req, res) {
   try {
     const productId = req.params.id;
+    const product = await productModel.findById(productId);
 
-    
+    if (!product) {
+      return res.render("admin/editProducts", { 
+        product: {}, 
+        success: null, 
+        error: "Product not found" 
+      });
+    }
+
     if (req.method === "GET") {
-      const product = await productModel.findById(productId);
-
-      if (!product) {
-        return res.render("admin/editProducts", { 
-          product: {}, 
-          success: null, 
-          error: "Product not found" 
-        });
-      }
-
       return res.render("admin/editProducts", { 
         product, 
         success: null, 
@@ -172,22 +231,31 @@ async function editProducts(req, res) {
       });
     }
 
-    const { name, category, brand, price, stock, status } = req.body;
+    const { name, category, brand, price, stock, status, deleteImages } = req.body;
 
-    const product = await productModel.findById(productId);
-    if (!product) {
-      return res.render("admin/editProducts",{product:{},success : null, error : "Product not found"});
+    // Remove images user wants to delete
+    let oldImages = product.images || [];
+    if (deleteImages) {
+      // deleteImages can be a single string or array
+      const imagesToDelete = Array.isArray(deleteImages) ? deleteImages : [deleteImages];
+      oldImages = oldImages.filter(img => !imagesToDelete.includes(img));
+
+      // Optional: delete files from server
+      const fs = require("fs");
+      imagesToDelete.forEach(imgPath => {
+        const filePath = `public${imgPath}`; // adjust if your paths differ
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+      });
     }
 
-    let oldImages = product.images || [];
+    // Add new images
     let newImages = [];
-
- 
     if (req.files) {
       newImages = req.files.map(file => `/img/${file.filename}`);
     }
 
-    
     const updatedImages = [...oldImages, ...newImages];
 
     await productModel.findByIdAndUpdate(productId, {
@@ -200,15 +268,18 @@ async function editProducts(req, res) {
       images: updatedImages
     });
 
-    console.log("editProducts - product updated");
-
     return res.redirect("/products");
 
   } catch (error) {
     console.log(error);
-    return res.render("admin/editProducts",{product,success : null, error : "Error editing product"})
+    return res.render("admin/editProducts", {
+      product,
+      success: null,
+      error: "Error editing product"
+    });
   }
 }
+
 
 
 //---------------------------------DELETE PRODUCT-----------------------------------

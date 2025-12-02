@@ -333,7 +333,7 @@ async function productList(req,res) {
   
   try {
     
-    const {category,type} = req.query
+    const {category,  brand} = req.query
 
     let filter = {}
 
@@ -341,11 +341,12 @@ async function productList(req,res) {
 
       filter.category = category
     }
+   
+   if (brand) {
 
-    if(type){
+    filter.sub = brand;  
 
-      filter.type = type
-    }
+   }
 
     let products = await productModel.find(filter)
 

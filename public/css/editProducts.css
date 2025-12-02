@@ -6,7 +6,7 @@ body {
 }
 
 .modal-container {
-    width: 80%;
+    width: 60%;
     margin: 40px auto;
     background: #fff;
     padding: 25px 35px;
@@ -81,7 +81,7 @@ input[type="file"] {
 
 input:focus,
 select:focus {
-    border-color: #007bff;
+    border-color:  #A4859F;
 }
 
 .image-upload-box {
@@ -95,7 +95,7 @@ select:focus {
 .save-btn {
     width: 100%;
     padding: 14px;
-    background: #007bff;
+    background: #A4859F;
     color: white;
     border: none;
     font-size: 17px;
@@ -106,7 +106,7 @@ select:focus {
 }
 
 .save-btn:hover {
-    background: #0056b3;
+    background:   rgb(155, 119, 139);
 }
 
 .preview-image-box {
@@ -139,4 +139,22 @@ select:focus {
     line-height: 15px;
     text-align: center;
     padding: 0;
+}
+
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.close-btn a {
+    color: #333;
+    text-decoration: none;
+}
+
+.close-btn a:hover {
+    color: red;
 }

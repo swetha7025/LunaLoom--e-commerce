@@ -4,12 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add New Product</title>
+
     <link rel="stylesheet" href="/css/addProducts.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 
 <body>
+<body>
+<%- include('../partials/adminSidebar', { activePage: 'addProducts' }) %>
 
 <div class="modal-container">
+
+    <!-- Close button goes here -->
+    <div class="close-btn">
+        <a href="javascript:history.back()">
+            <i class="fa-solid fa-xmark"></i>
+        </a>
+    </div>
+    <!-- End close button -->
+
     <div class="modal-header">
         <h2>Add New Product</h2>
     </div>
@@ -41,18 +55,31 @@
         </div>
 
         <div class="form-row">
+
+            <div class="form-group">
+                <label>Brand</label>
+                <select name="brand" required>
+                    <option value="">Select Brand</option>
+                    <option value="Welspun Living">Welspun Living</option>
+                    <option value="Sleepwell">Sleepwell</option>
+                    <option value="Zara Home">Zara Home</option>
+                </select>
+            </div>
+
             <div class="form-group">
                 <label>Price (₹)</label>
                 <input type="number" name="price" required>
             </div>
 
+        </div>
+
+        <div class="form-row">
+
             <div class="form-group">
                 <label>Stock</label>
                 <input type="number" name="stock" required>
             </div>
-        </div>
 
-        <div class="form-row">
             <div class="form-group">
                 <label>Status</label>
                 <select name="status">
@@ -60,6 +87,7 @@
                     <option value="Not available">Not available</option>
                 </select>
             </div>
+
         </div>
 
         <div class="form-group full">
@@ -68,6 +96,7 @@
         </div>
 
         <button type="submit" class="save-btn">Save Product</button>
+
     </form>
 
 </div>
