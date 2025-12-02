@@ -4,7 +4,8 @@ const router = express.Router();
 const authControllers = require("../controllers/authControllers");
 const {signupValidator,loginValidator} = require('../middleware/validateUser')
 const {protectedAuth} = require("../middleware/auth")
-const passport = require("passport")
+const passport = require("passport");
+const productModel = require('../models/products');
 
 
 
@@ -108,7 +109,7 @@ router.post('/editProfile',protectedAuth, authControllers.updateProfile)
 
 
 
-
+router.get('/product_list',authControllers.productList)
 
 
 

@@ -40,15 +40,17 @@
             <div class="alert error"><%= error %></div>
         <% } %>
 
-        <div class="select-container">
-            <div class="select-box">
-                <select>
-                    <option>All Categories</option>
-                    <option>Bedding</option>
-                    <option>Pillows & Cushions</option>
-                </select>
-            </div>
-        </div>
+             <div class="select-container">
+
+    <!-- Category Dropdown -->
+    <div class="select-box">
+        <select id="categorySelect" name="category">
+            <option value="">All Categories</option>
+            <option value="bedding">Bedding</option>
+            <option value="pillows">Pillows & Cushions</option>
+        </select>
+    </div>
+
 
         <table>
             <thead>
@@ -57,6 +59,7 @@
                     <th>Images</th>
                     <th>Name</th>
                     <th>Category</th>
+                    <th>Brand</th>
                     <th>Price</th>
                     <th>Stock</th>
                     <th>Status</th>

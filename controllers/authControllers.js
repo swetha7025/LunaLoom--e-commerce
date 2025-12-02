@@ -1,4 +1,5 @@
 const User = require('../models/user')
+const productModel = require('../models/products')
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const nodemailer = require('nodemailer');
@@ -326,6 +327,39 @@ async function updateProfile(req, res) {
 }
 
 
+//--------------------------------------PRODUCT LIST---------------------------------
+
+async function productList(req,res) {
+  
+  try {
+    
+    const {category,type} = req.query
+
+    let filter = {}
+
+    if(category){
+
+      filter.category = category
+    }
+
+    if(type){
+
+      filter.type = type
+    }
+
+    let products = await productModel.find(filter)
+
+    return res.render("user/product_list",{products,success : null, error : null})
+
+
+  } catch (error) {
+    
+    console.log(error)
+    return res.render("user/product_list",{products, success:null,error:'Error during loading products'})
+
+  }
+}
+
 
 
 
@@ -362,5 +396,7 @@ module.exports = {
   editProfile,
   updateProfile,
   loadHome,
-  logoutUser
+  logoutUser,
+  productList,
+
 }

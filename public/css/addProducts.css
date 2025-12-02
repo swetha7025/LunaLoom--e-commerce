@@ -23,6 +23,7 @@ body {
     border-bottom: 2px solid #eee;
 }
 
+/* Alerts */
 .alert {
     padding: 12px 15px;
     margin: 15px 0;
@@ -43,6 +44,7 @@ body {
     border-left: 5px solid #c62828;
 }
 
+/* Form Layout */
 .product-form {
     margin-top: 25px;
 }
@@ -84,14 +86,7 @@ select:focus {
     border-color: #007bff;
 }
 
-.image-upload-box {
-    padding: 12px;
-    border: 2px dashed #aaa;
-    border-radius: 8px;
-    text-align: center;
-    background: #fafafa;
-}
-
+/* Save button */
 .save-btn {
     width: 100%;
     padding: 14px;

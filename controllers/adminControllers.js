@@ -84,7 +84,7 @@ async function adminDashboard(req, res) {
 }
 
 
-//---------------------------------PRODUCTS-----------------------------
+//---------------------------------PRODUCTS------------------------------------
 
 
 
@@ -107,7 +107,7 @@ async function adminProducts(req, res) {
   }
 }
 
-//------------------------------------------ADD PRODUCTS-----------------------
+//------------------------------------------ADD PRODUCTS---------------------------
 
 
 async function addProducts(req, res) {
@@ -117,7 +117,7 @@ async function addProducts(req, res) {
        return res.render("admin/addProducts", { success: null, error: null });
     }
 
-    const { name, category, price, stock, status } = req.body;
+    const { name, category, brand, price, stock, status } = req.body;
 
   
     let imagePaths = [];
@@ -129,6 +129,7 @@ async function addProducts(req, res) {
     await productModel.create({
       name,
       category,
+      brand,
       price,
       stock,
       status,
@@ -145,7 +146,7 @@ async function addProducts(req, res) {
   }
 }
 
-//----------------------------EDIT PRODUCT-----------------------------------
+//------------------------------EDIT PRODUCT-------------------------------------
 
 
 async function editProducts(req, res) {
@@ -171,7 +172,7 @@ async function editProducts(req, res) {
       });
     }
 
-    const { name, category, price, stock, status } = req.body;
+    const { name, category, brand, price, stock, status } = req.body;
 
     const product = await productModel.findById(productId);
     if (!product) {
@@ -192,6 +193,7 @@ async function editProducts(req, res) {
     await productModel.findByIdAndUpdate(productId, {
       name,
       category,
+      brand,
       price,
       stock,
       status,
