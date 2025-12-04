@@ -11,18 +11,16 @@
 </head>
 
 <body>
-<body>
 <%- include('../partials/adminSidebar', { activePage: 'addProducts' }) %>
 
 <div class="modal-container">
 
-    <!-- Close button goes here -->
+    <!-- Close button -->
     <div class="close-btn">
         <a href="javascript:history.back()">
             <i class="fa-solid fa-xmark"></i>
         </a>
     </div>
-    <!-- End close button -->
 
     <div class="modal-header">
         <h2>Add New Product</h2>
@@ -38,6 +36,7 @@
 
     <form action="/addProducts" method="POST" enctype="multipart/form-data" class="product-form">
 
+        <!-- Row 1 -->
         <div class="form-row">
             <div class="form-group">
                 <label>Name</label>
@@ -54,8 +53,8 @@
             </div>
         </div>
 
+        <!-- Row 2 -->
         <div class="form-row">
-
             <div class="form-group">
                 <label>Brand</label>
                 <select name="brand" required>
@@ -70,11 +69,10 @@
                 <label>Price (₹)</label>
                 <input type="number" name="price" required>
             </div>
-
         </div>
 
+        <!-- Row 3 -->
         <div class="form-row">
-
             <div class="form-group">
                 <label>Stock</label>
                 <input type="number" name="stock" required>
@@ -87,9 +85,38 @@
                     <option value="Not available">Not available</option>
                 </select>
             </div>
-
         </div>
 
+        <!-- New Fabrics Field -->
+        <div class="form-group full">
+    <label>Fabrics</label>
+    <div class="checkbox-group">
+             <label><input type="checkbox" name="fabrics[]" value="Cotton"> Cotton</label>
+            <label><input type="checkbox" name="fabrics[]" value="Silk"> Silk</label>
+             <label><input type="checkbox" name="fabrics[]" value="Polyester"> Polyester</label>
+             <label><input type="checkbox" name="fabrics[]" value="Bamboo Fabric"> Bamboo Fabric</label>
+
+    </div>
+</div>
+
+        <!-- New Description Field -->
+        <div class="form-group full">
+            <label>Description</label>
+            <textarea name="description" rows="4" placeholder="Enter product description..." required></textarea>
+        </div>
+
+        <!-- New Size Checkbox Field -->
+        <div class="form-group full">
+            <label>Available Sizes</label>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="sizes[]" value="Double"> Double</label>
+                <label><input type="checkbox" name="sizes[]" value="Queen"> Queen</label>
+                <label><input type="checkbox" name="sizes[]" value="King"> King</label>
+
+            </div>
+        </div>
+
+        <!-- Images -->
         <div class="form-group full">
             <label>Images</label>
             <input type="file" name="images" multiple accept="image/*">

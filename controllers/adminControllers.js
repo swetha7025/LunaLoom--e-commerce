@@ -109,23 +109,30 @@ async function adminProducts(req, res) {
 
 //------------------------------------------ADD PRODUCTS---------------------------
 
-
 async function addProducts(req, res) {
   try {
-
-     if (req.method === "GET") {
-       return res.render("admin/addProducts", { success: null, error: null });
+    if (req.method === "GET") {
+      return res.render("admin/addProducts", { success: null, error: null });
     }
 
-    const { name, category, brand, price, stock, status } = req.body;
+    const { name, category, brand, price, stock, status, description } = req.body;
 
-  
+    
+    const sizes = Array.isArray(req.body.sizes)
+      ? req.body.sizes
+      : req.body.sizes ? [req.body.sizes] : [];
+
+    const fabrics = Array.isArray(req.body.fabrics)
+      ? req.body.fabrics
+      : req.body.fabrics ? [req.body.fabrics] : [];
+
+    
     let imagePaths = [];
-
-    if (req.files) {
+    if (req.files && req.files.length > 0) {
       imagePaths = req.files.map(file => `/img/${file.filename}`);
     }
 
+   
     await productModel.create({
       name,
       category,
@@ -133,7 +140,10 @@ async function addProducts(req, res) {
       price,
       stock,
       status,
-      images: imagePaths   
+      description,
+      sizes,
+      fabrics,
+      images: imagePaths
     });
 
     console.log("addProducts - product created");
@@ -146,69 +156,10 @@ async function addProducts(req, res) {
   }
 }
 
+
 //------------------------------EDIT PRODUCT-------------------------------------
 
 
-// async function editProducts(req, res) {
-//   try {
-//     const productId = req.params.id;
-
-    
-//     if (req.method === "GET") {
-//       const product = await productModel.findById(productId);
-
-//       if (!product) {
-//         return res.render("admin/editProducts", { 
-//           product: {}, 
-//           success: null, 
-//           error: "Product not found" 
-//         });
-//       }
-
-//       return res.render("admin/editProducts", { 
-//         product, 
-//         success: null, 
-//         error: null 
-//       });
-//     }
-
-//     const { name, category, brand, price, stock, status } = req.body;
-
-//     const product = await productModel.findById(productId);
-//     if (!product) {
-//       return res.render("admin/editProducts",{product:{},success : null, error : "Product not found"});
-//     }
-
-//     let oldImages = product.images || [];
-//     let newImages = [];
-
- 
-//     if (req.files) {
-//       newImages = req.files.map(file => `/img/${file.filename}`);
-//     }
-
-    
-//     const updatedImages = [...oldImages, ...newImages];
-
-//     await productModel.findByIdAndUpdate(productId, {
-//       name,
-//       category,
-//       brand,
-//       price,
-//       stock,
-//       status,
-//       images: updatedImages
-//     });
-
-//     console.log("editProducts - product updated");
-
-//     return res.redirect("/products");
-
-//   } catch (error) {
-//     console.log(error);
-//     return res.render("admin/editProducts",{product,success : null, error : "Error editing product"})
-//   }
-// }
 
 async function editProducts(req, res) {
   try {
@@ -223,6 +174,7 @@ async function editProducts(req, res) {
       });
     }
 
+    
     if (req.method === "GET") {
       return res.render("admin/editProducts", { 
         product, 
@@ -231,42 +183,57 @@ async function editProducts(req, res) {
       });
     }
 
-    const { name, category, brand, price, stock, status, deleteImages } = req.body;
+   
+    const { name, category, fabrics, sizes, brand, price, stock, status, description,  deleteImages  } = req.body;
 
-    // Remove images user wants to delete
+   
+
+    
+    const updatedSizes = Array.isArray(sizes) ? sizes : sizes ? [sizes] : [];
+    const updatedFabrics = Array.isArray(fabrics) ? fabrics : fabrics ? [fabrics] : [];
+
+    
     let oldImages = product.images || [];
+
     if (deleteImages) {
-      // deleteImages can be a single string or array
-      const imagesToDelete = Array.isArray(deleteImages) ? deleteImages : [deleteImages];
+      const imagesToDelete = Array.isArray(deleteImages)
+        ? deleteImages
+        : [deleteImages];
+
       oldImages = oldImages.filter(img => !imagesToDelete.includes(img));
 
-      // Optional: delete files from server
-      const fs = require("fs");
       imagesToDelete.forEach(imgPath => {
-        const filePath = `public${imgPath}`; // adjust if your paths differ
+        const filePath = `public${imgPath}`;
         if (fs.existsSync(filePath)) {
           fs.unlinkSync(filePath);
         }
       });
     }
 
-    // Add new images
+    
     let newImages = [];
-    if (req.files) {
+    if (req.files && req.files.length > 0) {
       newImages = req.files.map(file => `/img/${file.filename}`);
     }
 
     const updatedImages = [...oldImages, ...newImages];
 
-    await productModel.findByIdAndUpdate(productId, {
-      name,
-      category,
-      brand,
-      price,
-      stock,
-      status,
-      images: updatedImages
-    });
+    
+    await productModel.findByIdAndUpdate(
+      productId,
+      {
+        name,
+        category,
+        brand,
+        price,
+        stock,
+        status,
+        sizes: updatedSizes,
+        fabrics: updatedFabrics,
+        images: updatedImages
+      },
+      { new: true }
+    );
 
     return res.redirect("/products");
 
@@ -279,7 +246,6 @@ async function editProducts(req, res) {
     });
   }
 }
-
 
 
 //---------------------------------DELETE PRODUCT-----------------------------------

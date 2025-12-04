@@ -3,63 +3,98 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= product.title || "Product" %></title>
+  <title><%= product.name || "Product" %></title>
   <link rel="icon" href="/img/favicon.png">
 
-  <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="/css/bootstrap.min.css">
-
-  <!-- Animation and carousel -->
-  <link rel="stylesheet" href="/css/animate.css">
-  <link rel="stylesheet" href="/css/owl.carousel.min.css">
-
-  <!-- Font Awesome & Icons -->
   <link rel="stylesheet" href="/css/all.css">
-  <link rel="stylesheet" href="/css/flaticon.css">
-  <link rel="stylesheet" href="/css/themify-icons.css">
-
-  <!-- Popup & Slider -->
-  <link rel="stylesheet" href="/css/magnific-popup.css">
-  <link rel="stylesheet" href="/css/slick.css">
-
-  <!-- Shared and page-specific CSS -->
-  <link rel="stylesheet" href="/css/style.css"> <!-- main site styles (home, header, etc.) -->
-  <link rel="stylesheet" href="/css/header.css"> <!-- header/navbar styles -->
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/header.css">
   <link rel="stylesheet" href="/css/footer.css">
 
-
-  <!-- Custom CSS -->
   <link rel="stylesheet" href="/css/singleProduct.css">
 </head>
+
 <body>
 
 <%- include('../partials/header') %>
 
-<div class="product-container">
+<div class="product-main">
 
-  <!-- Image Box -->
-  <div class="image-box">
-    <% if(product.images && product.images.length > 0){ %>
-      <img src="<%= product.images[0] %>" alt="<%= product.title %>">
-    <% } else { %>
-      <img src="/img/default-product.png" alt="Default Product">
-    <% } %>
+  <!-- LEFT IMAGE -->
+  <div class="product-image-box">
+    <img src="<%= product.images?.length ? product.images[0] : '/img/default-product.png' %>" 
+         alt="<%= product.name %>">
   </div>
 
-  <!-- Details Box -->
- <div class="details-box">
-    <h1 class="title"><%= product.title || "No Title" %></h1>
-    <p class="price">₹<%= product.price || "0" %></p>
-    <p class="description"><%= product.description || "No Description" %></p>
+  <!-- RIGHT DETAILS -->
+  <div class="product-details">
 
-    <div class="button-group">
-        <a href="/cart/add/<%= product._id %>" class="btn add-cart">Add to Cart</a>
-        <a href="/buy/<%= product._id %>" class="btn buy-now">Buy Now</a>
+    <!-- NAME -->
+    <h1 class="p-title"><%= product.name %></h1>
+
+    <!-- PRICE -->
+    <p class="p-price">₹ <%= product.price %></p>
+    <p class="p-shipping">Free Shipping all over India</p>
+
+    <!-- DESCRIPTION -->
+    <% if (product.description) { %>
+      <div class="p-section">
+        <p class="label">Description</p>
+        <p><%= product.description %></p>
+      </div>
+    <% } %>
+
+    <!-- SIZES -->
+    <% if(product.sizes && product.sizes.length > 0) { %>
+<div class="p-section">
+  <p class="label">Size</p>
+  <div class="options">
+    <% product.sizes.forEach(s => { %>
+      <button class="opt-btn"><%= s %></button>
+    <% }) %>
+  </div>
+</div>
+<% } %>
+
+
+    <!-- FABRICS -->
+    <% if(product.fabrics && product.fabrics.length > 0) { %>
+<div class="p-section">
+  <p class="label">Fabric</p>
+  <div class="options">
+    <% product.fabrics.forEach(f => { %>
+      <button class="opt-btn"><%= f %></button>
+    <% }) %>
+  </div>
+</div>
+<% } %>
+
+
+    <!-- CATEGORY -->
+    <div class="p-section">
+      <p class="label">Category</p>
+      <div class="options">
+        <button class="opt-btn active"><%= product.category %></button>
+      </div>
     </div>
+
+    <!-- QUANTITY -->
+    <div class="quantity-box">
+      <button class="qty-btn">−</button>
+      <span class="qty-number">1</span>
+      <button class="qty-btn">+</button>
+    </div>
+
+    <!-- BUTTONS -->
+    <a href="/cart/add/<%= product._id %>" class="btn-full add-cart-btn">Add to Cart</a>
+    <a href="/buy/<%= product._id %>" class="btn-full buy-now-btn">Buy It Now</a>
+    <button class="btn-full wishlist-btn"><i class="fa-regular fa-heart"></i> Add To Wishlist</button>
+
+  </div>
+
 </div>
 
-
 <%- include('../partials/footer') %>
-
 </body>
 </html>

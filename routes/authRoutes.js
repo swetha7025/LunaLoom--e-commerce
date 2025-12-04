@@ -116,6 +116,7 @@ router.post("/removeProfileImage", protectedAuth,authControllers.removeProfileIm
 
 router.get('/product_list',authControllers.productList)
 
+router.get('/product/:id',authControllers.getSingleProduct)
 
 
 

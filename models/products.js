@@ -7,11 +7,11 @@ const productSchema = new mongoose.Schema({
         trim: true,
     },
 
-    // description: {
-    //     type: String,
-    //     required: true,
-    //     trim: true,
-    // },
+    description: {
+        type: String,
+        required: true,
+        trim: true,
+    },
 
     price: {
         type: Number,
@@ -19,7 +19,6 @@ const productSchema = new mongoose.Schema({
         min: 0
     },
 
-    
     status: {
         type: String,
         enum: ['Available', 'Not available'],
@@ -33,8 +32,7 @@ const productSchema = new mongoose.Schema({
     },
 
     images: {
-
-       type: [String],  
+       type: [String],
        default: [],
     },
 
@@ -43,20 +41,29 @@ const productSchema = new mongoose.Schema({
         trim: true
     },
 
-    stock : {
-        type : Number,
-      
+    stock: {
+        type: Number,
     },
 
-    brand : {
-
-        type : String,
-        require : true,
-        trim : true,
+    brand: {
+        type: String,
+        required: true,
+        trim: true,
     },
+
     
+    sizes: {
+        type: [String],
+        enum: ['Double', 'Queen', 'King'],
+        default: []
+    },
 
 
+    fabrics: {
+        type: [String],
+        enum: ['Cotton', 'Silk', 'Polyester', 'Bamboo Fabric'],
+        default: []
+    }
 
 }, { timestamps: true });
 
@@ -64,10 +71,5 @@ const productSchema = new mongoose.Schema({
 
 
 
-
-
-
-
 const productModel = mongoose.model('Product', productSchema);
-
 module.exports = productModel;

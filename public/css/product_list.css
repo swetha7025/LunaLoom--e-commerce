@@ -336,10 +336,17 @@
     margin-top: 12px;
     display: flex;
     gap: 10px;
+    
 }
 
 .product-buttons .btn {
     flex: 1;
     border-radius: 6px;
     padding: 8px 0;
+     background:#a174a9;
+}
+
+.product-buttons .btn:hover{
+
+    background: #8d5b9e;
 }

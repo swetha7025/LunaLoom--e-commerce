@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Product</title>
+
     <link rel="stylesheet" href="/css/editProducts.css">
     <link rel="stylesheet" href="/css/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -11,15 +12,16 @@
 
 <body>
 
- <%- include('../partials/adminSidebar', { activePage: 'editProducts' }) %>
+<%- include('../partials/adminSidebar', { activePage: 'editProducts' }) %>
 
 <div class="modal-container">
 
     <!-- Close Button -->
-    <a href="javascript:history.back()" class="close-btn">
-        <i class="fa-solid fa-xmark"></i>
-    </a>
-    <!-- End Close Button -->
+    <div class="close-btn">
+        <a href="javascript:history.back()">
+            <i class="fa-solid fa-xmark"></i>
+        </a>
+    </div>
 
     <div class="modal-header">
         <h2>Edit Product</h2>
@@ -84,6 +86,56 @@
             </div>
         </div>
 
+        <!-- Description -->
+        <div class="form-group full">
+            <label>Description</label>
+            <textarea name="description" required><%= product.description %></textarea>
+        </div>
+
+        <!-- Sizes -->
+       <div class="form-group full">
+    <label>Sizes</label>
+    <div class="checkbox-group">
+        <label><input type="checkbox" name="sizes" value="Double" <%= (product.sizes && product.sizes.includes("Double")) ? "checked" : "" %>> Double</label>
+
+<label><input type="checkbox" name="sizes" value="Queen" <%= (product.sizes && product.sizes.includes("Queen")) ? "checked" : "" %>> Queen</label>
+
+<label><input type="checkbox" name="sizes" value="King" <%= (product.sizes && product.sizes.includes("King")) ? "checked" : "" %>> King</label>
+
+    </div>
+</div>
+
+<div class="form-group full">
+    <label>Fabrics</label>
+    <div class="checkbox-group">
+       <label>
+  <input type="checkbox" name="fabrics" value="Cotton"
+    <%= (product.fabrics && product.fabrics.includes("Cotton")) ? "checked" : "" %>>
+  Cotton
+</label>
+
+<label>
+  <input type="checkbox" name="fabrics" value="Silk"
+    <%= (product.fabrics && product.fabrics.includes("Silk")) ? "checked" : "" %>>
+  Silk
+</label>
+
+<label>
+  <input type="checkbox" name="fabrics" value="Polyester"
+    <%= (product.fabrics && product.fabrics.includes("Polyester")) ? "checked" : "" %>>
+  Polyester
+</label>
+
+<label>
+  <input type="checkbox" name="fabrics" value="Bamboo Fabric"
+    <%= (product.fabrics && product.fabrics.includes("Bamboo Fabric")) ? "checked" : "" %>>
+  Bamboo Fabric
+</label>
+
+    </div>
+</div>
+
+
         <!-- Current Images -->
         <div class="form-group full">
             <label>Current Images</label>
@@ -92,8 +144,8 @@
                     <% product.images.forEach(img => { %>
                         <div class="preview-image-box">
                             <img src="<%= img %>" class="preview-image" alt="Product Image">
-                            <label>
-                                <input type="checkbox" name="deleteImages" value="<%= img %>"/> Delete
+                            <label class="delete-label">
+                                <input type="checkbox" name="deleteImages" value="<%= img %>"> Delete
                             </label>
                         </div>
                     <% }) %>
@@ -108,8 +160,6 @@
             <label>Upload New Images (optional)</label>
             <input type="file" name="images" multiple accept="image/*">
         </div>
-
-
 
         <button type="submit" class="save-btn">Save Changes</button>
 
