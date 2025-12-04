@@ -4,6 +4,7 @@ const router = express.Router();
 const authControllers = require("../controllers/authControllers");
 const {signupValidator,loginValidator} = require('../middleware/validateUser')
 const {protectedAuth} = require("../middleware/auth")
+const {upload} = require("../middleware/multer")
 const passport = require("passport");
 const productModel = require('../models/products');
 
@@ -107,7 +108,11 @@ router.get('/editProfile',protectedAuth, authControllers.editProfile)
 
 router.post('/editProfile',protectedAuth, authControllers.updateProfile)
 
+router.post("/uploadProfileImage",protectedAuth,upload.single("profileImage"), authControllers.uploadProfileImage)
 
+router.post("/removeProfileImage", protectedAuth,authControllers.removeProfileImage);
+
+//-----------------------------------------PRODUCT------------------------------------
 
 router.get('/product_list',authControllers.productList)
 

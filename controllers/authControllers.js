@@ -326,6 +326,52 @@ async function updateProfile(req, res) {
     }
 }
 
+//-----------------------------------------PROFILE IMAGE-----------------------------
+
+async function uploadProfileImage(req,res) {
+
+  try {
+     if(!req.file){
+
+       return res.render("user/profile",{user:req.user, success : null, error : 'Image not founnd'})
+     }
+
+     const profilePhoto = `/img/${req.file.filename}`
+
+     await User.findByIdAndUpdate(req.auth.id,{profileImage:profilePhoto},{new:true})
+
+     return res.redirect("/profile")
+
+
+
+  } catch (error) {
+    console.log(error)
+    res.render("user/profile",{user : req.user, success : null, error : 'Something went wrong'})
+  }
+  
+}
+
+async function removeProfileImage(req, res) {
+  try {
+    await User.findByIdAndUpdate(
+      req.auth.id,
+      { profileImage: null },
+      { new: true }
+    );
+
+    return res.redirect("/profile");
+  } catch (error) {
+    console.log(error);
+    return res.render("user/profile", {
+      user: req.user,
+      success: null,
+      error: "Unable to remove profile photo"
+    });
+  }
+}
+
+
+
 
 //--------------------------------------PRODUCT LIST---------------------------------
 
@@ -387,6 +433,7 @@ async function productList(req,res) {
 
 
 
+
 module.exports = {
   signupUser,
   loginUser,
@@ -396,8 +443,11 @@ module.exports = {
   profilePage,
   editProfile,
   updateProfile,
+  uploadProfileImage,
+  removeProfileImage,
   loadHome,
   logoutUser,
   productList,
+
 
 }

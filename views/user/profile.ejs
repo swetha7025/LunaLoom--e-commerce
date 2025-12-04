@@ -7,23 +7,18 @@
   <title>My Profile</title>
   <link rel="stylesheet" href="/css/profile.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/animate.css">
-     <link rel="stylesheet" href="/css/owl.carousel.min.css">
-   <link rel="stylesheet" href="/css/all.css">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/animate.css">
+  <link rel="stylesheet" href="/css/owl.carousel.min.css">
+  <link rel="stylesheet" href="/css/all.css">
   <link rel="stylesheet" href="/css/flaticon.css">
   <link rel="stylesheet" href="/css/themify-icons.css">
   <link rel="stylesheet" href="/css/magnific-popup.css">
   <link rel="stylesheet" href="/css/slick.css">
 
-<!-- IMPORTANT -->
-<link rel="stylesheet" href="/css/style.css">
-<link rel="stylesheet" href="/css/header.css">
-
-<!-- Page-specific -->
-<link rel="stylesheet" href="/css/profile.css">
-
-  
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/header.css">
+  <link rel="stylesheet" href="/css/profile.css">
 </head>
 
 <body>
@@ -35,38 +30,30 @@
       <!-- Sidebar -->
       <div class="col-md-3 sidebar">
         <div class="profile-card text-center">
-<!-- 
-          <div class="profile-icon">
-            <span><%= user.name ? user.name.charAt(0).toUpperCase() : "U" %></span>
-          </div>
-           -->
-      <div class="profile-photo-container">
+
+         <div class="profile-photo-container">
 
     <% if (user.profileImage) { %>
-        <!-- Show uploaded profile image -->
         <img 
-            src="/uploads/profile/<%= user.profileImage %>" 
+            src="<%= user.profileImage %>" 
             class="profile-photo"
             alt="profile"
         >
     <% } else { %>
-        <!-- Show initial letter -->
         <div class="profile-initial">
             <%= user.name ? user.name.charAt(0).toUpperCase() : "U" %>
         </div>
     <% } %>
 
-    <!-- Edit icon -->
     <label for="profileUpload" class="edit-icon">
         <i class="fas fa-camera"></i>
     </label>
 
-    <!-- File upload form -->
     <form action="/uploadProfileImage" method="POST" enctype="multipart/form-data">
         <input 
             type="file" 
             id="profileUpload" 
-            name="profile" 
+            name="profileImage" 
             style="display: none;" 
             onchange="this.form.submit()"
         >
@@ -76,12 +63,9 @@
 
           <h4 class="profile-name"><%= user.name %></h4>
           <p class="profile-email"><%= user.email %></p>
-         <p class="profile-phone"><%= user.phone %></p>
+          <p class="profile-phone"><%= user.phone %></p>
 
-          <!-- <button class="btn btn-danger w-100">EDIT PROFILE</button> -->
-         <!-- <button class="btn custom-edit-btn w-100">EDIT PROFILE</button> -->
           <a href="/editProfile" class="btn custom-edit-btn w-100">EDIT PROFILE</a>
-
 
           <ul class="nav flex-column mt-3">
             <li class="nav-item active"><a href="#" class="nav-link active">My Orders</a></li>
@@ -93,7 +77,6 @@
         </div>
       </div>
 
-      <!-- Orders Section -->
       <div class="col-md-7 orders-section">
 
         <% if (success) { %>

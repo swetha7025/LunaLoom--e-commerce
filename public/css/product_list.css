@@ -301,3 +301,45 @@
         font-size: 13px;
     }
 }
+
+/* Wishlist icon - top right over the image */
+.product-image-wrapper {
+    position: relative;
+}
+
+.wishlist-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #ffffffd9;
+    padding: 8px 10px;
+    border-radius: 50%;
+    font-size: 18px;
+    color: #ff4d4d;
+    z-index: 10;
+    transition: 0.3s;
+}
+
+.wishlist-icon:hover {
+    background: #ff4d4d;
+    color: #fff;
+}
+
+/* Image styling (optional) */
+.product-img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+/* Buttons */
+.product-buttons {
+    margin-top: 12px;
+    display: flex;
+    gap: 10px;
+}
+
+.product-buttons .btn {
+    flex: 1;
+    border-radius: 6px;
+    padding: 8px 0;
+}

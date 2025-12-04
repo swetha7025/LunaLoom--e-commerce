@@ -5,8 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Profile</title>
 
+    <!-- REQUIRED CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/all.css">
+    <link rel="stylesheet" href="/css/all.css">              <!-- FontAwesome -->
+    <link rel="stylesheet" href="/css/themify-icons.css">     <!-- Search icon -->
+    <link rel="stylesheet" href="/css/flaticon.css">          <!-- Cart icon -->
+    
+    <!-- Your Styles -->
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/profile.css">
@@ -27,41 +32,50 @@
         <div class="alert alert-danger"><%= error %></div>
     <% } %>
 
-    <!-- Profile Image Section -->
     <div class="profile-photo-container">
 
         <% if (user && user.profileImage) { %>
-            <!-- Show uploaded image -->
-            <img 
-                src="/uploads/profile/<%= user.profileImage %>" 
-                class="profile-photo"
-                alt="Profile Image"
-            >
+
+            <div class="profile-photo-wrapper">
+                <img 
+                    src="<%= user.profileImage %>" 
+                    class="profile-photo"
+                    alt="Profile Image"
+                >
+
+                <!-- delete icon -->
+                <form action="/removeProfileImage" method="POST">
+                    <button class="remove-icon-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </form>
+            </div>
+
         <% } else { %>
-            <!-- Show initial letter -->
+
             <div class="profile-initial">
                 <%= user && user.name ? user.name.charAt(0).toUpperCase() : "U" %>
             </div>
+
         <% } %>
 
-        <!-- Camera Icon -->
+        <!-- Upload button -->
         <label for="profileUpload" class="edit-icon">
             <i class="fas fa-camera"></i>
         </label>
 
-        <!-- Hidden Upload Form -->
         <form action="/uploadProfileImage" method="POST" enctype="multipart/form-data">
             <input 
                 type="file" 
                 id="profileUpload" 
-                name="profile" 
+                name="profileImage" 
                 style="display:none" 
                 onchange="this.form.submit()"
             >
         </form>
     </div>
 
-    <!-- Edit Profile Form -->
+
     <form action="/editProfile" method="POST">
 
         <div class="mb-3">
@@ -107,6 +121,11 @@
     </form>
 
 </div>
+
+<!-- REQUIRED JS -->
+<script src="/js/jquery-1.12.1.min.js"></script>
+<script src="/js/popper.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
 
 </body>
 </html>

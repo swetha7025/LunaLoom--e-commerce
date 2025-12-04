@@ -158,3 +158,29 @@ body {
   background: #d682b0;
   color: #fff;
 }
+.profile-photo-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.remove-icon-btn {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ff4d4d;
+    border: none;
+    color: white;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 12px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.remove-icon-btn:hover {
+    background: #e60000;
+}

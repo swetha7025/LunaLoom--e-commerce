@@ -78,3 +78,13 @@
   color: #000;
 }
 
+.header-wishlist i {
+    font-size: 22px;
+    color: #ff4d4d;
+    transition: 0.3s;
+}
+
+.header-wishlist:hover i {
+    color: #e60000;
+    transform: scale(1.15);
+}

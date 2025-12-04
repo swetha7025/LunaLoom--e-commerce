@@ -15,12 +15,11 @@
 
 <div class="modal-container">
 
-    <!-- Close button -->
-    <div class="close-btn">
-        <a href="javascript:history.back()">
-            <i class="fa-solid fa-xmark"></i>
-        </a>
-    </div>
+    <!-- Close Button -->
+    <a href="javascript:history.back()" class="close-btn">
+        <i class="fa-solid fa-xmark"></i>
+    </a>
+    <!-- End Close Button -->
 
     <div class="modal-header">
         <h2>Edit Product</h2>
@@ -109,6 +108,8 @@
             <label>Upload New Images (optional)</label>
             <input type="file" name="images" multiple accept="image/*">
         </div>
+
+
 
         <button type="submit" class="save-btn">Save Changes</button>
 
