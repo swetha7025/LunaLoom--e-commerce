@@ -381,28 +381,26 @@ async function productList(req, res) {
   try {
     const { category, brand } = req.query;
 
-    let filter = {};
+    let filter = {}
 
     if (category) {
-      filter.category = category;
+      filter.category = category
     }
 
     if (brand) {
-      filter.brand = brand;   // FIXED: previously filter.sub (wrong)
+      filter.brand = brand
     }
 
-    const products = await productModel.find(filter);
+    const products = await productModel.find(filter)
 
-    return res.render("user/product_list", {
-      products,
-      success: null,
-      error: null
-    });
+    return res.render("user/product_list", { products,success: null,error: null })
+    
+  
 
   } catch (error) {
     console.log(error);
 
-    // FIXED: products was not defined in catch
+  
     return res.render("user/product_list", {
       products: [],
       success: null,
@@ -416,23 +414,17 @@ async function productList(req, res) {
 
 async function getSingleProduct(req, res) {
   try {
-    const productId = req.params.id;
+    const productId = req.params.id
 
-    const product = await productModel.findById(productId);
+    const product = await productModel.findById(productId)
 
     if (!product) {
-      return res.render("user/product_list", {
-        product: null,
-        success: null,
-        error: 'Product not found'
-      });
+      return res.render("user/product_list", { product: null,success: null, error: 'Product not found' })
+       
     }
 
-    return res.render("user/singleProduct", {
-      product,
-      success: null,
-      error: null
-    });
+    return res.render("user/singleProduct", {product,success: null,error: null})
+     
 
   } catch (error) {
     console.log(error);

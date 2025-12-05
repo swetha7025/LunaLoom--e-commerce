@@ -92,11 +92,9 @@ async function adminProducts(req, res) {
   try {
     const products = await productModel.find();
 
-    res.render("admin/products", {
-      products,
-      success: null,
-      error: null
-    });
+    res.render("admin/products", { products,success: null,error: null})
+      
+    
 
   } catch (err) {
     res.render("admin/products", {
@@ -146,13 +144,13 @@ async function addProducts(req, res) {
       images: imagePaths
     });
 
-    console.log("addProducts - product created");
+    console.log("addProducts - product created")
 
-    return res.redirect("/products");
+    return res.redirect("/products")
 
   } catch (err) {
     console.log(err);
-    return res.status(500).send("Error adding product");
+    return res.render("admin/addProducts", { success: null, error: "Error adding product" })
   }
 }
 
@@ -167,20 +165,14 @@ async function editProducts(req, res) {
     const product = await productModel.findById(productId);
 
     if (!product) {
-      return res.render("admin/editProducts", { 
-        product: {}, 
-        success: null, 
-        error: "Product not found" 
-      });
+      return res.render("admin/editProducts", {  product: {}, success: null, error: "Product not found" })
+       
     }
 
     
     if (req.method === "GET") {
-      return res.render("admin/editProducts", { 
-        product, 
-        success: null, 
-        error: null 
-      });
+      return res.render("admin/editProducts", { product,  success: null,  error: null  });
+        
     }
 
    
@@ -203,16 +195,17 @@ async function editProducts(req, res) {
       oldImages = oldImages.filter(img => !imagesToDelete.includes(img));
 
       imagesToDelete.forEach(imgPath => {
-        const filePath = `public${imgPath}`;
-        if (fs.existsSync(filePath)) {
-          fs.unlinkSync(filePath);
-        }
+
+        const filePath = `public${imgPath}`
+
+        if (fs.existsSync(filePath)) { fs.unlinkSync(filePath)}
+         
       });
     }
 
     
     let newImages = [];
-    if (req.files && req.files.length > 0) {
+    if (req.files) {
       newImages = req.files.map(file => `/img/${file.filename}`);
     }
 
@@ -228,6 +221,7 @@ async function editProducts(req, res) {
         price,
         stock,
         status,
+        description,
         sizes: updatedSizes,
         fabrics: updatedFabrics,
         images: updatedImages

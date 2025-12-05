@@ -26,7 +26,6 @@
 
   <%- include('../partials/header') %>
 
-  <!-- Success / Error Messages -->
   <% if (success) { %>
     <div class="alert alert-success text-center"><%= success %></div>
   <% } %>
@@ -35,7 +34,6 @@
     <div class="alert alert-danger text-center"><%= error %></div>
   <% } %>
 
-  <!-- Banner -->
   <section class="breadcrumb_part">
     <div class="container">
       <div class="row">
@@ -48,7 +46,6 @@
     </div>
   </section>
 
-  <!-- Product List Section -->
   <section class="product_list section_padding">
     <div class="container">
       <div class="row">
@@ -102,13 +99,15 @@
                   <div class="col-lg-6 col-sm-6">
                     <div class="single_product_item">
 
-                      <!-- Image + Wishlist -->
                       <div class="product-image-wrapper">
                         <a href="/wishlist/add/<%= product._id %>" class="wishlist-icon">
                           <i class="far fa-heart"></i>
                         </a>
 
-                        <img src="<%= product.images[0] %>" class="img-fluid product-img">
+                        <!-- FIXED FALLBACK IMAGE -->
+                        <img 
+                          src="<%= product.images?.length ? product.images[0] : '/img/default-product.png' %>" 
+                          class="img-fluid product-img">
                       </div>
 
                       <h3>
@@ -117,10 +116,8 @@
 
                       <p>From ₹<%= product.price %></p>
 
-                      <!-- Add to Cart / Buy Now -->
                       <div class="product-buttons">
                         <a href="/cart/add/<%= product._id %>" class="btn btn-sm btn-primary">Add to Cart</a>
-                        <!-- <a href="/buy/<%= product._id %>" class="btn btn-sm btn-success">Buy Now</a> -->
                       </div>
 
                     </div>
