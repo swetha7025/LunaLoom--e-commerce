@@ -1,5 +1,6 @@
 const User = require('../models/user')
 const productModel = require('../models/products')
+const wishlistModel = require('../models/wishlist')
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const nodemailer = require('nodemailer');
@@ -436,22 +437,90 @@ async function getSingleProduct(req, res) {
     });
   }
 }
+//-------------------------------------WISHLIST------------------------------------
 
 
+async function getWishlist(req,res) {
+    try {
+      
+      const userId = req.auth?.id
+
+      const wishlist = await wishlistModel.findOne({userId}).populate('products.productId', 'name price images ')
 
 
+      res.render('user/wishlist',{wishlist, success:null,error:null})
+
+    } catch (error) {
+      
+      console.log(error)
+      res.render('user/wishlist',{wishlist:null, success:null,error:'something went wrong'})
+    }
+  
+}
+
+//------------------------------------------ADD TO WISHLIST--------------------------------
+
+async function addToWishlist(req,res) {
+  try {
+  
+    const userId = req.auth?.id
+    const productId = req.params.id
+
+    let wishlist = await wishlistModel.findOne({userId})
+
+    if(!wishlist){
+
+      wishlist = new wishlistModel({userId,products:[]})
+    }
+
+    const exist = wishlist.products.find(p=>p.productId.toString()===productId)
+
+    if(!exist){
+      wishlist.products.push({productId})
+      await wishlist.save()
+    }
+
+    res.redirect('/wishlist')
+  
+
+  } catch (error) {
+    console.log(error)
+    res.render('user/wishlist',{success:null,error:'Somthing went wrong while adding to wishlist'})
+  }
+  
+}
 
 
+//---------------------------------------REMOVE WISHLIST------------------------------------
 
 
+async function removeFromWishlist(req, res) {
+  try {
+    const userId = req.auth?.id
+    const productId = req.params.id
 
+    let wishlist = await wishlistModel.findOne({ userId })
 
+    if (!wishlist) {
+      return res.redirect('/wishlist')
+    }
 
+    wishlist.products = wishlist.products.filter(
+      (p) => p.productId.toString() !== productId
+    );
 
+    await wishlist.save();
 
+    res.redirect('/wishlist');
 
-
-
+  } catch (error) {
+    console.log(error);
+    res.render('user/wishlist', {
+      success: null,
+      error: "Something went wrong while removing from wishlist"
+    });
+  }
+}
 
 
 
@@ -478,7 +547,9 @@ module.exports = {
   loadHome,
   logoutUser,
   productList,
-  getSingleProduct
-
+  getSingleProduct,
+  getWishlist,
+  addToWishlist,
+  removeFromWishlist
 
 }

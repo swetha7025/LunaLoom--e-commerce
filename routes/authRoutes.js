@@ -7,6 +7,7 @@ const {protectedAuth} = require("../middleware/auth")
 const {upload} = require("../middleware/multer")
 const passport = require("passport");
 const productModel = require('../models/products');
+const wishlistModel = require('../models/wishlist');
 
 
 
@@ -119,7 +120,12 @@ router.get('/product_list',authControllers.productList)
 router.get('/product/:id',authControllers.getSingleProduct)
 
 
+router.get('/wishlist',protectedAuth,authControllers.getWishlist)
 
+
+router.get('/wishlist/add/:id', protectedAuth, authControllers.addToWishlist)
+
+router.post('/wishlist/remove/:id', protectedAuth, authControllers.removeFromWishlist);
 
 
 

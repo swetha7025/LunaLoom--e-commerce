@@ -1,23 +1,23 @@
+/* Footer background */
 .footer_part {
   background: #f8f9fa;
-  padding-top: 40px;
+  padding: 40px 0 10px 0;
 }
 
-.footer_iner {
-  padding-bottom: 20px;
-  border-bottom: 1px solid #ddd;
-}
-
- .footer_logo img {
-  max-width: 40px;
-} 
-
+/* Align logo + menu */
 .footer_menu {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 40px;
 }
 
+/* Resize logo */
+.footer_logo img {
+  max-width: 90px;   /* adjust size here */
+  height: auto;
+}
+
+/* Footer links */
 .footer_menu_item a {
   margin-right: 20px;
   color: #333;
@@ -27,28 +27,27 @@
 }
 
 .footer_menu_item a:hover {
-  color: #007bff;
+  color: #7d4c74;   /* your theme color */
 }
 
+/* Social icons */
 .social_icon a {
   margin-right: 15px;
-  color: #333;
-  font-size: 18px;
-  transition: color 0.3s ease;
 }
 
-.social_icon a:hover {
-  color: #007bff;
+.social_icon a i {
+  font-size: 26px;   /* adjust icon size */
+  color: #7d4c74;
+  transition: 0.3s;
 }
 
+.social_icon a i:hover {
+  transform: scale(1.2);
+  color: #000;
+}
+
+/* Copyright section */
 .copyright_part {
-  background: #e9ecef;
+  background: #f3e6ec;
   padding: 15px 0;
 }
-
-.copyright_part p {
-  margin: 0;
-  color: #555;
-  font-size: 14px;
-}
-
