@@ -8,7 +8,6 @@
 
   <link rel="icon" href="/img/favicon.png">
   <link rel="stylesheet" href="/css/bootstrap.min.css">
-
   <link rel="stylesheet" href="/css/animate.css">
   <link rel="stylesheet" href="/css/owl.carousel.min.css">
   <link rel="stylesheet" href="/css/all.css">
@@ -16,24 +15,52 @@
   <link rel="stylesheet" href="/css/themify-icons.css">
   <link rel="stylesheet" href="/css/magnific-popup.css">
   <link rel="stylesheet" href="/css/slick.css">
-
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/header.css">
-   <link rel="stylesheet" href="/css/footer.css">
+  <link rel="stylesheet" href="/css/footer.css">
   <link rel="stylesheet" href="/css/product_list.css">
+  <style>
+    .wishlist-icon {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 22px;
+      color: #444;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    .wishlist-icon i {
+      transition: 0.3s;
+    }
+
+    .wishlist-box-message {
+      position: absolute;
+      top: 10px;
+      right: 40px;
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 14px;
+      color: #333;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    .wishlist-box-message.show {
+      opacity: 1;
+      transform: translateY(-5px);
+    }
+  </style>
 </head>
 
 <body>
 
   <%- include('../partials/header') %>
-
-  <% if (success) { %>
-    <div class="alert alert-success text-center"><%= success %></div>
-  <% } %>
-
-  <% if (error) { %>
-    <div class="alert alert-danger text-center"><%= error %></div>
-  <% } %>
 
   <section class="breadcrumb_part">
     <div class="container">
@@ -51,17 +78,14 @@
     <div class="container">
       <div class="row">
 
-        <!-- Sidebar -->
+        <!-- SIDEBAR -->
         <div class="col-md-4">
           <div class="product_sidebar">
 
             <!-- Category Filter -->
             <div class="single_sedebar">
               <div class="select_option">
-                <div class="select_option_list">
-                  Category <i class="right fas fa-caret-down"></i>
-                </div>
-
+                <div class="select_option_list">Category <i class="right fas fa-caret-down"></i></div>
                 <div class="select_option_dropdown">
                   <p><a href="/product_list">All</a></p>
                   <p><a href="/product_list?category=Bedding">Bedding</a></p>
@@ -73,10 +97,7 @@
             <!-- Brand Filter -->
             <div class="single_sedebar">
               <div class="select_option">
-                <div class="select_option_list">
-                  Brand <i class="right fas fa-caret-down"></i>
-                </div>
-
+                <div class="select_option_list">Brand <i class="right fas fa-caret-down"></i></div>
                 <div class="select_option_dropdown">
                   <p><a href="/product_list">All</a></p>
                   <p><a href="/product_list?brand=Welspun%20Living">Welspun Living</a></p>
@@ -89,31 +110,36 @@
           </div>
         </div>
 
-        <!-- Product Grid -->
+        <!-- PRODUCT GRID -->
         <div class="col-md-8">
           <div class="product_list">
             <div class="row">
 
               <% if (products && products.length > 0) { %>
-
                 <% products.forEach(product => { %>
                   <div class="col-lg-6 col-sm-6">
-                    <div class="single_product_item">
+                    <div class="single_product_item" style="position: relative;">
 
-                      <div class="product-image-wrapper">
-                        <a href="/wishlist/add/<%= product._id %>" class="wishlist-icon">
-                          <i class="far fa-heart"></i>
-                        </a>
+                      <div class="product-image-wrapper" style="position: relative;">
 
-                        <!-- FIXED FALLBACK IMAGE -->
-                        <img 
-                          src="<%= product.images?.length ? product.images[0] : '/img/default-product.png' %>" 
-                          class="img-fluid product-img">
+                        <!-- ❤️ AJAX Wishlist Icon -->
+                        <div class="wishlist-icon" onclick="addToWishlist('<%= product._id %>', this)">
+                          <% if (product.isInWishlist) { %>
+                            <i class="fa-solid fa-heart" style="color:red;"></i>
+                          <% } else { %>
+                            <i class="far fa-heart"></i>
+                          <% } %>
+                        </div>
+
+                        <!-- Small floating message -->
+                        <div class="wishlist-box-message">Added to wishlist ❤️</div>
+
+                        <!-- PRODUCT IMAGE -->
+                        <img src="<%= product.images?.length ? product.images[0] : '/img/default-product.png' %>" 
+                             class="img-fluid product-img">
                       </div>
 
-                      <h3>
-                        <a href="/product/<%= product._id %>"><%= product.name %></a>
-                      </h3>
+                      <h3><a href="/product/<%= product._id %>"><%= product.name %></a></h3>
 
                       <p>From ₹<%= product.price %></p>
 
@@ -124,7 +150,6 @@
                     </div>
                   </div>
                 <% }) %>
-
               <% } else { %>
                 <p class="text-center w-100">No products found</p>
               <% } %>
@@ -143,6 +168,36 @@
   </section>
 
   <%- include('../partials/footer') %>
+
+  <!-- AJAX SCRIPT -->
+  <script>
+    function addToWishlist(productId, el) {
+      fetch(`/wishlist/add/${productId}`, {
+        method: "GET",
+        headers: { "X-Requested-With": "XMLHttpRequest" }
+      })
+      .then(res => res.json())
+      .then(data => {
+        let icon = el.querySelector("i");
+
+        // Make heart red + solid
+        icon.classList.remove("fa-regular");
+        icon.classList.add("fa-solid");
+        icon.style.color = "red";
+
+        // Show small message box
+        let msgBox = el.parentElement.querySelector(".wishlist-box-message");
+        msgBox.textContent = data.exists ? "Already in wishlist ❤️" : "Added to wishlist ❤️";
+        msgBox.classList.add("show");
+
+        // Hide after 2 seconds
+        setTimeout(() => {
+          msgBox.classList.remove("show");
+        }, 2000);
+      })
+      .catch(err => console.log(err));
+    }
+  </script>
 
 </body>
 </html>

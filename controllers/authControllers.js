@@ -396,12 +396,10 @@ async function productList(req, res) {
 
     return res.render("user/product_list", { products,success: null,error: null })
     
-  
 
   } catch (error) {
     console.log(error);
-
-  
+ 
     return res.render("user/product_list", {
       products: [],
       success: null,
@@ -460,34 +458,75 @@ async function getWishlist(req,res) {
 
 //------------------------------------------ADD TO WISHLIST--------------------------------
 
-async function addToWishlist(req,res) {
+// async function addToWishlist(req,res) {
+//   try {
+  
+//     const userId = req.auth?.id
+//     const productId = req.params.id
+
+//     let wishlist = await wishlistModel.findOne({userId})
+
+//     if(!wishlist){
+
+//       wishlist = new wishlistModel({userId,products:[]})
+//     }
+
+//     const exist = wishlist.products.find(p=>p.productId.toString()===productId)
+
+//     if(!exist){
+    
+//       wishlist.products.push({productId})
+//       await wishlist.save()
+//     }
+
+//     res.redirect('/wishlist')
+  
+
+//   } catch (error) {
+//     console.log(error)
+//     res.render('user/wishlist',{success:null,error:'Somthing went wrong while adding to wishlist'})
+//   }
+  
+// }
+
+
+async function addToWishlist(req, res) {
   try {
-  
-    const userId = req.auth?.id
-    const productId = req.params.id
+    const userId = req.auth?.id;
+    const productId = req.params.id;
 
-    let wishlist = await wishlistModel.findOne({userId})
+    let wishlist = await wishlistModel.findOne({ userId });
 
-    if(!wishlist){
-
-      wishlist = new wishlistModel({userId,products:[]})
+    if (!wishlist) {
+      wishlist = new wishlistModel({ userId, products: [] });
     }
 
-    const exist = wishlist.products.find(p=>p.productId.toString()===productId)
+    const exist = wishlist.products.find(p => p.productId.toString() === productId);
 
-    if(!exist){
-      wishlist.products.push({productId})
-      await wishlist.save()
+    if (exist) {
+      return res.json({
+        success: true,
+        exists: true,
+        message: "Product already in wishlist"
+      });
     }
 
-    res.redirect('/wishlist')
-  
+    wishlist.products.push({ productId });
+    await wishlist.save();
+
+    return res.json({
+      success: true,
+      exists: false,
+      message: "Product added to wishlist"
+    });
 
   } catch (error) {
-    console.log(error)
-    res.render('user/wishlist',{success:null,error:'Somthing went wrong while adding to wishlist'})
+    console.log(error);
+    return res.json({
+      success: false,
+      message: "Something went wrong"
+    });
   }
-  
 }
 
 
@@ -506,21 +545,50 @@ async function removeFromWishlist(req, res) {
     }
 
     wishlist.products = wishlist.products.filter(
+
       (p) => p.productId.toString() !== productId
-    );
+    )
 
-    await wishlist.save();
+    await wishlist.save()
 
-    res.redirect('/wishlist');
+    res.redirect('/wishlist')
 
   } catch (error) {
-    console.log(error);
-    res.render('user/wishlist', {
-      success: null,
-      error: "Something went wrong while removing from wishlist"
-    });
+    console.log(error)
+    res.render('user/wishlist', {success: null, error: "Something went wrong while removing from wishlist" })
+  
   }
 }
+
+
+//------------------------------------------------CART PAGE-------------------------------------------
+
+async function getCart(params) {
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

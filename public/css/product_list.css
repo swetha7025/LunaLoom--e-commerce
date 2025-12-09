@@ -350,3 +350,23 @@
 
     background: #8d5b9e;
 }
+
+.wishlist-box-message {
+    position: absolute;
+    top: -25px;
+    right: 0;
+    background: #d4edda; /* light green */
+    color: #155724;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    border: 1px solid #c3e6cb;
+    white-space: nowrap;
+    z-index: 20;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.wishlist-box-message.show {
+    opacity: 1;
+}

@@ -11,7 +11,7 @@ const wishlistSchema = new mongoose.Schema({
         {
             productId: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "Product",  // ✔ MUST MATCH model name in product model
+                ref: "Product",  
                 required: true
             }
         }

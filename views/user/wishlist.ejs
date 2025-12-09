@@ -85,6 +85,7 @@
                     <a href="/product/<%= product._id %>" class="btn btn-primary btn-sm mt-2">
                         View Product
                     </a>
+                    
 
                     <!-- Remove Button -->
                     <form action="/wishlist/remove/<%= product._id %>" method="POST">
@@ -102,8 +103,8 @@
 
 <%- include('../partials/footer') %>
 
-<!-- Bootstrap JS for close button -->
 <script src="/js/bootstrap.bundle.min.js"></script>
+
 
 </body>
 </html>
