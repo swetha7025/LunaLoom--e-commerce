@@ -1,113 +1,187 @@
-<!doctype html>
-<html lang="zxx">
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>pilloMart | Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
     <link rel="icon" href="/img/favicon.png">
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <!-- animate CSS -->
+
+    <!-- Animation and carousel -->
     <link rel="stylesheet" href="/css/animate.css">
-    <!-- owl carousel CSS -->
     <link rel="stylesheet" href="/css/owl.carousel.min.css">
-    <!-- font awesome CSS -->
+
+    <!-- Font Awesome & Icons -->
     <link rel="stylesheet" href="/css/all.css">
-    <!-- icon CSS -->
     <link rel="stylesheet" href="/css/flaticon.css">
     <link rel="stylesheet" href="/css/themify-icons.css">
-    <!-- magnific popup CSS -->
+
+    <!-- Popup & Slider -->
     <link rel="stylesheet" href="/css/magnific-popup.css">
-    <link rel="stylesheet" href="/css/nice-select.css">
-    <!-- style CSS -->
+    <link rel="stylesheet" href="/css/slick.css">
+
+    <!-- Shared and page-specific CSS -->
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/cart.css">
 </head>
-
 <body>
-    <!-- dynamic alert messages -->
-    <% if (successMessage) { %>
-        <div class="alert alert-success text-center" role="alert">
-            <%= successMessage %>
+    <!-- views/user/cart.ejs -->
+
+<%- include('../partials/header') %>
+
+<!-- dynamic alert messages -->
+<% if (success) { %>
+  <div class="alert alert-success text-center" role="alert">
+    <%= successMessage %>
+  </div>
+<% } %>
+
+<% if (error) { %>
+  <div class="alert alert-danger text-center" role="alert">
+    <%= errorMessage %>
+  </div>
+<% } %>
+
+<!-- breadcrumb part start-->
+<section class="breadcrumb_part">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="breadcrumb_iner">
+          <h2>Cart List</h2>
         </div>
-    <% } %>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- breadcrumb part end-->
 
-    <% if (errorMessage) { %>
-        <div class="alert alert-danger text-center" role="alert">
-            <%= errorMessage %>
-        </div>
-    <% } %>
+<!--================Cart Area =================-->
+<section class="cart_area section_padding">
+  <div class="container">
+    <div class="cart_inner">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Product</th>
+              <th scope="col">Price</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Total</th>
+              <th scope="col">Actions</th>
+              
+            
+              
+            </tr>
+          </thead>
 
-    <!--::header part start::-->
-    <header class="main_menu home_menu">
-        <!-- same header HTML structure -->
-        <!-- all links updated as /routes or ejs-friendly links -->
-        ...
-    </header>
-    <!-- Header part end-->
+          <tbody>
+  <% if (cart && cart.products.length > 0) { %>
 
-    <!-- breadcrumb part start -->
-    <section class="breadcrumb_part">
-        ...
-        <h2>Login</h2>
-        ...
-    </section>
-    <!-- breadcrumb part end-->
+    <% cart.
+    products.forEach(item => { %>
+      <tr>
+        <td>
+          <div class="media">
+            <div class="d-flex">
 
-    <!--================Login Section =================-->
-    <section class="login_part section_padding">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 col-md-6">
-                    <div class="login_part_text text-center">
-                        <div class="login_part_text_iner">
-                            <h2>New to our Shop?</h2>
-                            <p>There are advances being made in science and technology everyday, and a good example of this is the</p>
-                            <a href="/register" class="btn_3">Create an Account</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6">
-                    <div class="login_part_form">
-                        <div class="login_part_form_iner">
-                            <h3>Welcome Back ! <br> Please Sign in now</h3>
-                            <form class="row contact_form" action="/login" method="POST" novalidate="novalidate">
-                                <div class="col-md-12 form-group p_star">
-                                    <input type="text" class="form-control" placeholder="Username" name="email" required />
-                                </div>
-                                <div class="col-md-12 form-group p_star">
-                                    <input type="password" class="form-control" placeholder="Password" name="password" required />
-                                </div>
-                                <div class="col-md-12 form-group">
-                                    <button type="submit" value="submit" class="btn_3">
-                                        log in
-                                    </button>
-                                    <a class="lost_pass" href="#">forget password?</a>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+              <img 
+                src="<%= item.productId.images && item.productId.images.length > 0 
+                        ? item.productId.images[0] 
+                        : 'img/default.png' %>" 
+                alt="<%= item.productId.title %>" 
+                style="width: 80px; height: 80px; object-fit: cover;"
+              >
+
             </div>
-        </div>
-    </section>
-    <!--================End Login Section =================-->
 
-    <!-- footer part start -->
-    <footer class="footer_part">
-        <!-- footer structure unchanged, links updated -->
-        ...
-    </footer>
+            <div class="media-body">
+              <p><%= item.productId.title %></p>
+            </div>
+          </div>
+        </td>
 
-    <!-- jquery plugins here-->
-    <script src="/js/jquery-1.12.1.min.js"></script>
-    <!-- popper js -->
-    <script src="/js/popper.min.js"></script>
-    <!-- bootstrap js -->
-    <script src="/js/bootstrap.min.js"></script>
-    <!-- custom js -->
-    <script src="/js/custom.js"></script>
+        <td>
+          <h5>₹<%= item.productId.price.toFixed(2) %></h5>
+        </td>
+
+        <td>
+          <div class="product_count">
+
+            <a href="/cart/decrease/<%= item.productId._id %>" class="input-number-decrement">
+              <i class="ti-minus"></i>
+            </a>
+
+            <input class="input-number" type="text" 
+                   value="<%= item.quantity %>" min="1" max="100">
+
+            <a href="/cart/increase/<%= item.productId._id %>" class="input-number-increment">
+              <i class="ti-plus"></i>
+            </a>
+
+          </div>
+        </td>
+
+        <td>
+          <h5>₹<%= (item.productId.price * item.quantity).toFixed(2) %></h5>
+        </td>
+
+        <td>
+          <a href="/cart/edit/<%= item.productId._id %>" 
+             class="btn btn-warning btn-sm me-2" 
+             title="Edit">
+              <i class="fa fa-edit"></i>
+          </a>
+
+          <a href="/cart/remove/<%= item.productId._id %>" 
+             class="btn btn-danger btn-sm"
+             title="Delete">
+              <i class="fa fa-trash"></i>
+          </a>
+        </td>
+
+      </tr>
+    <% }) %>
+
+    <!-- Subtotal -->
+    <tr>
+      <td></td>
+      <td></td>
+      <td><h5>Subtotal</h5></td>
+      <td><h5>₹<%= total.toFixed(2) %></h5></td>
+      <td></td>
+    </tr>
+
+  <% } else { %>
+
+    <tr>
+      <td colspan="5" class="text-center py-5">Your cart is empty.</td>
+    </tr>
+
+  <% } %>
+</tbody>
+
+        </table>
+
+        <% if (cart.products.length > 0) { %>
+          <div class="checkout_btn_inner float-right">
+            <a class="btn_1" href="/product_list">Continue Shopping</a>
+            <a class="btn_1 checkout_btn_1" href="/checkout">Proceed to checkout</a>
+          </div>
+        <% } %>
+
+      </div>
+    </div>
+  </div>
+</section>
+<!--================End Cart Area =================-->
+
+<%- include('../partials/footer') %>
+
 </body>
-
 </html>

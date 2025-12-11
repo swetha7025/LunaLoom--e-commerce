@@ -8,6 +8,7 @@ const {upload} = require("../middleware/multer")
 const passport = require("passport");
 const productModel = require('../models/products');
 const wishlistModel = require('../models/wishlist');
+const cartModel = require('../models/cart');
 
 
 
@@ -119,13 +120,24 @@ router.get('/product_list',authControllers.productList)
 
 router.get('/product/:id',authControllers.getSingleProduct)
 
-
+//--------------------------------WISHLIST-------------------------
 router.get('/wishlist',protectedAuth,authControllers.getWishlist)
 
 
 router.get('/wishlist/add/:id', protectedAuth, authControllers.addToWishlist)
 
 router.post('/wishlist/remove/:id', protectedAuth, authControllers.removeFromWishlist);
+
+//-----------------------------------------CART----------------------------------
+
+router.get('/cart',protectedAuth,authControllers.getCart)
+
+
+router.post('/cart/add/:id',protectedAuth,authControllers.addToCart)
+
+
+router.get('/cart/remove/:id',protectedAuth,authControllers.removeFromCart)
+
 
 
 

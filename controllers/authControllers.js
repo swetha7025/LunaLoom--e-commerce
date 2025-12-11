@@ -1,9 +1,11 @@
 const User = require('../models/user')
 const productModel = require('../models/products')
 const wishlistModel = require('../models/wishlist')
+const cartModel = require('../models/cart')
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const nodemailer = require('nodemailer');
+const user = require('../models/user')
 
 require('dotenv').config();
 
@@ -435,6 +437,7 @@ async function getSingleProduct(req, res) {
     });
   }
 }
+
 //-------------------------------------WISHLIST------------------------------------
 
 
@@ -492,40 +495,32 @@ async function getWishlist(req,res) {
 
 async function addToWishlist(req, res) {
   try {
-    const userId = req.auth?.id;
-    const productId = req.params.id;
+    const userId = req.auth?.id
+    const productId = req.params.id
 
-    let wishlist = await wishlistModel.findOne({ userId });
+    let wishlist = await wishlistModel.findOne({ userId })
 
     if (!wishlist) {
-      wishlist = new wishlistModel({ userId, products: [] });
+      wishlist = new wishlistModel({ userId, products: [] })
     }
 
-    const exist = wishlist.products.find(p => p.productId.toString() === productId);
+    const exist = wishlist.products.find(p => p.productId.toString() === productId)
 
     if (exist) {
-      return res.json({
-        success: true,
-        exists: true,
-        message: "Product already in wishlist"
-      });
+      return res.json({ success: true, exists: true, message: "Product already in wishlist" })
+      
     }
 
-    wishlist.products.push({ productId });
-    await wishlist.save();
+    wishlist.products.push({ productId })
+    await wishlist.save()
 
-    return res.json({
-      success: true,
-      exists: false,
-      message: "Product added to wishlist"
-    });
-
+    return res.json({ success: true, exists: false, message: "Product added to wishlist"})
+     
+     
   } catch (error) {
-    console.log(error);
-    return res.json({
-      success: false,
-      message: "Something went wrong"
-    });
+    console.log(error)
+    return res.json({ success: false, message: "Something went wrong" })
+     
   }
 }
 
@@ -562,13 +557,150 @@ async function removeFromWishlist(req, res) {
 
 
 //------------------------------------------------CART PAGE-------------------------------------------
+async function getCart(req,res) {
+  try {
 
-async function getCart(params) {
+    const userId = req.auth?.id
+
+    const cart = await cartModel.findOne({userId}).populate('products.productId', 'name price images')
+    
+    const total = cart?cart.products.reduce((sum,item)=>{
+                  const product = item.productId
+                  return sum+product.price*item.quantity
+                 },0):0
+              
+      res.render('user/cart',{cart:cart||{products:[]},total, user : req.user, success:null, error : null })
+                              
+                             
+  } catch (error) {
+    
+    console.log(error)
+    res.render('user/cart',{cart:{products:[]},total:0,user:req.user,success:null,error:'something went wrong'})
+  }
   
 }
 
+//-----------------------------------------------ADD TO CART-----------------------------------------
 
 
+// async function addToCart(req, res) {
+//   try {
+//     const userId = req.auth?.id
+//     const productId = req.params.id
+
+    
+//     const product = await productModel.findById(productId)
+//     if (!product) {
+//       return res.redirect('/product_list')
+//     }
+
+    
+//     let cart = await cartModel.findOne({ userId })
+    
+//     if (!cart) {
+//       await cartModel.create({
+
+//         userId, products: [ {productId, quantity: 1, price: product.price }]
+       
+//       })
+
+//       return res.redirect("/cart");
+//     }
+
+    
+//     const existingItem = cart.products.find(
+//       (item) => item.productId.toString() === productId
+//     );
+
+//     if (existingItem) {
+//       existingItem.quantity += 1
+//     } else {
+
+//       cart.products.push({ productId, quantity: 1, price: product.price})
+       
+//     }
+
+//     await cart.save();
+//     return res.redirect("/cart")
+
+//   } catch (error) {
+//     console.log(error)
+//     return res.redirect("/cart")
+//   }
+// }
+
+async function addToCart(req, res) {
+  try {
+    const userId = req.auth?.id
+    const productId = req.params.id
+
+    const product = await productModel.findById(productId)
+    if (!product) {
+      return res.json({ success: false, msg: "Product not found" })
+    }
+
+    let cart = await cartModel.findOne({ userId })
+
+    if (!cart) {
+      await cartModel.create({
+        userId, products: [{ productId, quantity: 1, price: product.price }]
+       
+      })
+
+      return res.json({success: true, msg: "Added to cart", alreadyInCart: false})
+       
+    }
+
+    const existingItem = cart.products.find(
+      (item) => item.productId.toString() === productId
+    )
+
+    if (existingItem) {
+
+      return res.json({ success: true, msg: "Already in cart",alreadyInCart: true})
+      
+      
+    }
+
+    cart.products.push({ productId, quantity: 1,price: product.price })
+    
+
+    await cart.save()
+
+    return res.json({success: true,msg: "Added to cart",alreadyInCart: false})
+      
+    
+  } catch (error) {
+    console.log(error)
+    return res.json({ success: false, msg: "Something went wrong" })
+  }
+}
+
+
+//---------------------------------------------------REMOVE FROM CART-------------------------------
+
+async function removeFromCart(req, res) {
+  try {
+    const userId = req.auth?.id
+    const productId = req.params.id
+    
+    let cart = await cartModel.findOne({ userId })
+
+    if (!cart) {
+      return res.redirect('/cart')
+    }
+
+    cart.products = cart.products.filter(item => item.productId.toString() !== productId)
+
+    await cart.save()
+
+    return res.redirect('/cart')
+
+  } catch (error) {
+    console.log("Remove from cart error:", error)
+    return res.redirect('/cart')
+  }
+}
 
 
 
@@ -618,6 +750,10 @@ module.exports = {
   getSingleProduct,
   getWishlist,
   addToWishlist,
-  removeFromWishlist
+  removeFromWishlist,
+  getCart,
+  addToCart,
+  removeFromCart
+
 
 }

@@ -55,6 +55,18 @@
       opacity: 1;
       transform: translateY(-5px);
     }
+
+    .cart-msg {
+  margin-top: 5px;
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0;
+  transition: 0.3s;
+}
+.cart-msg.show {
+  opacity: 1;
+}
+
   </style>
 </head>
 
@@ -144,7 +156,13 @@
                       <p>From ₹<%= product.price %></p>
 
                       <div class="product-buttons">
-                        <a href="/cart/add/<%= product._id %>" class="btn btn-sm btn-primary">Add to Cart</a>
+                        <!-- <a href="/cart/add/<%= product._id %>" class="btn btn-sm btn-primary">Add to Cart</a> -->
+                         <button class="btn btn-sm btn-primary addToCartBtn" data-id="<%= product._id %>">
+                                Add to Cart
+                         </button>
+
+                         <div class="cart-msg"></div>
+
                       </div>
 
                     </div>
@@ -198,6 +216,32 @@
       .catch(err => console.log(err));
     }
   </script>
+
+
+<script>
+  document.querySelectorAll(".addToCartBtn").forEach(btn => {
+    btn.addEventListener("click", function () {
+      const id = this.dataset.id;
+      const msgBox = this.parentElement.querySelector(".cart-msg");
+
+      fetch(`/cart/add/${id}`, {
+        method: "POST",
+        headers: { "X-Requested-With": "XMLHttpRequest" }
+      })
+      .then(res => res.json())
+      .then(data => {
+
+        msgBox.textContent = data.msg;
+        msgBox.style.color = data.alreadyInCart ? "red" : "green";
+
+        msgBox.classList.add("show");
+        setTimeout(() => msgBox.classList.remove("show"), 2000);
+      })
+      .catch(err => console.log(err));
+    });
+  });
+</script>
+
 
 </body>
 </html>
