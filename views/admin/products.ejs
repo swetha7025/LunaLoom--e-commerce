@@ -107,10 +107,11 @@
                                 </a>
 
                                 <form action="/deleteProducts/<%= item._id %>" method="POST" class="delete-form">
-                                    <button class="btn btn-delete" onclick="return confirm('Delete this product?');">
-                                        Delete
-                                    </button>
+                                  <button class="btn btn-delete">
+                                            Delete
+                                   </button>
                                 </form>
+
                             </td>
 
                         </tr>
@@ -130,6 +131,45 @@
         </table>
 
     </div>
+    <div id="confirmPopup" class="confirm-popup">
+  <div class="popup-box">
+    <p>Are you sure you want to delete this product?</p>
+
+    <div class="popup-buttons">
+      <button id="confirmYes">Yes</button>
+      <button id="confirmNo">No</button>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const deleteForms = document.querySelectorAll(".delete-form");
+  const popup = document.getElementById("confirmPopup");
+  const yes = document.getElementById("confirmYes");
+  const no = document.getElementById("confirmNo");
+
+  let activeForm = null;
+
+  deleteForms.forEach(form => {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      activeForm = form;
+      popup.classList.add("show");
+    });
+  });
+
+  yes.addEventListener("click", () => {
+    popup.classList.remove("show");
+    if (activeForm) activeForm.submit();
+  });
+
+  no.addEventListener("click", () => {
+    popup.classList.remove("show");
+    activeForm = null;
+  });
+});
+</script>
+
 
 </body>
 </html>

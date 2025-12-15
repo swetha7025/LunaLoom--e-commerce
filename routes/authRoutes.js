@@ -120,6 +120,7 @@ router.get('/product_list',authControllers.productList)
 
 router.get('/product/:id',authControllers.getSingleProduct)
 
+
 //--------------------------------WISHLIST-------------------------
 router.get('/wishlist',protectedAuth,authControllers.getWishlist)
 

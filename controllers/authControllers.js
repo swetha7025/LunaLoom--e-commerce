@@ -382,7 +382,7 @@ async function removeProfileImage(req, res) {
 
 async function productList(req, res) {
   try {
-    const { category, brand } = req.query;
+    const { category, brand, } = req.query;
 
     let filter = {}
 
@@ -394,9 +394,11 @@ async function productList(req, res) {
       filter.brand = brand
     }
 
+    
+
     const products = await productModel.find(filter)
 
-    return res.render("user/product_list", { products,success: null,error: null })
+    return res.render("user/product_list", { products,category,success: null,error: null })
     
 
   } catch (error) {
@@ -404,6 +406,7 @@ async function productList(req, res) {
  
     return res.render("user/product_list", {
       products: [],
+      category:null,
       success: null,
       error: 'Error during loading products'
     });
@@ -437,6 +440,7 @@ async function getSingleProduct(req, res) {
     });
   }
 }
+
 
 //-------------------------------------WISHLIST------------------------------------
 

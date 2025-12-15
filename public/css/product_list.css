@@ -344,7 +344,8 @@
     border-radius: 6px;
     padding: 8px 0;
      background:#a174a9;
-}
+     border: #a174a9;
+} 
 
 .product-buttons .btn:hover{
 

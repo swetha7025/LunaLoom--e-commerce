@@ -19,14 +19,14 @@ body {
 .product-image-box {
   flex: 1 1 100%;           /* Takes full width */
   max-width: 700px;         /* Adjustable */
-  margin: 0 auto;           /* Centered */
+  margin: 0 ;           /* Centered */
 }
 
 .product-image-box img {
   width: 100%;
   height: auto;
-  border-radius: 12px;
-  object-fit: cover;        /* Perfect full image */
+  border-radius: 0;
+  object-fit: cover;       
 }
 
 /* RIGHT DETAILS */
@@ -65,13 +65,13 @@ body {
 .opt-btn {
   padding: 8px 20px;
   border-radius: 25px;
-  border: 1px solid #000;
+  border: 1px solid#a174a9;;
   background: #fff;
   cursor: pointer;
 }
 .opt-btn.active,
 .opt-btn:hover {
-  background: #000;
+  background: #a174a9;;
   color: #fff;
 }
 
@@ -110,26 +110,20 @@ body {
 
 .add-cart-btn {
   background: #fff;
-  color: #000;
+  color:#a174a9;
 }
 .add-cart-btn:hover {
-  background: #000;
+  background:#a174a9;
   color: #fff;
 }
 
-.buy-now-btn {
-  background: #000;
-  color: #fff;
-}
-.buy-now-btn:hover {
-  background: #333;
-}
+
 
 .wishlist-btn {
-  background: #fff;
+  background:#a174a9;
 }
 .wishlist-btn:hover {
-  background: #f3f3f3;
+  background:#a174a9;
 }
 
 /* RESPONSIVE */
@@ -146,7 +140,7 @@ body {
 }
 
 /* ✔ SWIPE FIX */
-.carousel-inner {
+/* .carousel-inner {
   touch-action: pan-y;
 }
 .carousel-item {
@@ -155,5 +149,32 @@ body {
 }
 .carousel-inner img {
   pointer-events: none;
+} */
+.carousel-item {
+  transition: transform 0.6s ease-in-out;
+}
+/* PRODUCT STATUS */
+.product-status {
+  display: inline-block;
+  margin: 10px 0 15px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 20px;
 }
 
+/* STATUS COLORS */
+.status-in {
+  background: #e6f7ec;
+  color: #1e7e34;
+}
+
+.status-out {
+  background: #fdecea;
+  color: #c82333;
+}
+
+.status-limited {
+  background: #fff3cd;
+  color: #856404;
+}

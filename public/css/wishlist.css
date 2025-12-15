@@ -64,3 +64,77 @@
     text-transform: capitalize;
     margin: 0;
 }
+.confirm-popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.3s ease;
+  z-index: 9999;
+}
+
+.confirm-popup.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup-box {
+  background: #fff;
+  padding: 25px 30px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.popup-box p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.popup-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+#confirmYes {
+  background: #e63946;
+  border: none;
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#confirmNo {
+  background: #dcdcdc;
+  border: none;
+  color: #333;
+  padding: 8px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#confirmYes:hover {
+  background: #c91f33;
+}
+
+#confirmNo:hover {
+  background: #bdbdbd;
+}
+
+.add-cart-btn{
+  background-color:#a174a9;
+  border:#a174a9;
+  
+}
+
+.add-cart-btn:hover {
+  background:#a174a9;
+  color: #fff; 
+}
