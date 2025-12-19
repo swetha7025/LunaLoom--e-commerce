@@ -707,12 +707,163 @@ async function removeFromCart(req, res) {
 }
 
 
+//----------------------------------------------INCREASE QUANTITY-----------------------------------
 
 
+// async function increaseQuantity(req, res) {
+//   try {
+//     const userId =req.auth?.id;      // make sure auth middleware sets this
+//     const productId = req.params.id;
+
+//     const cart = await cartModel.findOne({ userId });
+//     if (!cart) return res.redirect("/cart");
+
+//     const product = cart.products.find(
+//       item => item.productId.toString() === productId
+//     );
+
+//     if (product) {
+//       product.quantity += 1;
+//     }
+
+//     await cart.save();
+//     return res.redirect("/cart");
+
+//   } catch (error) {
+//     console.error("increaseQuantity error:", error);
+//     return res.redirect("/cart");
+//   }
+// }
 
 
+// async function decreaseQuantity(req, res) {
+//   try {
+//     const userId = req.auth?.id;     // works without isLogin
+//     const productId = req.params.id;
+
+//     if (!userId) return res.redirect("/login");
+
+//     const cart = await cartModel.findOne({ userId });
+//     if (!cart) return res.redirect("/cart");
+
+//     const productIndex = cart.products.findIndex(
+//       item => item.productId.toString() === productId
+//     );
+
+//     if (productIndex !== -1) {
+//       if (cart.products[productIndex].quantity > 1) {
+//         cart.products[productIndex].quantity -= 1;
+//       } else {
+//         // remove item if quantity reaches 0
+//         cart.products.splice(productIndex, 1);
+//       }
+//     }
+
+//     await cart.save();
+//     return res.redirect("/cart");
+
+//   } catch (error) {
+//     console.error("decreaseQuantity error:", error);
+//     return res.redirect("/cart");
+//   }
+// }
+
+async function increaseQuantity(req, res) {
+  try {
+    const userId = req.auth?.id
+    const productId = req.params.id
+
+    if (!userId) {
+      return res.json({ success: false, message: "Not logged in" })
+    }
+
+    const cart = await cartModel.findOne({ userId }) .populate("products.productId")
+    
+
+    if (!cart) {
+      return res.json({ success: false, message: "Cart not found" })
+    }
+
+    const product = cart.products.find(
+      item => item.productId._id.toString() === productId
+    );
+
+    if (!product) {
+      return res.json({ success: false, message: "Product not found" })
+    }
+
+    product.quantity += 1;
+    await cart.save();
+
+      const subtotal = cart.products.reduce((sum, item) => {
+      return sum + item.quantity * item.productId.price
+      }, 0);
+
+    const itemTotal = product.quantity * product.productId.price;
+
+    return res.json({success: true,quantity: product.quantity,itemTotal, subtotal })
+      
+  } catch (error) {
+    console.error("increaseQuantity error:", error)
+    return res.json({ success: false, message: "Server error" })
+  }
+}
+
+//--------------------------------------DECREASE QUANTITY-------------------------------------
 
 
+async function decreaseQuantity(req, res) {
+  try {
+    const userId = req.auth?.id
+    const productId = req.params.id
+
+    if (!userId) {
+      return res.json({ success: false, message: "Not logged in" })
+    }
+
+    const cart = await cartModel.findOne({ userId }) .populate("products.productId")
+
+      
+    if (!cart) {
+      return res.json({ success: false, message: "Cart not found" })
+    }
+
+    const index = cart.products.findIndex(
+      item => item.productId._id.toString() === productId
+    );
+
+    if (index === -1) {
+      return res.json({ success: false, message: "Product not found" })
+    }
+
+    let removed = false
+    let quantity = 0
+    let itemTotal = 0
+
+    if (cart.products[index].quantity > 1) {
+      cart.products[index].quantity -= 1
+      quantity = cart.products[index].quantity
+      itemTotal = quantity * cart.products[index].productId.price
+    } else {
+      cart.products.splice(index, 1)
+      removed = true
+    }
+
+    await cart.save()
+
+      const subtotal = cart.products.reduce((sum, item) => {
+        return sum + item.quantity * item.productId.price
+    }, 0)
+
+
+    return res.json({success: true, quantity, itemTotal,  subtotal, removed })
+      
+     
+  } catch (error) {
+    console.error("decreaseQuantity error:", error)
+    return res.json({ success: false, message: "Server error" })
+  }
+}
 
 
 
@@ -757,7 +908,9 @@ module.exports = {
   removeFromWishlist,
   getCart,
   addToCart,
-  removeFromCart
+  removeFromCart,
+  increaseQuantity,
+  decreaseQuantity
 
 
 }

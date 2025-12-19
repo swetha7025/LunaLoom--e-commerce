@@ -1,0 +1,131 @@
+/* ===============================
+   GENERAL LAYOUT
+================================ */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ===============================
+   MAIN CONTENT
+================================ */
+.content {
+    flex: 1;
+    padding: 30px;
+    background: #f4f6f9;
+}
+
+/* ===============================
+   PAGE HEADER (LIKE PRODUCTS PAGE)
+================================ */
+.page-header {
+    background: #ffffff;
+    padding: 18px 24px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.content-header h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+/* ===============================
+   BUTTONS
+================================ */
+.primary-btn {
+    padding: 8px 14px;
+    background-color: #ff4d4f;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.primary-btn:hover {
+    background-color: #e04345;
+}
+
+.edit-btn {
+    background: #f1c40f;
+    padding: 5px 10px;
+    border: none;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.delete-btn {
+    background: #e74c3c;
+    padding: 5px 10px;
+    border: none;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* ===============================
+   FLASH MESSAGES
+================================ */
+.alert {
+    padding: 12px 15px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.alert-success {
+    background: #d4edda;
+    color: #155724;
+}
+
+.alert-error {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* ===============================
+   TABLE
+================================ */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+table th {
+    background: #e6e6e6;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+}
+
+table td {
+    padding: 12px;
+    border-top: 1px solid #eee;
+}
+/* Shift content because sidebar is fixed */
+.content {
+    margin-left: 250px;   /* SAME as sidebar width */
+    padding: 30px;
+    background: #f4f6f9;
+    min-height: 100vh;
+}

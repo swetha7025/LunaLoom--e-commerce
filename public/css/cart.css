@@ -162,3 +162,38 @@ body {
 #confirmNo:hover {
   background: #bdbdbd;
 }
+.coupon-box {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.coupon-input {
+  flex: 1;
+  height: 45px;
+  padding: 0 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.coupon-input:focus {
+  outline: none;
+  border-color:#a174a9; /* same theme color */
+}
+
+.coupon-btn {
+  height: 45px;
+  padding: 0 22px;
+  background-color:#a174a9;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.coupon-btn:hover {
+  background-color: #a174a9;
+}

@@ -34,6 +34,10 @@ router.post("/editProducts/:id", upload.array("images", 4), adminControllers.edi
 
 router.post("/deleteProducts/:id", adminControllers.deleteProduct);
 
+//--------------------------------------------COUPON------------------------------
+
+router.get("/coupons",adminControllers.couponPage)
+
 
 
 

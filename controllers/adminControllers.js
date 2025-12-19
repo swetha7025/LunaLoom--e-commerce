@@ -1,9 +1,11 @@
 const adminModel = require('../models/admin');
 const productModel = require('../models/products')
+const couponModel = require('../models/coupon');
 const { upload } = require("../middleware/multer");
  const fs = require("fs");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+
 
 //--------------------------------ADMIN LOGIN------------------------------------
 
@@ -271,7 +273,25 @@ async function deleteProduct(req, res) {
   }
 }
 
+//---------------------------------------------COUPON PAGE--------------------------------
 
+async function couponPage(req,res) {
+try {
+  
+ const coupons = await couponModel.find().sort({createdAt:-1})
+
+ res.render('admin/coupons',{coupons, success : null, error : null})
+
+
+} catch (error) {
+
+  console.log(error)
+  res.render('admin/coupons',{coupons:[], success : null, error : 'Failed to load Coupon'})
+  
+}
+
+  
+}
 
 
 
@@ -331,6 +351,7 @@ module.exports = {
     adminProducts,
     addProducts,
     editProducts,
-    deleteProduct
+    deleteProduct,
+    couponPage
   
 }

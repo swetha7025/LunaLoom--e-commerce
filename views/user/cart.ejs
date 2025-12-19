@@ -110,26 +110,37 @@
           <h5>₹<%= item.productId.price.toFixed(2) %></h5>
         </td>
 
-        <td>
-          <div class="product_count">
+       <td>
+  <div class="product_count">
 
-            <a href="/cart/decrease/<%= item.productId._id %>" class="input-number-decrement">
-              <i class="ti-minus"></i>
-            </a>
+    <a href="/cart/decrease/<%= item.productId._id %>"
+       class="input-number-decrement"
+       data-id="<%= item.productId._id %>">
+      <i class="ti-minus"></i>
+    </a>
 
-            <input class="input-number" type="text" 
-                   value="<%= item.quantity %>" min="1" max="100">
+    <input class="input-number"
+           id="qty-<%= item.productId._id %>"
+           type="text"
+           value="<%= item.quantity %>"
+           readonly>
 
-            <a href="/cart/increase/<%= item.productId._id %>" class="input-number-increment">
-              <i class="ti-plus"></i>
-            </a>
+    <a href="/cart/increase/<%= item.productId._id %>"
+       class="input-number-increment"
+       data-id="<%= item.productId._id %>">
+      <i class="ti-plus"></i>
+    </a>
 
-          </div>
-        </td>
+  </div>
+</td>
 
-        <td>
-          <h5>₹<%= (item.productId.price * item.quantity).toFixed(2) %></h5>
-        </td>
+<td>
+  <h5 id="total-<%= item.productId._id %>">
+  ₹<%= (item.productId.price * item.quantity).toFixed(2) %>
+</h5>
+
+</td>
+
 
         <td>
          
@@ -145,14 +156,16 @@
       </tr>
     <% }) %>
 
-    <!-- Subtotal -->
-    <tr>
-      <td></td>
-      <td></td>
-      <td><h5>Subtotal</h5></td>
-      <td><h5>₹<%= total.toFixed(2) %></h5></td>
-      <td></td>
-    </tr>
+   <!-- Subtotal -->
+   <tr>
+  <td></td>
+  <td></td>
+  <td><h5>Subtotal</h5></td>
+  <td><h5 id="cart-subtotal">₹<%= total.toFixed(2) %></h5>
+</td>
+  <td></td>
+</tr>
+
 
   <% } else { %>
 
@@ -169,6 +182,15 @@
           <div class="checkout_btn_inner float-right">
             <a class="btn_1" href="/product_list">Continue Shopping</a>
             <a class="btn_1 checkout_btn_1" href="/checkout">Proceed to checkout</a>
+            <div class="coupon-box">
+         <input 
+           type="text" 
+           placeholder="Apply coupon" 
+           class="coupon-input"
+          />
+        <button class="coupon-btn">Apply</button>
+        </div>
+
           </div>
         <% } %>
 
@@ -217,6 +239,52 @@ document.addEventListener("DOMContentLoaded", function () {
     popup.classList.remove("show");
     targetHref = null;
   });
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const updateCartDisplay = (productId, data) => {
+    if (data.removed) {
+      const row = document.getElementById(`row-${productId}`);
+      if (row) row.remove();
+    } else {
+      document.getElementById(`qty-${productId}`).value = data.quantity;
+      document.getElementById(`total-${productId}`).innerText = `₹${data.itemTotal.toFixed(2)}`;
+    }
+    document.getElementById("cart-subtotal").innerText = `₹${data.subtotal.toFixed(2)}`;
+  };
+
+  document.querySelectorAll(".input-number-increment").forEach(btn => {
+    btn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const productId = btn.dataset.id;
+
+      try {
+        const res = await fetch(`/cart/increase/${productId}`);
+        const data = await res.json();
+        if (data.success) updateCartDisplay(productId, data);
+      } catch (err) {
+        console.error(err);
+      }
+    });
+  });
+
+  document.querySelectorAll(".input-number-decrement").forEach(btn => {
+    btn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const productId = btn.dataset.id;
+
+      try {
+        const res = await fetch(`/cart/decrease/${productId}`);
+        const data = await res.json();
+        if (data.success || data.removed) updateCartDisplay(productId, data);
+      } catch (err) {
+        console.error(err);
+      }
+    });
+  });
+
 });
 </script>
 

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Coupons</title>
+
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/admin-coupons.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+
+<body>
+<div class="container">
+
+    <!-- Sidebar -->
+    <%- include('../partials/adminSidebar', { activePage: 'coupon' }) %>
+
+    <!-- Main Content -->
+    <main class="content">
+
+        <% if (success && success.length) { %>
+            <div class="alert alert-success"><%= success %></div>
+        <% } %>
+
+        <% if (error && error.length) { %>
+            <div class="alert alert-error"><%= error %></div>
+        <% } %>
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <header class="content-header">
+                <h1>Coupons</h1>
+                <a href="/admin/coupon/add">
+                    <button class="primary-btn">+ Add Coupon</button>
+                </a>
+            </header>
+        </div>
+
+        <!-- Coupons Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Coupon Code</th>
+                    <th>Discount</th>
+                    <th>Expiry Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <% if (coupons && coupons.length > 0) { %>
+                    <% coupons.forEach(coupon => { %>
+                        <tr>
+                            <td><%= coupon.code %></td>
+                            <td><%= coupon.discount %>%</td>
+                            <td><%= coupon.expiryDate.toISOString().split('T')[0] %></td>
+                            <td><%= coupon.status %></td>
+                            <td>
+                                <a href="/admin/coupon/edit/<%= coupon._id %>">
+                                    <button class="edit-btn">Edit</button>
+                                </a>
+
+                                <form action="/admin/coupon/delete/<%= coupon._id %>" method="POST" style="display:inline;">
+                                    <button class="delete-btn" onclick="return confirm('Are you sure?')">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="5">No coupons found</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+
+    </main>
+</div>
+</body>
+</html>
