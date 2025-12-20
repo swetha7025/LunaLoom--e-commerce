@@ -129,3 +129,68 @@ table td {
     background: #f4f6f9;
     min-height: 100vh;
 }
+.delete-btn {
+  background: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background: #b52a37;
+}
+
+/* Modal backdrop */
+.delete-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* Modal box */
+.delete-box {
+  background: #fff;
+  padding: 20px;
+  width: 320px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.delete-box h5 {
+  margin-bottom: 10px;
+}
+
+.delete-box p {
+  color: #555;
+  font-size: 14px;
+}
+
+/* Actions */
+.delete-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.cancel-btn {
+  background: #6c757d;
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 4px;
+}
+
+.confirm-delete-btn {
+  background: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 4px;
+}

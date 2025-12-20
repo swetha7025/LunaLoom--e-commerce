@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= coupon ? 'Edit Coupon' : 'Add New Coupon' %></title>
+
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/admin.css">
+  <link rel="stylesheet" href="/css/add-coupon.css">
+</head>
+
+<body>
+<%- include('../partials/adminSidebar', { activePage: 'coupons' }) %>
+
+<div class="coupon-backdrop">
+  <div class="coupon-modal">
+
+    <!-- Header -->
+    <div class="coupon-header">
+      <h5><%= coupon ? 'Edit Coupon' : 'Add New Coupon' %></h5>
+      <a href="/coupons" class="close-btn">&times;</a>
+    </div>
+
+    <% if (error) { %>
+      <div class="alert alert-danger"><%= error %></div>
+    <% } %>
+
+    <!-- ✅ Dynamic action -->
+    <form 
+      action="<%= coupon ? `/coupons/edit/${coupon._id}` : '/coupons/add' %>" 
+      method="POST"
+    >
+
+      <div class="form-group">
+        <label>Coupon Code</label>
+        <input
+          type="text"
+          name="code"
+          class="form-control"
+          value="<%= coupon ? coupon.code : '' %>"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label>Discount (%)</label>
+        <input
+          type="number"
+          name="discount"
+          class="form-control"
+          min="1"
+          max="100"
+          value="<%= coupon ? coupon.discount : '' %>"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label>Expiry Date</label>
+        <input
+          type="date"
+          name="expiryDate"
+          class="form-control"
+          value="<%= coupon ? coupon.expiryDate.toISOString().split('T')[0] : '' %>"
+          required
+        >
+      </div>
+
+      <% if (coupon) { %>
+        <div class="form-group">
+          <label>Status</label>
+          <select name="status" class="form-control">
+            <option value="Active" <%= coupon.status === 'Active' ? 'selected' : '' %>>
+              Active
+            </option>
+            <option value="Expired" <%= coupon.status === 'Expired' ? 'selected' : '' %>>
+              Expired
+            </option>
+          </select>
+        </div>
+      <% } %>
+
+      <div class="coupon-footer">
+        <a href="/coupons" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-success">
+          <%= coupon ? 'Update Coupon' : 'Save Coupon' %>
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+</body>
+</html>
+

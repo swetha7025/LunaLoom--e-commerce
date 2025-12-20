@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add New Coupon</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+  <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/admin.css">
+  <link rel="stylesheet" href="/css/add-coupon.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <%- include('../partials/adminSidebar', { activePage: 'coupon' }) %>
+<!-- Modal Backdrop -->
+<div class="coupon-backdrop">
+  <div class="coupon-modal">
+
+    <!-- Modal Header -->
+    <div class="coupon-header">
+      <h5>Add New Coupon</h5>
+      <a href="/coupons" class="close-btn">&times;</a>
+    </div>
+
+    <!-- Success Message -->
+    <% if (success) { %>
+      <div class="alert alert-success">
+        <%= success %>
+      </div>
+    <% } %>
+
+    <!-- Error Message -->
+    <% if (error) { %>
+      <div class="alert alert-danger">
+        <%= error %>
+      </div>
+    <% } %>
+
+    <!-- Form -->
+    <form action="/addCoupon" method="POST">
+
+      <div class="form-group">
+        <label>Coupon Code</label>
+        <input type="text" name="code" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label>Discount (%)</label>
+        <input type="number" name="discount" class="form-control" min="1" max="100" required>
+      </div>
+
+      <div class="form-group">
+        <label>Expiry Date</label>
+        <input type="date" name="expiryDate" class="form-control" required>
+      </div>
+
+      <!-- Footer Buttons -->
+      <div class="coupon-footer">
+        <a href="/coupons" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-success">Save Coupon</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

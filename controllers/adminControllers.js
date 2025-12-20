@@ -5,6 +5,7 @@ const { upload } = require("../middleware/multer");
  const fs = require("fs");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const { error } = require('console');
 
 
 //--------------------------------ADMIN LOGIN------------------------------------
@@ -92,7 +93,7 @@ async function adminDashboard(req, res) {
 
 async function adminProducts(req, res) {
   try {
-    const products = await productModel.find();
+    const products = await productModel.find()
 
     res.render("admin/products", { products,success: null,error: null})
       
@@ -282,25 +283,130 @@ try {
 
  res.render('admin/coupons',{coupons, success : null, error : null})
 
-
 } catch (error) {
 
   console.log(error)
   res.render('admin/coupons',{coupons:[], success : null, error : 'Failed to load Coupon'})
   
+}  
 }
+
+//------------------------------------------ADD COUPONS----------------------------------
+
+
+async function getAddCouponPage(req, res) {
+  try {
+    res.render('admin/addCoupon', { success: null,error: null })
+     
+  } catch (error) {
+    console.log(error)
+    res.render('admin/addCoupon', {success: null, error: 'Something went wrong' })
+    
+  }
+}
+
+
+async function addCoupon(req, res) {
+  try {
+    const { code, discount, expiryDate } = req.body
+
+    if (!code || !discount || !expiryDate) {
+      return res.render('admin/addCoupon', {
+        success: null,
+        error: 'All fields are required'
+      })
+    }
+
+      const existingCoupon = await couponModel.findOne({ code })
+
+    if (existingCoupon) {
+      return res.render('admin/addCoupon', {success: null, error: 'Coupon code already exists' })
+      
+    }
+
+    await couponModel.create({ code,discount,expiryDate})
+     
+    
+    res.redirect('/coupons')
+
+  } catch (error) {
+    console.log(error)
+    res.render('admin/addCoupon', {success: null, error: 'Something went wrong'})
+  }
+}
+
+//-------------------------------------------EDIT COUPON---------------------------------
+
+async function getEditCouponPage(req, res) {
+  try {
+    const  id  = req.params.id
+
+    const coupon = await couponModel.findById(id)
+
+    if (!coupon) {
+      return res.redirect('/coupons')
+    }
+
+    res.render('admin/editCoupon', { coupon, success: null,error: null })
+     
+
+  } catch (error) {
+    console.log(error)
+    res.redirect('/coupons')
+  }
+}
+
+async function updateCoupon(req,res) {
+ try {
+  
+   const { code, discount, expiryDate, status } = req.body
+
+  const id = req.params.id
+
+  const coupon = await couponModel.findById(id)
+
+   if(!coupon){
+    return res.redirect('/coupons')
+
+   }
+
+   await couponModel.findByIdAndUpdate(id,{code,discount,expiryDate,status},{new:true})
+
+    return res.redirect('/coupons')
+      
+
+
+ } catch (error) {
+  console.log(error)
+  return res.redirect('/coupons')
+ }  
+}
+
+//-----------------------------------------------DELETE COUPON----------------------------
+
+async function deleteCoupon(req,res) {
+ try {
+  
+  const {code,discount,expiryDate} = req.body
+  const id = req.params.id
+
+  const coupon = await couponModel.findById(id)
+
+  if(!coupon){
+    return res.redirect('/coupons')
+  }
+  await couponModel.findByIdAndDelete(id)
+  return res.redirect('/coupons')
+
+ } catch (error) {
+  console.log(error)
+  return res.redirect('/coupons')
+ }
 
   
 }
 
-
-
-
-
-
-
-
-
+//----------------------------------------
 
 
 
@@ -352,6 +458,11 @@ module.exports = {
     addProducts,
     editProducts,
     deleteProduct,
-    couponPage
+    couponPage,
+    getAddCouponPage,
+    addCoupon,
+    getEditCouponPage,
+    updateCoupon,
+    deleteCoupon
   
 }

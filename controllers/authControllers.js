@@ -712,11 +712,11 @@ async function removeFromCart(req, res) {
 
 // async function increaseQuantity(req, res) {
 //   try {
-//     const userId =req.auth?.id;      // make sure auth middleware sets this
-//     const productId = req.params.id;
+//     const userId =req.auth?.id   
+//     const productId = req.params.id
 
-//     const cart = await cartModel.findOne({ userId });
-//     if (!cart) return res.redirect("/cart");
+//     const cart = await cartModel.findOne({ userId })
+//     if (!cart) return res.redirect("/cart")
 
 //     const product = cart.products.find(
 //       item => item.productId.toString() === productId
@@ -730,21 +730,21 @@ async function removeFromCart(req, res) {
 //     return res.redirect("/cart");
 
 //   } catch (error) {
-//     console.error("increaseQuantity error:", error);
-//     return res.redirect("/cart");
+//     console.error("increaseQuantity error:", error)
+//     return res.redirect("/cart")
 //   }
 // }
 
 
 // async function decreaseQuantity(req, res) {
 //   try {
-//     const userId = req.auth?.id;     // works without isLogin
-//     const productId = req.params.id;
+//     const userId = req.auth?.id
+//     const productId = req.params.id
 
-//     if (!userId) return res.redirect("/login");
+//     if (!userId) return res.redirect("/login")
 
-//     const cart = await cartModel.findOne({ userId });
-//     if (!cart) return res.redirect("/cart");
+//     const cart = await cartModel.findOne({ userId })
+//     if (!cart) return res.redirect("/cart")
 
 //     const productIndex = cart.products.findIndex(
 //       item => item.productId.toString() === productId
@@ -752,19 +752,19 @@ async function removeFromCart(req, res) {
 
 //     if (productIndex !== -1) {
 //       if (cart.products[productIndex].quantity > 1) {
-//         cart.products[productIndex].quantity -= 1;
+//         cart.products[productIndex].quantity -= 1
 //       } else {
 //         // remove item if quantity reaches 0
-//         cart.products.splice(productIndex, 1);
+//         cart.products.splice(productIndex, 1)
 //       }
 //     }
 
-//     await cart.save();
-//     return res.redirect("/cart");
+//     await cart.save()
+//     return res.redirect("/cart")
 
 //   } catch (error) {
-//     console.error("decreaseQuantity error:", error);
-//     return res.redirect("/cart");
+//     console.error("decreaseQuantity error:", error)
+//     return res.redirect("/cart")
 //   }
 // }
 
