@@ -114,6 +114,14 @@ router.post("/uploadProfileImage",protectedAuth,upload.single("profileImage"), a
 
 router.post("/removeProfileImage", protectedAuth,authControllers.removeProfileImage);
 
+//----------------------------------ADDRESS-----------------------------------
+
+router.get("/address",protectedAuth,authControllers.getaddressPage)
+router.post("/address/save",protectedAuth,authControllers.saveAddress)
+router.get("/editAddress",protectedAuth,authControllers.editAddress)
+router.post('/address/update/:id',protectedAuth,authControllers.updateAddress)
+
+
 //-----------------------------------------PRODUCT------------------------------------
 
 router.get('/product_list',authControllers.productList)

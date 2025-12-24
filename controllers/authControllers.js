@@ -2,6 +2,7 @@ const User = require('../models/user')
 const productModel = require('../models/products')
 const wishlistModel = require('../models/wishlist')
 const cartModel = require('../models/cart')
+const addressModel = require('../models/address')
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const nodemailer = require('nodemailer');
@@ -263,26 +264,66 @@ async function logoutUser(req,res) {
 //---------------------------------------PROFILE----------------------------------------
 
 
+// async function profilePage(req, res) {
+//     try {
+//         const userId = req.auth?.id;   
+
+//         if(!userId){
+//           return res.redirect('/login')
+//         }
+
+//         const user = await User.findById(userId);
+
+//         if (!user) {
+//             return res.render("user/profile", { user: {}, success: null, error: "User not found" });
+//         }
+
+//         res.render("user/profile", { user, success: null, error: null });
+
+//     } catch (error) {
+//         console.log(error);
+//         res.render("user/profile", { user: {}, success: null, error: "Something went wrong" });
+//     }
+// }
+
 async function profilePage(req, res) {
-    try {
-        const userId = req.auth?.id;   
+  try {
+    const userId = req.auth?.id;
 
-        if(!userId){
-          return res.redirect('/login')
-        }
+    if (!userId) return res.redirect('/login');
 
-        const user = await User.findById(userId);
-
-        if (!user) {
-            return res.render("user/profile", { user: {}, success: null, error: "User not found" });
-        }
-
-        res.render("user/profile", { user, success: null, error: null });
-
-    } catch (error) {
-        console.log(error);
-        res.render("user/profile", { user: {}, success: null, error: "Something went wrong" });
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.render('user/profile', {
+        user: {},
+        address: null,
+        tab: 'orders',
+        success: null,
+        error: 'User not found'
+      });
     }
+
+    
+    const address = await addressModel.findOne({ userId });
+
+    res.render('user/profile', {
+      user,
+      address,                      
+      tab: req.query.tab || 'orders',
+      success: null,
+      error: null
+    });
+
+  } catch (err) {
+    console.log(err);
+    res.render('user/profile', {
+      user: {},
+      address: null,
+      tab: 'orders',
+      success: null,
+      error: 'Something went wrong'
+    });
+  }
 }
 
 //---------------------------------------EDIT PROFILE------------------------------------------
@@ -329,6 +370,10 @@ async function updateProfile(req, res) {
     }
 }
 
+
+
+
+
 //-----------------------------------------PROFILE IMAGE-----------------------------
 
 async function uploadProfileImage(req,res) {
@@ -373,10 +418,106 @@ async function removeProfileImage(req, res) {
   }
 }
 
+//-------------------------------------------------ADDRESS PAGE-----------------------------
 
+async function getaddressPage(req,res) {
 
+  try {
+  
+     const userId = req.auth?.id
 
+     if(!userId){
+      return res.redirect('/login')
+     }
 
+    const user = await User.findById(userId)
+
+    if(!user){
+       return res.render('user/profile',{user:{},address:null,tab:'address',success:null,error:'User not found'})
+
+    }
+    const address = await addressModel.findOne({userId})
+    res.render('user/profile',{user,address,tab:'address',success:null,error:null})
+     
+  } catch (error) {
+    console.log(error)
+    res.render('user/profile',{user:{},address:null,tab:'address',success:null, error:'Something went wrong'})
+    
+  }
+}
+
+//----------------------------------SAVE ADDRESS------------------------------------
+
+async function saveAddress(req,res) {
+  try {
+    const {label,street,city,district,country,pincode,phone} = req.body  
+
+    const userId = req.auth?.id
+    
+    if(!userId){
+      return res.redirect('/login')
+    }
+      
+    await addressModel.create({userId,label,street,city,district,country,pincode,phone})
+     
+    return res.redirect('/address')
+
+  } catch (error) {
+    console.log(error)
+    res,redirect('/address')
+  }
+  
+}
+
+//---------------------------------EDIT ADDRESS----------------------------------------
+
+async function editAddress(req, res) {
+  try {
+    const userId = req.auth?.id
+
+    if (!userId) {
+      return res.redirect('/login')
+    }
+
+    const user = await User.findById(userId)
+    if (!user) {
+      return res.render("user/editAddress", { user: {}, address: null, success: null, error: "User not found"  })
+      
+    }
+
+    const address = await addressModel.findOne({ userId })
+
+    if (!address) {
+      return res.render("user/editAddress", { user,address: null, success: null, error: "Address not found" })
+    }
+
+    res.render("user/editAddress", { user,address,success: null, error: null })
+      
+  } catch (error) {
+    console.log(error)
+    res.render("user/editAddress", { user: {}, address: null, success: null, error: "Something went wrong" })
+  }
+}
+
+//-----------------------------------UPDATE ADDRESS----------------------------------
+
+async function updateAddress(req,res) {
+  try {
+     const {label,street,city,district,country,pincode,phone} = req.body  
+
+     const userId =  req.auth?.id
+     const addressId = req.params.id;
+     await addressModel.findByIdAndUpdate( { _id: addressId, userId },{label,street,city,district,country,pincode,phone},{new:true})
+   
+    return res.redirect('/address')
+
+  } catch (error) {
+    console.log(error)
+    return res.redirect('/address')
+    
+  }
+  
+}
 
 // -------------------------------------- PRODUCT LIST ---------------------------------
 
@@ -899,6 +1040,10 @@ module.exports = {
   updateProfile,
   uploadProfileImage,
   removeProfileImage,
+  getaddressPage,
+  saveAddress,
+  editAddress,
+  updateAddress,
   loadHome,
   logoutUser,
   productList,

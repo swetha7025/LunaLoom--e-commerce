@@ -1,111 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Profile</title>
+
+  
+ 
   <link rel="stylesheet" href="/css/profile.css">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+ 
+  <link rel="stylesheet" href="/css/all.css">
+  <link rel="icon" href="/img/favicon.png">
+
+  <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+  <!-- Animation and carousel -->
   <link rel="stylesheet" href="/css/animate.css">
   <link rel="stylesheet" href="/css/owl.carousel.min.css">
+
+  <!-- Font Awesome & Icons -->
   <link rel="stylesheet" href="/css/all.css">
   <link rel="stylesheet" href="/css/flaticon.css">
   <link rel="stylesheet" href="/css/themify-icons.css">
+
+  <!-- Popup & Slider -->
   <link rel="stylesheet" href="/css/magnific-popup.css">
   <link rel="stylesheet" href="/css/slick.css">
 
-  <link rel="stylesheet" href="/css/style.css">
-  <link rel="stylesheet" href="/css/header.css">
-  <link rel="stylesheet" href="/css/profile.css">
+  <!-- Shared and page-specific CSS -->
+  <link rel="stylesheet" href="/css/style.css"> <!-- main site styles (home, header, etc.) -->
+  <link rel="stylesheet" href="/css/header.css"> <!-- header/navbar styles -->
+  <link rel="stylesheet" href="/css/footer.css">
 </head>
 
 <body>
-  <%- include('../partials/header') %>
 
-  <div class="container-fluid profile-container">
-    <div class="row justify-content-center">
+<%- include('../partials/header') %>
 
-      <!-- Sidebar -->
-      <div class="col-md-3 sidebar">
-        <div class="profile-card text-center">
+<div class="container-fluid profile-container">
+  <div class="row justify-content-center">
 
-         <div class="profile-photo-container">
+    <!-- ================= SIDEBAR ================= -->
+    <div class="col-md-3 sidebar">
+      <div class="profile-card text-center">
 
-    <% if (user.profileImage) { %>
-        <img 
-            src="<%= user.profileImage %>" 
-            class="profile-photo"
-            alt="profile"
-        >
-    <% } else { %>
-        <div class="profile-initial">
-            <%= user.name ? user.name.charAt(0).toUpperCase() : "U" %>
+        <!-- Profile Image -->
+        <div class="profile-photo-container">
+          <% if (user.profileImage) { %>
+            <img src="<%= user.profileImage %>" class="profile-photo" alt="profile">
+          <% } else { %>
+            <div class="profile-initial">
+              <%= user.name ? user.name.charAt(0).toUpperCase() : "U" %>
+            </div>
+          <% } %>
+
+          <label for="profileUpload" class="edit-icon">
+            <i class="fas fa-camera"></i>
+          </label>
+
+          <form action="/uploadProfileImage" method="POST" enctype="multipart/form-data">
+            <input
+              type="file"
+              id="profileUpload"
+              name="profileImage"
+              hidden
+              onchange="this.form.submit()">
+          </form>
         </div>
-    <% } %>
 
-    <label for="profileUpload" class="edit-icon">
-        <i class="fas fa-camera"></i>
-    </label>
+        <h4 class="profile-name"><%= user.name %></h4>
+        <p class="profile-email"><%= user.email %></p>
+        <p class="profile-phone"><%= user.phone %></p>
 
-    <form action="/uploadProfileImage" method="POST" enctype="multipart/form-data">
-        <input 
-            type="file" 
-            id="profileUpload" 
-            name="profileImage" 
-            style="display: none;" 
-            onchange="this.form.submit()"
-        >
-    </form>
-</div>
+        <a href="/editProfile" class="btn custom-edit-btn w-100 mb-3">
+          EDIT PROFILE
+        </a>
 
+        <!-- Navigation -->
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a href="/profile?tab=orders"
+               class="nav-link <%= tab === 'orders' ? 'active' : '' %>">
+              My Orders
+            </a>
+          </li>
 
-          <h4 class="profile-name"><%= user.name %></h4>
-          <p class="profile-email"><%= user.email %></p>
-          <p class="profile-phone"><%= user.phone %></p>
+          <li class="nav-item">
+            <a href="/address" class="nav-link">Address</a>
 
-          <a href="/editProfile" class="btn custom-edit-btn w-100">EDIT PROFILE</a>
+               <!-- class="nav-link <%= tab === 'address' ? 'active' : '' %>">
+              Address -->
+            </a>
+          </li>
 
-          <ul class="nav flex-column mt-3">
-            <li class="nav-item active"><a href="#" class="nav-link active">My Orders</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">Address</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">Payment Methods</a></li>
-          </ul>
+          <li class="nav-item">
+            <a href="#" class="nav-link">Payment Methods</a>
+          </li>
+        </ul>
 
-          <a href="/logout" class="logout">Logout</a>
-        </div>
+        <a href="/logout" class="logout mt-3 d-block">Logout</a>
       </div>
+    </div>
 
-      <div class="col-md-7 orders-section">
+    <!-- ================= RIGHT CONTENT ================= -->
+    <div class="col-md-7 orders-section">
 
-        <% if (success) { %>
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <% if (success) { %>
+        <div class="alert alert-success alert-dismissible fade show">
           <%= success %>
           <button type="button" class="close" data-dismiss="alert">&times;</button>
         </div>
-        <% } %>
+      <% } %>
 
-        <% if (error) { %>
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <% if (error) { %>
+        <div class="alert alert-danger alert-dismissible fade show">
           <%= error %>
           <button type="button" class="close" data-dismiss="alert">&times;</button>
         </div>
-        <% } %>
+      <% } %>
 
+      <!-- ===== ORDERS TAB ===== -->
+      <% if (tab === 'orders') { %>
         <h3 class="orders-title">My Orders</h3>
-
         <div class="orders-box text-center">
           <p class="no-orders">No Orders Found</p>
           <small>You haven't placed any orders yet.</small>
         </div>
+      <% } %>
 
-      </div>
+      <!-- ===== ADDRESS TAB ===== -->
+      <% if (tab === 'address') { %>
+        <h3 class="orders-title">My Address</h3>
+
+        <% if (address) { %>
+          <!-- Saved Address -->
+          <div class="card p-4">
+            <p><strong>Label:</strong> <%= address.label %></p>
+            <p><strong>Street:</strong> <%= address.street %></p>
+            <p><strong>City:</strong> <%= address.city %></p>
+            <p><strong>District:</strong> <%= address.district %></p>
+            <p><strong>Country:</strong> <%= address.country %></p>
+            <p><strong>Pincode:</strong> <%= address.pincode %></p>
+            <p><strong>Phone:</strong> <%= address.phone %></p>
+
+            <!-- <a href="/profile?tab=edit-address" class="btn btn-outline-primary">
+              Edit Address
+            </a> -->
+            <a href="/editAddress" class="btn btn-sm btn-outline-warning">
+               Edit
+            </a>
+
+          </div>
+
+        <% } else { %>
+          <!-- Address Form -->
+          <form action="/saveAddress" method="POST" class="card p-4">
+            <input name="label" class="form-control mb-2" placeholder="Home / Office" required>
+            <input name="street" class="form-control mb-2" placeholder="Street" required>
+            <input name="city" class="form-control mb-2" placeholder="City" required>
+            <input name="district" class="form-control mb-2" placeholder="District" required>
+            <input name="country" class="form-control mb-2" placeholder="Country" required>
+            <input name="pincode" class="form-control mb-2" placeholder="Pincode" required>
+            <input name="phone" class="form-control mb-3" placeholder="Phone" required>
+
+            <button type="submit" class="btn btn-warning w-100">
+              Save Address
+            </button>
+          </form>
+        <% } %>
+      <% } %>
+
     </div>
   </div>
+</div>
 
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

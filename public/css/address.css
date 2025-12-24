@@ -1,0 +1,42 @@
+.manage-title {
+  font-weight: 700;
+  color: #000;
+}
+
+.address-card {
+  max-width: 480px;
+  background: #fff;
+  border: 2px solid  #A4859F;
+  border-radius: 10px;
+  padding: 25px;
+}
+
+.address-card label {
+  color: #A4859F;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.address-card input {
+  font-size: 14px;
+}
+
+.btn-warning {
+  background-color: #A4859F;
+  border: none;
+}
+
+.btn-warning:hover {
+  background-color:#A4859F;
+}
+
+.save-btn {
+  background-color:#A4859F;   /* green */
+  border-color:#A4859F;
+  color: #fff;
+}
+
+.save-btn:hover {
+  background-color:#A4859F;
+}
+

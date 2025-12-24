@@ -349,7 +349,6 @@ async function getEditCouponPage(req, res) {
 
     res.render('admin/editCoupon', { coupon, success: null,error: null })
      
-
   } catch (error) {
     console.log(error)
     res.redirect('/coupons')
@@ -367,15 +366,13 @@ async function updateCoupon(req,res) {
 
    if(!coupon){
     return res.redirect('/coupons')
-
+    
    }
 
    await couponModel.findByIdAndUpdate(id,{code,discount,expiryDate,status},{new:true})
 
     return res.redirect('/coupons')
       
-
-
  } catch (error) {
   console.log(error)
   return res.redirect('/coupons')

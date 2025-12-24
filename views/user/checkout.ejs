@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Checkout</title>
+  <link rel="icon" href="/img/favicon.png">
+  <link rel="stylesheet" href="/css/checkout.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="main-header">
+  <div class="container header-flex">
+    <div class="logo">Fruitkha</div>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+      <a href="/shop">Shop</a>
+    </nav>
+    <div class="user">
+      <span><%= user.name %></span>
+    </div>
+  </div>
+</header>
+
+<!-- MESSAGES -->
+<div class="container">
+  <% if (success) { %>
+    <div class="alert success"><%= success %></div>
+  <% } %>
+
+  <% if (error) { %>
+    <div class="alert error"><%= error %></div>
+  <% } %>
+</div>
+
+<!-- CHECKOUT -->
+<div class="container checkout-wrapper">
+
+  <!-- LEFT -->
+  <form action="/place-order" method="POST" class="checkout-left">
+
+    <!-- DELIVERY ADDRESS -->
+    <div class="card">
+      <h3>Delivery Address</h3>
+
+      <label>Select Saved Address</label>
+      <select name="addressId" required>
+        <% addresses.forEach(address => { %>
+          <option value="<%= address._id %>">
+            <%= address.label %> - <%= address.city %>, <%= address.pincode %>
+          </option>
+        <% }) %>
+      </select>
+
+      <a href="/address" class="edit-address">➕ Add / Edit Address</a>
+    </div>
+
+    <!-- CONTACT DETAILS -->
+    <div class="card">
+      <h3>Contact Details</h3>
+
+      <div class="grid-2">
+        <div>
+          <label>Full Name</label>
+          <input type="text" name="name" value="<%= user.name %>" required>
+        </div>
+
+        <div>
+          <label>Email</label>
+          <input type="email" name="email" value="<%= user.email %>" required>
+        </div>
+
+        <div>
+          <label>Phone Number</label>
+          <input type="text" name="phone" value="<%= user.phone %>" required>
+        </div>
+
+        <div>
+          <label>Alternate Phone (Optional)</label>
+          <input type="text" name="altPhone">
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYMENT -->
+    <div class="card">
+      <h3>Payment Method</h3>
+
+      <select name="paymentMethod" required>
+        <option value="COD">Cash on Delivery</option>
+        <option value="ONLINE">Online Payment</option>
+      </select>
+
+      <label>Delivery Instructions (Optional)</label>
+      <textarea name="instructions" placeholder="E.g. Leave package at the door"></textarea>
+
+      <button type="submit" class="btn">Proceed to Payment</button>
+    </div>
+
+  </form>
+
+  <!-- RIGHT -->
+  <div class="checkout-right card">
+    <h3>Order Summary</h3>
+
+    <% cartItems.forEach(item => { %>
+      <div class="summary-row">
+        <span><%= item.product.name %> (x<%= item.quantity %>)</span>
+        <span>₹<%= item.total %></span>
+      </div>
+    <% }) %>
+
+    <hr>
+
+    <div class="summary-row">
+      <span>Subtotal</span>
+      <span>₹<%= subtotal %></span>
+    </div>
+
+    <div class="summary-row">
+      <span>Delivery Charge</span>
+      <span>₹<%= deliveryCharge %></span>
+    </div>
+
+    <div class="summary-row total">
+      <span>Total</span>
+      <span>₹<%= total %></span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

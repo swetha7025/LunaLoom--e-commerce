@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Save Address</title>
+
+  <link rel="icon" href="/img/favicon.png">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/address.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/animate.css">
+  <link rel="stylesheet" href="/css/owl.carousel.min.css">
+  <link rel="stylesheet" href="/css/all.css">
+  <link rel="stylesheet" href="/css/flaticon.css">
+  <link rel="stylesheet" href="/css/themify-icons.css">
+  <link rel="stylesheet" href="/css/magnific-popup.css">
+  <link rel="stylesheet" href="/css/slick.css">
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/header.css">
+   <link rel="stylesheet" href="/css/footer.css">
+</head>
+<body>
+
+<%- include('../partials/header') %>
+
+<div class="container mt-5 mb-5">
+
+  <h2 class="manage-title mb-4">Address</h2>
+
+  <!-- SUCCESS MESSAGE -->
+  <% if (success) { %>
+    <div class="alert alert-success alert-dismissible fade show">
+      <%= success %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  <% } %>
+
+  <!-- ERROR MESSAGE -->
+  <% if (error) { %>
+    <div class="alert alert-danger alert-dismissible fade show">
+      <%= error %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  <% } %>
+
+  <!-- SAVE ADDRESS FORM -->
+  <div class="address-card">
+
+    <form action="/address/save" method="POST">
+
+      <div class="mb-3">
+        <label>Label</label>
+        <input type="text" name="label" class="form-control" placeholder="Home / Office" required>
+      </div>
+
+      <div class="mb-3">
+        <label>Street</label>
+        <input type="text" name="street" class="form-control" placeholder="Street / House name" required>
+      </div>
+
+      <div class="mb-3">
+        <label>City</label>
+        <input type="text" name="city" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label>District</label>
+        <input type="text" name="district" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label>Country</label>
+        <input type="text" name="country" class="form-control" value="India" required>
+      </div>
+
+      <div class="mb-3">
+        <label>Pincode</label>
+        <input type="text" name="pincode" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label>Phone</label>
+        <input type="text" name="phone" class="form-control" required>
+      </div>
+
+      <div class="form-check mb-3">
+        <input type="checkbox" name="isDefault" class="form-check-input" id="defaultAddress">
+        <label class="form-check-label" for="defaultAddress">
+          Set as default address
+        </label>
+      </div>
+
+     <button type="submit" class="btn save-btn w-100">
+  Save Address
+</button>
+
+
+    </form>
+
+  </div>
+
+</div>
+
+<%- include('../partials/footer') %>
+
+<script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
