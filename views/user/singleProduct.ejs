@@ -8,14 +8,21 @@
   <link rel="icon" href="/img/favicon.png">
   <link rel="stylesheet" href="/css/themify-icons.css">
   <link rel="stylesheet" href="/css/flaticon.css">
-
   <link rel="stylesheet" href="/css/bootstrap.min.css">
   <link rel="stylesheet" href="/css/all.css">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/header.css">
   <link rel="stylesheet" href="/css/footer.css">
-
   <link rel="stylesheet" href="/css/singleProduct.css">
+
+  <!-- ADDITION (minimal style for active option) -->
+  <style>
+    .opt-btn.active {
+      background-color: #a174a9;
+      color: #fff;
+      border-color: #a174a9;
+    }
+  </style>
 </head>
 
 <body>
@@ -26,12 +33,9 @@
 
   <!-- LEFT IMAGE WITH MULTIPLE IMAGE SWIPER -->
   <div class="product-image-box">
+    <div id="productCarousel" class="carousel slide" data-bs-ride="carousel"
+      data-bs-touch="true" data-bs-interval="2000" data-bs-pause="false">
 
-    <div id="productCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-touch="true"
-     data-bs-interval="2000"
-     data-bs-pause="false">
-
-      <!-- INDICATORS -->
       <div class="carousel-indicators">
         <% product.images.forEach((img, index) => { %>
           <button type="button"
@@ -42,44 +46,23 @@
         <% }); %>
       </div>
 
-      <!-- IMAGES -->
       <div class="carousel-inner">
-
         <% product.images.forEach((img, index) => { %>
           <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
             <img src="<%= img %>" class="d-block w-100" alt="<%= product.name %>">
           </div>
         <% }); %>
       </div>
-
-      <!-- ARROWS -->
-      <!-- <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-      </button>
-
-      <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-      </button> -->
-
     </div>
-
   </div>
 
   <!-- RIGHT DETAILS -->
   <div class="product-details">
 
-    <!-- NAME -->
     <h1 class="p-title"><%= product.name %></h1>
-    <!-- NAME -->
-<h1 class="p-title"><%= product.name %></h1>
-
-
-
-    <!-- PRICE -->
     <p class="p-price">₹ <%= product.price %></p>
     <p class="p-shipping">Free Shipping all over India</p>
 
-    <!-- DESCRIPTION -->
     <% if (product.description) { %>
       <div class="p-section">
         <p class="label">Description</p>
@@ -87,31 +70,30 @@
       </div>
     <% } %>
 
-    <!-- SIZES -->
+    <!-- SIZES (ONLY data-size ADDED) -->
     <% if(product.sizes && product.sizes.length > 0) { %>
       <div class="p-section">
         <p class="label">Size</p>
         <div class="options">
           <% product.sizes.forEach(s => { %>
-            <button class="opt-btn"><%= s %></button>
+            <button class="opt-btn size-btn" data-size="<%= s %>"><%= s %></button>
           <% }) %>
         </div>
       </div>
     <% } %>
 
-    <!-- FABRICS -->
+    <!-- FABRICS (ONLY data-fabric ADDED) -->
     <% if(product.fabrics && product.fabrics.length > 0) { %>
       <div class="p-section">
         <p class="label">Fabric</p>
         <div class="options">
           <% product.fabrics.forEach(f => { %>
-            <button class="opt-btn"><%= f %></button>
+            <button class="opt-btn fabric-btn" data-fabric="<%= f %>"><%= f %></button>
           <% }) %>
         </div>
       </div>
     <% } %>
 
-    <!-- CATEGORY -->
     <div class="p-section">
       <p class="label">Category</p>
       <div class="options">
@@ -119,95 +101,99 @@
       </div>
     </div>
 
-    
+    <!-- ADD TO CART (UNCHANGED HTML) -->
+    <a href="/cart/add/<%= product._id %>"
+       class="btn-full add-cart-btn"
+       onclick="addToCart('<%= product._id %>', this, event)">
+      <span class="cart-text">Add to Cart</span>
+    </a>
 
-    <!-- BUTTONS -->
-    <!-- <a href="/cart/add/<%= product._id %>" class="btn-full add-cart-btn">Add to Cart</a> -->
-     <a href="/cart/add/<%= product._id %>"
-   class="btn-full add-cart-btn"
-   onclick="addToCart('<%= product._id %>', this, event)">
-   <span class="cart-text">Add to Cart</span>
-</a>
-
-
-    
-  
-<!--      
     <a href="/wishlist/add/<%= product._id %>"
-   class="btn-full add-cart-btn"
-   id="wishlistBtn"
-   data-id="<%= product._id %>">
-   Add to Wishlist
-   </a>  -->
-   
-<a href="/wishlist/add/<%= product._id %>"
-   class="btn-full add-cart-btn"
-   onclick="addToWishlist('<%= product._id %>', this, event)">
-   <span class="wishlist-text">Add to Wishlist</span>
-</a>
+       class="btn-full add-cart-btn"
+       onclick="addToWishlist('<%= product._id %>', this, event)">
+      <span class="wishlist-text">Add to Wishlist</span>
+    </a>
 
-
-   
-   
   </div>
-
 </div>
 
 <%- include('../partials/footer') %>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- ADDITION: selection logic -->
+<script>
+  let selectedSize = null;
+  let selectedFabric = null;
+
+  document.querySelectorAll(".size-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".size-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      selectedSize = btn.dataset.size;
+    });
+  });
+
+  document.querySelectorAll(".fabric-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".fabric-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      selectedFabric = btn.dataset.fabric;
+    });
+  });
+</script>
+
+<!-- UPDATED addToCart ONLY -->
+<script>
+  function addToCart(productId, el, event) {
+    event.preventDefault();
+
+    if (!selectedSize || !selectedFabric) {
+      alert("Please select size and fabric");
+      return;
+    }
+
+    fetch(`/cart/add/${productId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      body: JSON.stringify({
+        size: selectedSize,
+        fabric: selectedFabric
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      const text = el.querySelector(".cart-text");
+      if (data.success) {
+        text.innerText = "Added to Cart";
+        el.style.pointerEvents = "none";
+        el.style.opacity = "0.85";
+      }
+    })
+    .catch(err => console.log(err));
+  }
+</script>
+
 <script>
   function addToWishlist(productId, el, event) {
     event.preventDefault();
-
     fetch(`/wishlist/add/${productId}`, {
       method: "GET",
       headers: { "X-Requested-With": "XMLHttpRequest" }
     })
     .then(res => res.json())
     .then(data => {
-
       const text = el.querySelector(".wishlist-text");
-
-      if (data.exists) {
-        text.innerText = "Already in Wishlist";
-      } else if (data.success) {
-        text.innerText = "Added to Wishlist";
-      }
-
+      if (data.exists) text.innerText = "Already in Wishlist";
+      else if (data.success) text.innerText = "Added to Wishlist";
       el.style.pointerEvents = "none";
       el.style.opacity = "0.85";
-    })
-    .catch(err => console.log(err));
+    });
   }
 </script>
-<script>
-  function addToCart(productId, el, event) {
-    event.preventDefault();
-
-    fetch(`/cart/add/${productId}`, {
-      method: "POST",
-      headers: { "X-Requested-With": "XMLHttpRequest" }
-    })
-    .then(res => res.json())
-    .then(data => {
-
-      const text = el.querySelector(".cart-text");
-
-      if (data.alreadyInCart) {
-        text.innerText = "Already in Cart";
-      } else if (data.success) {
-        text.innerText = "Added to Cart";
-      }
-
-      el.style.pointerEvents = "none";
-      el.style.opacity = "0.85";
-    })
-    .catch(err => console.log(err));
-  }
-</script>
-
 
 </body>
 </html>
-

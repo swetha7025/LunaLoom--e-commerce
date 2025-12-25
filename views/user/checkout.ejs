@@ -5,24 +5,46 @@
   <title>Checkout</title>
   <link rel="icon" href="/img/favicon.png">
   <link rel="stylesheet" href="/css/checkout.css">
+   <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+  <!-- Animation and carousel -->
+  <link rel="stylesheet" href="/css/animate.css">
+  <link rel="stylesheet" href="/css/owl.carousel.min.css">
+
+  <!-- Font Awesome & Icons -->
+  <link rel="stylesheet" href="/css/all.css">
+  <link rel="stylesheet" href="/css/flaticon.css">
+  <link rel="stylesheet" href="/css/themify-icons.css">
+
+  <!-- Popup & Slider -->
+  <link rel="stylesheet" href="/css/magnific-popup.css">
+  <link rel="stylesheet" href="/css/slick.css">
+
+  <!-- Shared and page-specific CSS -->
+  <link rel="stylesheet" href="/css/style.css"> <!-- main site styles (home, header, etc.) -->
+  <link rel="stylesheet" href="/css/header.css"> <!-- header/navbar styles -->
+  <link rel="stylesheet" href="/css/footer.css">
 </head>
 <body>
 
 <!-- HEADER -->
-<header class="main-header">
-  <div class="container header-flex">
-    <div class="logo">Fruitkha</div>
-    <nav>
-      <a href="/">Home</a>
-      <a href="/about">About</a>
-      <a href="/contact">Contact</a>
-      <a href="/shop">Shop</a>
-    </nav>
-    <div class="user">
-      <span><%= user.name %></span>
+
+<%- include('../partials/header') %>
+
+
+  <section class="breadcrumb_part">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="breadcrumb_iner">
+            <h2>Checkout</h2>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-</header>
+  </section>
+
 
 <!-- MESSAGES -->
 <div class="container">
@@ -119,11 +141,6 @@
       <span>₹<%= subtotal %></span>
     </div>
 
-    <div class="summary-row">
-      <span>Delivery Charge</span>
-      <span>₹<%= deliveryCharge %></span>
-    </div>
-
     <div class="summary-row total">
       <span>Total</span>
       <span>₹<%= total %></span>
@@ -132,5 +149,6 @@
 
 </div>
 
+<%- include('../partials/footer') %>
 </body>
 </html>

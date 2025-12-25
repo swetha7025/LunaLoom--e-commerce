@@ -65,13 +65,13 @@ body {
 .opt-btn {
   padding: 8px 20px;
   border-radius: 25px;
-  border: 1px solid#a174a9;;
+  border: 1px solid#a174a9;
   background: #fff;
   cursor: pointer;
 }
 .opt-btn.active,
 .opt-btn:hover {
-  background: #a174a9;;
+  background: #a174a9;
   color: #fff;
 }
 
@@ -139,17 +139,7 @@ body {
   }
 }
 
-/* ✔ SWIPE FIX */
-/* .carousel-inner {
-  touch-action: pan-y;
-}
-.carousel-item {
-  -webkit-user-select: none;
-  user-select: none;
-}
-.carousel-inner img {
-  pointer-events: none;
-} */
+
 .carousel-item {
   transition: transform 0.6s ease-in-out;
 }
@@ -177,4 +167,10 @@ body {
 .status-limited {
   background: #fff3cd;
   color: #856404;
+}
+/* CATEGORY BUTTON COLOR ONLY */
+.p-section .options .opt-btn.active:not(.size-btn):not(.fabric-btn) {
+  background: #a174a9;
+  color: #fff;
+  border-color: #a174a9;
 }

@@ -150,7 +150,7 @@
               </div>
             </div>
 
-               <!-- <div class="single_sedebar">
+                <!-- <div class="single_sedebar">
                 <div class="select_option">
               <div class="select_option_list">
                Sort by Price <i class="right fas fa-caret-down"></i>
@@ -160,7 +160,7 @@
              <p><a href="/product_list?sort=price_desc">High to Low</a></p>
              </div>
              </div>
-            </div> -->
+            </div>  -->
 
 
           </div>
@@ -191,8 +191,11 @@
                         <div class="wishlist-box-message">Added to wishlist ❤️</div>
 
                         <!-- PRODUCT IMAGE -->
-                        <img src="<%= product.images?.length ? product.images[0] : '/img/default-product.png' %>" 
-                             class="img-fluid product-img">
+                       <a href="/product/<%= product._id %>">
+                       <img src="<%= product.images?.length ? product.images[0] : '/img/default-product.png' %>" 
+                        class="img-fluid product-img">
+                       </a>
+
                       </div>
 
                       <h3><a href="/product/<%= product._id %>"><%= product.name %></a></h3>
@@ -218,11 +221,46 @@
 
             </div>
 
-            <div class="load_more_btn text-center">
-              <a href="#" class="btn_3">Load More</a>
-            </div>
 
           </div>
+          <% if (totalPages > 1) { %>
+  <div class="pagination_area text-center mt-4">
+    <ul class="pagination justify-content-center">
+
+      <!-- Prev -->
+      <% if (currentPage > 1) { %>
+        <li class="page-item">
+          <a class="page-link"
+             href="/product_list?page=<%= currentPage - 1 %>&category=<%= category || '' %>&brand=<%= brand || '' %>">
+            Prev
+          </a>
+        </li>
+      <% } %>
+
+      <!-- Page Numbers -->
+      <% for (let i = 1; i <= totalPages; i++) { %>
+        <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+          <a class="page-link"
+             href="/product_list?page=<%= i %>&category=<%= category || '' %>&brand=<%= brand || '' %>">
+            <%= i %>
+          </a>
+        </li>
+      <% } %>
+
+      <!-- Next -->
+      <% if (currentPage < totalPages) { %>
+        <li class="page-item">
+          <a class="page-link"
+             href="/product_list?page=<%= currentPage + 1 %>&category=<%= category || '' %>&brand=<%= brand || '' %>">
+            Next
+          </a>
+        </li>
+      <% } %>
+
+    </ul>
+   </div>
+  <% } %>
+
         </div>
 
       </div>

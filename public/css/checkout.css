@@ -1,8 +1,53 @@
-body {
-  font-family: Arial, sans-serif;
-  background: #f5f7f9;
-  margin: 0;
+:root {
+  --primary: #b99bb5;      /* Lavender main */
+  --primary-dark: #9e7e9a;
+  --soft-bg: #f7f3f7;
+  --card-bg: #ffffff;
+  --text-dark: #3b2f3f;
+  --text-light: #7a6b7f;
+  --border: #e6dbe6;
+  --accent: #6d4f73;
 }
+
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: var(--soft-bg);
+  margin: 0;
+  color: var(--text-dark);
+}
+
+/* ---------- HEADER ---------- */
+
+.main-header {
+  background: #ffffff;
+  border-bottom: 1px solid var(--border);
+}
+
+.header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 0;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+nav a {
+  margin: 0 14px;
+  text-decoration: none;
+  color: var(--text-dark);
+  font-weight: 500;
+}
+
+nav a:hover {
+  color: var(--accent);
+}
+
+/* ---------- CONTAINER ---------- */
 
 .container {
   width: 90%;
@@ -10,28 +55,31 @@ body {
   margin: auto;
 }
 
-.main-header {
-  background: #0b2c3d;
-  padding: 15px 0;
-  color: #fff;
+/* ---------- ALERTS ---------- */
+
+.alert {
+  padding: 14px;
+  border-radius: 6px;
+  margin: 20px 0;
+  font-size: 14px;
 }
 
-.header-flex {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.alert.success {
+  background: #e7f5ec;
+  color: #2f6b45;
 }
 
-nav a {
-  color: #fff;
-  margin: 0 10px;
-  text-decoration: none;
+.alert.error {
+  background: #fdeaea;
+  color: #8a2d2d;
 }
+
+/* ---------- CHECKOUT LAYOUT ---------- */
 
 .checkout-wrapper {
   display: flex;
   gap: 30px;
-  margin: 40px auto;
+  margin: 40px auto 80px;
 }
 
 .checkout-left {
@@ -42,77 +90,127 @@ nav a {
   flex: 1;
 }
 
+/* ---------- CARDS ---------- */
+
 .card {
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 22px;
+  border: 1px solid var(--border);
 }
 
 .card h3 {
-  margin-bottom: 15px;
+  margin-bottom: 18px;
+  font-size: 18px;
+  color: var(--accent);
 }
+
+/* ---------- FORM ---------- */
 
 label {
+  font-size: 14px;
+  color: var(--text-light);
+  margin-bottom: 6px;
   display: block;
-  margin: 10px 0 5px;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-size: 14px;
+  outline: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--primary);
+}
+
+textarea {
+  resize: none;
+  min-height: 90px;
 }
 
 .grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 15px;
+  gap: 18px;
 }
+
+/* ---------- ADDRESS LINK ---------- */
 
 .edit-address {
   display: inline-block;
-  margin-top: 10px;
-  color: #ffb400;
+  margin-top: 12px;
+  color: var(--accent);
+  font-size: 14px;
   text-decoration: none;
 }
 
-.btn {
-  margin-top: 15px;
-  width: 100%;
-  padding: 12px;
-  background: #ffb400;
-  border: none;
-  border-radius: 5px;
-  font-weight: bold;
-  cursor: pointer;
+.edit-address:hover {
+  text-decoration: underline;
 }
+
+/* ---------- BUTTON ---------- */
+
+.btn {
+  margin-top: 20px;
+  width: 100%;
+  padding: 14px;
+  background: var(--primary);
+  border: none;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn:hover {
+  background: var(--primary-dark);
+}
+
+/* ---------- ORDER SUMMARY ---------- */
 
 .summary-row {
   display: flex;
   justify-content: space-between;
-  margin: 8px 0;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.summary-row span:last-child {
+  font-weight: 500;
 }
 
 .summary-row.total {
   font-size: 18px;
-  font-weight: bold;
+  font-weight: 600;
+  margin-top: 15px;
+  color: var(--accent);
 }
 
-.alert {
-  padding: 12px;
-  border-radius: 5px;
-  margin: 20px 0;
+hr {
+  border: none;
+  border-top: 1px dashed var(--border);
+  margin: 16px 0;
 }
 
-.alert.success {
-  background: #d4edda;
-  color: #155724;
-}
+/* ---------- RESPONSIVE ---------- */
 
-.alert.error {
-  background: #f8d7da;
-  color: #721c24;
+@media (max-width: 900px) {
+  .checkout-wrapper {
+    flex-direction: column;
+  }
+
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
 }

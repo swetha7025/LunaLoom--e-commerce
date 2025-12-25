@@ -30,10 +30,10 @@ const productSchema = new mongoose.Schema({
         enum: ['Bedding', 'Pillows & Cushions'],
         required: true
     },
-    subCategory: {
-      type: String,
-      required: true
- },
+//     subCategory: {
+//       type: String,
+//       required: true
+//  },
 
 
     images: {

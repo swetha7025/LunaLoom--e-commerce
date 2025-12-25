@@ -127,6 +127,7 @@ router.post('/address/update/:id',protectedAuth,authControllers.updateAddress)
 router.get('/product_list',authControllers.productList)
 
 router.get('/product/:id',authControllers.getSingleProduct)
+router.get("/singleProduct",authControllers.getSingleProduct)
 
 
 //--------------------------------WISHLIST-------------------------
@@ -143,16 +144,16 @@ router.post('/wishlist/remove/:id', protectedAuth, authControllers.removeFromWis
 router.get('/cart',protectedAuth,authControllers.getCart)
 
 
-router.post('/cart/add/:id',authControllers.addToCart)
+router.post('/cart/add/:id',protectedAuth,authControllers.addToCart)
 
 
-router.get('/cart/remove/:id',authControllers.removeFromCart)
+router.get('/cart/remove/:id',protectedAuth,authControllers.removeFromCart)
 
 router.get("/cart/increase/:id", protectedAuth, authControllers.increaseQuantity)
 
 router.get("/cart/decrease/:id", protectedAuth, authControllers.decreaseQuantity)
 
-
+router.get("/checkout",protectedAuth,authControllers.getCheckoutPage)
 
 
 

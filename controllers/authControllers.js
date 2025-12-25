@@ -521,38 +521,91 @@ async function updateAddress(req,res) {
 
 // -------------------------------------- PRODUCT LIST ---------------------------------
 
+// async function productList(req, res) {
+//   try {
+//     const { category, brand, } = req.query;
+
+//     let filter = {}
+
+//     if (category) {
+//       filter.category = category
+//     }
+
+//     if (brand) {
+//       filter.brand = brand
+//     }
+
+    
+
+//     const products = await productModel.find(filter)
+
+//     return res.render("user/product_list", { products,category,success: null,error: null })
+    
+
+//   } catch (error) {
+//     console.log(error);
+ 
+//     return res.render("user/product_list", {
+//       products: [],
+//       category:null,
+//       success: null,
+//       error: 'Error during loading products'
+//     });
+//   }
+// }
 async function productList(req, res) {
   try {
-    const { category, brand, } = req.query;
+    const { category, brand, page } = req.query;
 
-    let filter = {}
+    const currentPage = parseInt(page) || 1;
+    const limit = 6;
+    const skip = (currentPage - 1) * limit;
+
+    let filter = {};
 
     if (category) {
-      filter.category = category
+      filter.category = category;
     }
 
     if (brand) {
-      filter.brand = brand
+      filter.brand = brand;
     }
 
-    
+    // total products count (for pagination)
+    const totalProducts = await productModel.countDocuments(filter);
+    const totalPages = Math.ceil(totalProducts / limit);
 
-    const products = await productModel.find(filter)
+    // paginated products
+    const products = await productModel
+      .find(filter)
+      .skip(skip)
+      .limit(limit);
 
-    return res.render("user/product_list", { products,category,success: null,error: null })
-    
+    return res.render("user/product_list", {
+      products,
+      category,
+      brand,
+      currentPage,
+      totalPages,
+      success: null,
+      error: null
+    });
 
   } catch (error) {
     console.log(error);
- 
+
     return res.render("user/product_list", {
       products: [],
-      category:null,
+      category: null,
+      brand: null,
+      currentPage: 1,
+      totalPages: 0,
       success: null,
-      error: 'Error during loading products'
+      error: "Error during loading products"
     });
   }
 }
+
 
 
 // ------------------------------------------ SINGLE PRODUCT -----------------------------------
@@ -826,7 +879,10 @@ async function addToCart(req, res) {
 
 async function removeFromCart(req, res) {
   try {
+
+
     const userId = req.auth?.id
+
     const productId = req.params.id
     
     let cart = await cartModel.findOne({ userId })
@@ -1007,6 +1063,80 @@ async function decreaseQuantity(req, res) {
 }
 
 
+//---------------------------------------------CHECK OUT----------------------------------------
+
+async function getCheckoutPage(req,res) {
+try {
+  const userId = req.auth?.id
+
+  if(!userId){
+    return res.redirect('/login')
+  }
+
+  const user = await User.findById(userId).lean()
+
+
+  const addresses = await addressModel.find({userId}).lean()
+
+  const cart = await cartModel.findOne({userId}).populate("products.productId").lean()
+
+  if(!cart){
+    return res,redirect('/cart')
+  }
+ 
+  let subtotal = 0
+
+  const cartItems = cart.products.map(item=>{
+    const total = item.productId.price*item.quantity
+    subtotal+= total
+
+    return {
+        product: {
+          name: item.productId.name
+        },
+        quantity: item.quantity,
+        total
+      };
+  })
+
+   const total = subtotal 
+
+  
+    res.render("user/checkout", { user, addresses,cartItems, subtotal, total, success: null, error: null })
+    
+} catch (error) {
+  console.log(error)
+  return res.redirect('/checkout')
+}  
+}
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1055,7 +1185,7 @@ module.exports = {
   addToCart,
   removeFromCart,
   increaseQuantity,
-  decreaseQuantity
-
+  decreaseQuantity,
+  getCheckoutPage,
 
 }
