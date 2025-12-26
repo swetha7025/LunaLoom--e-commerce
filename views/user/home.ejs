@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="/css/magnific-popup.css">
   <link rel="stylesheet" href="/css/slick.css">
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/footer.css">
 </head>
 
 <body>
@@ -97,19 +98,18 @@
       </div>
       <div class="row">
         <% const trending = [
-          { img: "bedspread1.png", name: "Malabar stripe ribbed Bedspread" },
-          { img: "pillow1.png", name: "Foam filling cotton slow rebound pillows" },
+          { img: "bedspread1.png", name: "Malabar stripe Bedspread" },
+          { img: "pillow1.png", name: "Check Sucker Cushions" },
           { img: "bedspread4.png", name: "Diamond Bedspread"},
           { img: "bedsheet3.png", name: "Pincheck Bedsheet" },
-          { img: "pillow2.png", name: "Blossom Embroidered pillows" },
+          { img: "pillow2.png", name: "Blossom Cushions" },
           { img: "bedsheet4.png", name: "Bergen Bedsheet" }
         ]; %>
         <% trending.forEach(item => { %>
           <div class="col-lg-4 col-sm-6">
             <div class="single_product_item">
               <img src="/img/<%= item.img %>" alt="#" class="img-fluid">
-              <h3><a href="/singleProduct"><%= item.name %></a></h3>
-              <p>From $5</p>
+              <h3><a href="/product_list"><%= item.name %></a></h3>
             </div>
           </div>
         <% }) %>

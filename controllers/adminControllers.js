@@ -1,5 +1,6 @@
 const adminModel = require('../models/admin');
 const productModel = require('../models/products')
+const User= require('../models/user')
 const couponModel = require('../models/coupon');
 const { upload } = require("../middleware/multer");
  const fs = require("fs");
@@ -403,7 +404,26 @@ async function deleteCoupon(req,res) {
   
 }
 
-//----------------------------------------
+//---------------------------------------------CUSTOMERS---------------------------------------
+
+
+const getCustomersPage = async (req, res) => {
+  try {
+    const customers = await User.find() 
+      .select("name email phoneNumber isBlock")
+      .lean()
+
+    res.render("admin/customers", {customers, success: null, error: null })
+      
+  } catch (error) {
+    console.log(error)
+    res.render("admin/customers", { customers: [],success: null, error: "Failed to load customers" })
+  
+  }
+}
+
+
+
 
 
 
@@ -460,6 +480,7 @@ module.exports = {
     addCoupon,
     getEditCouponPage,
     updateCoupon,
-    deleteCoupon
+    deleteCoupon,
+    getCustomersPage
   
 }

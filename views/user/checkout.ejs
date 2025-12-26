@@ -96,7 +96,13 @@
 
         <div>
           <label>Phone Number</label>
-          <input type="text" name="phone" value="<%= user.phone %>" required>
+        <input
+        type="text"
+         name="phone"
+        value="<%= addresses[0]?.phone || '' %>"
+        required
+        >
+
         </div>
 
         <div>

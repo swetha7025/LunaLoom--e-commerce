@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Customers</title>
+
+  <!-- Font Awesome -->
+  
+  <link rel="stylesheet" href="/css/admin.css">
+   
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/customers.css">
+</head>
+<body>
+
+  <!-- Sidebar Partial -->
+ <%- include('../partials/adminSidebar', { activePage: 'customers' }) %>
+
+  <div class="main-content">
+    <div class="header">
+      <h1>Customers</h1>
+      
+    </div>
+
+    <!-- Success Message -->
+    <% if (success) { %>
+      <div class="alert success"><%= success %></div>
+    <% } %>
+
+    <!-- Error Message -->
+    <% if (error) { %>
+      <div class="alert error"><%= error %></div>
+    <% } %>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone Number</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+     <tbody>
+  <% customers.forEach((customer, index) => { %>
+    <tr>
+      <td><%= index + 1 %></td>
+
+      <td><%= customer.name %></td>
+
+      <td><%= customer.email %></td>
+
+      <td><%= customer.phoneNumber || "-" %></td>
+
+      <td>
+        <span class="status <%= customer.isBlock ? 'blocked' : 'active' %>">
+          <%= customer.isBlock ? 'Blocked' : 'Active' %>
+        </span>
+      </td>
+
+      <td>
+        <% if (customer.isBlock) { %>
+          <a href="/admin/customers/unblock/<%= customer._id %>" class="btn btn-block">
+            Unblock
+          </a>
+        <% } else { %>
+          <a href="/admin/customers/block/<%= customer._id %>" class="btn btn-block">
+            Block
+          </a>
+        <% } %>
+
+        <a href="/admin/customers/delete/<%= customer._id %>"
+           class="btn btn-delete"
+           onclick="return confirm('Are you sure?')">
+           Delete
+        </a>
+      </td>
+    </tr>
+  <% }) %>
+</tbody>
+
+    </table>
+  </div>
+
+</body>
+</html>

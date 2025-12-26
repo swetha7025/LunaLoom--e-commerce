@@ -571,11 +571,11 @@ async function productList(req, res) {
       filter.brand = brand;
     }
 
-    // total products count (for pagination)
+    
     const totalProducts = await productModel.countDocuments(filter);
     const totalPages = Math.ceil(totalProducts / limit);
 
-    // paginated products
+  
     const products = await productModel
       .find(filter)
       .skip(skip)
@@ -1066,7 +1066,7 @@ async function decreaseQuantity(req, res) {
 //---------------------------------------------CHECK OUT----------------------------------------
 
 async function getCheckoutPage(req,res) {
-try {
+ try {
   const userId = req.auth?.id
 
   if(!userId){
@@ -1087,6 +1087,7 @@ try {
   let subtotal = 0
 
   const cartItems = cart.products.map(item=>{
+    
     const total = item.productId.price*item.quantity
     subtotal+= total
 
@@ -1096,7 +1097,7 @@ try {
         },
         quantity: item.quantity,
         total
-      };
+      }
   })
 
    const total = subtotal 

@@ -46,7 +46,7 @@ router.get('/coupons/edit/:id', adminControllers.getEditCouponPage)
 router.post('/coupons/edit/:id',adminControllers.updateCoupon)
 router.post('/coupons/delete/:id',adminControllers.deleteCoupon)
 
-
+router.get("/customers",adminControllers.getCustomersPage)
 
 
 
