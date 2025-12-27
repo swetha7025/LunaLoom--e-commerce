@@ -15,7 +15,6 @@
   <link rel="stylesheet" href="/css/footer.css">
   <link rel="stylesheet" href="/css/singleProduct.css">
 
-  <!-- ADDITION (minimal style for active option) -->
   <style>
     .opt-btn.active {
       background-color: #a174a9;
@@ -31,17 +30,14 @@
 
 <div class="product-main">
 
-  <!-- LEFT IMAGE WITH MULTIPLE IMAGE SWIPER -->
   <div class="product-image-box">
-    <div id="productCarousel" class="carousel slide" data-bs-ride="carousel"
-      data-bs-touch="true" data-bs-interval="2000" data-bs-pause="false">
-
+    <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-indicators">
         <% product.images.forEach((img, index) => { %>
           <button type="button"
-                  data-bs-target="#productCarousel"
-                  data-bs-slide-to="<%= index %>"
-                  class="<%= index === 0 ? 'active' : '' %>">
+            data-bs-target="#productCarousel"
+            data-bs-slide-to="<%= index %>"
+            class="<%= index === 0 ? 'active' : '' %>">
           </button>
         <% }); %>
       </div>
@@ -56,11 +52,10 @@
     </div>
   </div>
 
-  <!-- RIGHT DETAILS -->
   <div class="product-details">
 
     <h1 class="p-title"><%= product.name %></h1>
-    <p class="p-price">₹ <%= product.price %></p>
+    <p class="p-price">₹ <span id="finalPrice"><%= product.price %></span></p>
     <p class="p-shipping">Free Shipping all over India</p>
 
     <% if (product.description) { %>
@@ -70,7 +65,6 @@
       </div>
     <% } %>
 
-    <!-- SIZES (ONLY data-size ADDED) -->
     <% if(product.sizes && product.sizes.length > 0) { %>
       <div class="p-section">
         <p class="label">Size</p>
@@ -82,7 +76,6 @@
       </div>
     <% } %>
 
-    <!-- FABRICS (ONLY data-fabric ADDED) -->
     <% if(product.fabrics && product.fabrics.length > 0) { %>
       <div class="p-section">
         <p class="label">Fabric</p>
@@ -101,7 +94,6 @@
       </div>
     </div>
 
-    <!-- ADD TO CART (UNCHANGED HTML) -->
     <a href="/cart/add/<%= product._id %>"
        class="btn-full add-cart-btn"
        onclick="addToCart('<%= product._id %>', this, event)">
@@ -121,16 +113,42 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- ADDITION: selection logic -->
 <script>
+ const basePrice = Number('<%= product.price %>');
+
+  const priceEl = document.getElementById("finalPrice");
+
+  const sizePrices = {
+    Double: 0,
+    Queen: 300,
+    King: 600
+  };
+
+  const fabricPrices = {
+    Cotton: 0,
+    Silk: 500,
+    Polyester: 200,
+    "Bamboo Fabric": 700
+  };
+
   let selectedSize = null;
   let selectedFabric = null;
+
+  function updatePriceIfReady() {
+    if (selectedSize && selectedFabric) {
+      priceEl.textContent =
+        basePrice +
+        sizePrices[selectedSize] +
+        fabricPrices[selectedFabric];
+    }
+  }
 
   document.querySelectorAll(".size-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       document.querySelectorAll(".size-btn").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
       selectedSize = btn.dataset.size;
+      updatePriceIfReady();
     });
   });
 
@@ -139,11 +157,11 @@
       document.querySelectorAll(".fabric-btn").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
       selectedFabric = btn.dataset.fabric;
+      updatePriceIfReady();
     });
   });
 </script>
 
-<!-- UPDATED addToCart ONLY -->
 <script>
   function addToCart(productId, el, event) {
     event.preventDefault();
@@ -166,32 +184,26 @@
     })
     .then(res => res.json())
     .then(data => {
-      const text = el.querySelector(".cart-text");
       if (data.success) {
-        text.innerText = "Added to Cart";
+        el.querySelector(".cart-text").innerText = "Added to Cart";
         el.style.pointerEvents = "none";
         el.style.opacity = "0.85";
       }
-    })
-    .catch(err => console.log(err));
+    });
   }
 </script>
 
 <script>
   function addToWishlist(productId, el, event) {
     event.preventDefault();
-    fetch(`/wishlist/add/${productId}`, {
-      method: "GET",
-      headers: { "X-Requested-With": "XMLHttpRequest" }
-    })
-    .then(res => res.json())
-    .then(data => {
-      const text = el.querySelector(".wishlist-text");
-      if (data.exists) text.innerText = "Already in Wishlist";
-      else if (data.success) text.innerText = "Added to Wishlist";
-      el.style.pointerEvents = "none";
-      el.style.opacity = "0.85";
-    });
+    fetch(`/wishlist/add/${productId}`, { method: "GET" })
+      .then(res => res.json())
+      .then(data => {
+        el.querySelector(".wishlist-text").innerText =
+          data.exists ? "Already in Wishlist" : "Added to Wishlist";
+        el.style.pointerEvents = "none";
+        el.style.opacity = "0.85";
+      });
   }
 </script>
 
