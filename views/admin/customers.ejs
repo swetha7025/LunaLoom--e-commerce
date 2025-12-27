@@ -66,20 +66,20 @@
 
       <td>
         <% if (customer.isBlock) { %>
-          <a href="/admin/customers/unblock/<%= customer._id %>" class="btn btn-block">
+          <a href="/customers/unblock/<%= customer._id %>" class="btn btn-block">
             Unblock
           </a>
         <% } else { %>
-          <a href="/admin/customers/block/<%= customer._id %>" class="btn btn-block">
+          <a href="/customers/block/<%= customer._id %>" class="btn btn-block">
             Block
           </a>
         <% } %>
 
-        <a href="/admin/customers/delete/<%= customer._id %>"
+        <!-- <a href="/admin/customers/delete/<%= customer._id %>"
            class="btn btn-delete"
            onclick="return confirm('Are you sure?')">
            Delete
-        </a>
+        </a> -->
       </td>
     </tr>
   <% }) %>

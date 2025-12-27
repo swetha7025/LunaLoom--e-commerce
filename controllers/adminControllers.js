@@ -422,7 +422,27 @@ const getCustomersPage = async (req, res) => {
   }
 }
 
+//-------------------------------------------BLOCK CUSTOMER---------------------------------------
 
+async function blockCustomer(req,res) {
+  try {
+    
+   const { id } = req.params 
+    const user = await User.findById(id)
+
+     if(user){
+      user.isBlock=!user.isBlock
+      await user.save()
+     }
+     res.redirect("/customers")
+
+  } catch (error) {
+    console.log(error)
+    res.redirect("/customers")
+  }
+
+  
+}
 
 
 
@@ -481,6 +501,7 @@ module.exports = {
     getEditCouponPage,
     updateCoupon,
     deleteCoupon,
-    getCustomersPage
+    getCustomersPage,
+    blockCustomer,
   
 }

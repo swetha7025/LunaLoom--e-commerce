@@ -48,7 +48,9 @@ router.post('/coupons/delete/:id',adminControllers.deleteCoupon)
 
 router.get("/customers",adminControllers.getCustomersPage)
 
+router.get("/customers/block/:id",adminControllers.blockCustomer)
 
+router.get("/customers/unblock/:id",adminControllers.blockCustomer)
 
 
 
