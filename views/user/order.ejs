@@ -6,9 +6,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <link rel="icon" href="/img/favicon.png" />
-  <link rel="stylesheet" href="/css/order-success.css" />
+  <link rel="stylesheet" href="/css/order.css">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/animate.css">
+  <link rel="stylesheet" href="/css/owl.carousel.min.css">
+  <link rel="stylesheet" href="/css/all.css">
+  <link rel="stylesheet" href="/css/flaticon.css">
+  <link rel="stylesheet" href="/css/themify-icons.css">
+  <link rel="stylesheet" href="/css/magnific-popup.css">
+  <link rel="stylesheet" href="/css/slick.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/footer.css">
+  <link rel="stylesheet" href="/css/header.css">
 </head>
+
 <body>
+
+ <%- include('../partials/header') %>
 
   <div class="page-wrapper">
 
@@ -24,7 +38,7 @@
           <h3>Order Summary</h3>
           <p><strong>Order ID:</strong> <%= order._id %></p>
           <p><strong>Payment Method:</strong> <%= order.paymentMethod %></p>
-          <p><strong>Order Date:</strong> <%= order.createdAt.toDateString() %></p>
+          <p><strong>Order Date:</strong> <%= new Date(order.createdAt).toDateString() %></p>
         </div>
 
         <div class="section address-box">
@@ -41,7 +55,7 @@
           <% order.items.forEach(item => { %>
             <div class="item-row">
               <div>
-                <strong><%= item.product.name %> (<%= item.quantity %>kg)</strong>
+                <strong><%= item.product.name %></strong>
                 <p>Qty: <%= item.quantity %></p>
               </div>
               <span>₹<%= item.price %></span>
@@ -54,7 +68,7 @@
         </div>
 
         <div class="actions">
-          <a href="/shop" class="btn primary">Continue Shopping</a>
+          <a href="/product_list" class="btn primary">Continue Shopping</a>
           <button onclick="window.print()" class="btn secondary">Print this Page</button>
         </div>
       </div>
@@ -70,6 +84,8 @@
     <% } %>
 
   </div>
+
+ <%- include('../partials/footer') %>
 
 </body>
 </html>

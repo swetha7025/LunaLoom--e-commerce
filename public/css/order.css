@@ -18,11 +18,12 @@ body {
 .card {
   background: #fff;
   width: 100%;
-  max-width: 520px;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  max-width: 720px;
+  padding: 45px;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
 }
+
 
 .success-title {
   color: #2ecc71;
@@ -105,3 +106,15 @@ body {
   color: #e74c3c;
   margin-bottom: 10px;
 }
+
+.page-wrapper {
+  padding-top: 90px;
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  width: 100%;
+  max-width: 700px;
+}
+

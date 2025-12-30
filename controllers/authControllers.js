@@ -3,6 +3,7 @@ const productModel = require('../models/products')
 const wishlistModel = require('../models/wishlist')
 const cartModel = require('../models/cart')
 const addressModel = require('../models/address')
+const orderModel = require('../models/order')
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const nodemailer = require('nodemailer');
@@ -1073,7 +1074,7 @@ async function getCheckoutPage(req,res) {
   const cart = await cartModel.findOne({userId}).populate("products.productId").lean()
 
   if(!cart){
-    return res,redirect('/cart')
+    return res.redirect('/cart')
   }
  
   let subtotal = 0
@@ -1102,29 +1103,95 @@ async function getCheckoutPage(req,res) {
 }  
 }
 
-//----------------------------------------------PLACE ORDER - CASH ON DELIVERY----------------------------
+//----------------------------------------------PLACE ORDER --- CASH ON DELIVERY----------------------------
 
 
+async function proceedCheckOut(req, res) {
+  try {
+    const userId = req.auth?.id
+
+    if (!userId) return res.redirect("/login")
+
+    const { addressId, paymentMethod } = req.body
+
+    const user = await User.findById(userId).lean()
+
+    const addresses = await addressModel.find({ userId }).lean()
+
+    const cart = await cartModel.findOne({ userId }).populate("products.productId").lean()
+    
+
+    if (!cart || !cart.products || cart.products.length === 0) {
+
+      return res.render("user/checkout", {user, addresses, cartItems: [],subtotal: 0, total: 0,success: null, error: "Cart is empty"})
+       
+    }
+
+    const address = await addressModel.findById(addressId).lean()
+
+    if (!address) {
+
+      return res.render("user/checkout", {user, addresses, cartItems: [],subtotal: 0,total: 0,success: null, error: "Invalid address selected"})
+      
+    }
+
+    let subtotal = 0
+
+    const orderItems = cart.products.map(p => {
+      const itemTotal = p.productId.price * p.quantity
+      subtotal += itemTotal
+
+      return {
+        product: p.productId._id,
+        quantity: p.quantity,
+        price: p.productId.price,
+      }
+    })
+
+    const order = await orderModel.create({ userId,items: orderItems, address: addressId,  paymentMethod})
+     
+
+    await cartModel.updateOne( { userId }, { $set: { products: [] }})
+     
+    const populatedOrder = await orderModel.findById(order._id) .populate("items.product").populate("address") .lean()
+      
+    return res.render("user/order", { success: "Order placed successfully",error: null, order: populatedOrder, userName: user.name, })
+      
+
+  } catch (error) {
+    console.log(error)
+    return res.redirect("/checkout")
+  }
+}
+
+//-----------------------------------------------------ORDER PAGE----------------------------------
 
 
+const orderPage = async (req, res) => {
+  try {
+    const userId = req.auth?.id            
+    const orderId = req.params.orderId   
 
+    const order = await orderModel.findOne({ _id: orderId, userId }).populate("items.product").lean()
+      
 
+    if (!order) {
+      return res.render("user/order", {success: false, error: "Order not found"})
+       
+    }
 
+    res.render("user/order", {success: true, error: null, order, userName: req.auth.name})
+     
+    
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  } catch (error) {
+    console.error(error)
+    res.render("user/order", {
+      success: false,
+      error: "Failed to load order confirmation",
+    })
+  }
+}
 
 
 
@@ -1181,5 +1248,7 @@ module.exports = {
   increaseQuantity,
   decreaseQuantity,
   getCheckoutPage,
+  proceedCheckOut,
+  orderPage
 
 }

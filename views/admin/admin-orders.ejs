@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Orders - PillowMart</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+   <link rel="stylesheet" href="/css/admin.css">
+  
+
+  <!-- External CSS -->
+  <link rel="stylesheet" href="/css/admin-orders.css">
+</head>
+<body>
+<%- include('../partials/adminSidebar', { activePage: 'admin-orders' }) %>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>PillowMart Admin</h2>
+    <ul>
+      <li><i class="fa fa-chart-line"></i> Dashboard</li>
+      <li class="active"><i class="fa fa-receipt"></i> Orders</li>
+      <li><i class="fa fa-box"></i> Products</li>
+      <li><i class="fa fa-users"></i> Customers</li>
+      <li><i class="fa fa-tags"></i> Coupons</li>
+      <li><i class="fa fa-cog"></i> Settings</li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+
+    <!-- Header -->
+    <div class="header">
+      <h1>Orders</h1>
+      <div class="profile">
+        <span>Admin</span>&nbsp;&nbsp;
+        <img src="https://via.placeholder.com/35" alt="Admin Avatar">
+      </div>
+    </div>
+
+    <!-- SUCCESS MESSAGE -->
+    <% if (success) { %>
+      <div class="alert success"><%= success %></div>
+    <% } %>
+
+    <!-- ERROR MESSAGE -->
+    <% if (error) { %>
+      <div class="alert error"><%= error %></div>
+    <% } %>
+
+    <!-- Orders Table -->
+    <table>
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Customer</th>
+          <th>Quantity</th>
+          <th>Total</th>
+          <th>Order Status</th>
+          <th>Payment</th>
+          <th>Update</th>
+          <th>Cancel Request</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <% orders.forEach(order => { %>
+          <tr>
+            <td><%= order.productName %></td>
+            <td><%= order.customerName %></td>
+            <td><%= order.quantity %></td>
+            <td>$<%= order.total %></td>
+
+            <td>
+              <span class="status <%= order.status.toLowerCase() %>">
+                <%= order.status %>
+              </span>
+            </td>
+
+            <td><%= order.payment %></td>
+
+            <td>
+              <button class="btn-update">Update</button>
+            </td>
+
+            <td>
+              <%= order.cancelRequest ? "Requested" : "-" %>
+            </td>
+          </tr>
+        <% }) %>
+
+      </tbody>
+    </table>
+
+  </div>
+
+</body>
+</html>
+ 

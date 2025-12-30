@@ -156,6 +156,35 @@ router.get("/cart/decrease/:id", protectedAuth, authControllers.decreaseQuantity
 router.get("/checkout",protectedAuth,authControllers.getCheckoutPage)
 
 
+router.post("/place-order",protectedAuth,authControllers.proceedCheckOut)
+
+router.get("/place-order/:orderId", protectedAuth, authControllers.orderPage)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

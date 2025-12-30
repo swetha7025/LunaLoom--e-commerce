@@ -33,7 +33,7 @@ const orderSchema = new mongoose.Schema({
 
       address: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Address",
+        ref: "address",
         required: true,
       },
 
@@ -51,7 +51,7 @@ const orderSchema = new mongoose.Schema({
 
       orderStatus: {
         type: String,
-        enum: ["Placed", "Processing", "Shipped", "Delivered", "Cancelled"],
+        enum: ["Placed", "Shipped", "Delivered", "Cancelled"],
         default: "Placed"
       },
 },{timestamps : true})
