@@ -400,8 +400,6 @@ async function deleteCoupon(req,res) {
   console.log(error)
   return res.redirect('/coupons')
  }
-
-  
 }
 
 //---------------------------------------------CUSTOMERS---------------------------------------
@@ -440,8 +438,6 @@ async function blockCustomer(req,res) {
     console.log(error)
     res.redirect("/customers")
   }
-
-  
 }
 
 

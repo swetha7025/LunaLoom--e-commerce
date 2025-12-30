@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Order Confirmation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="icon" href="/img/favicon.png" />
+  <link rel="stylesheet" href="/css/order-success.css" />
+</head>
+<body>
+
+  <div class="page-wrapper">
+
+    <!-- SUCCESS MESSAGE -->
+    <% if (success) { %>
+      <div class="card">
+        <h1 class="success-title">Order Confirmed!</h1>
+        <p class="success-subtitle">
+          Thank you for your purchase, <strong><%= userName %></strong>!
+        </p>
+
+        <div class="section">
+          <h3>Order Summary</h3>
+          <p><strong>Order ID:</strong> <%= order._id %></p>
+          <p><strong>Payment Method:</strong> <%= order.paymentMethod %></p>
+          <p><strong>Order Date:</strong> <%= order.createdAt.toDateString() %></p>
+        </div>
+
+        <div class="section address-box">
+          <h3>Shipping Address</h3>
+          <p><%= order.address.label %></p>
+          <p><%= order.address.street %></p>
+          <p><%= order.address.city %>, <%= order.address.pincode %></p>
+          <p>Phone: <%= order.address.phone %></p>
+        </div>
+
+        <div class="section">
+          <h3>Ordered Items</h3>
+
+          <% order.items.forEach(item => { %>
+            <div class="item-row">
+              <div>
+                <strong><%= item.product.name %> (<%= item.quantity %>kg)</strong>
+                <p>Qty: <%= item.quantity %></p>
+              </div>
+              <span>₹<%= item.price %></span>
+            </div>
+          <% }) %>
+        </div>
+
+        <div class="total">
+          Total: ₹<%= order.totalAmount %>
+        </div>
+
+        <div class="actions">
+          <a href="/shop" class="btn primary">Continue Shopping</a>
+          <button onclick="window.print()" class="btn secondary">Print this Page</button>
+        </div>
+      </div>
+    <% } %>
+
+    <!-- ERROR MESSAGE -->
+    <% if (error) { %>
+      <div class="card error-card">
+        <h2>Something went wrong</h2>
+        <p><%= error %></p>
+        <a href="/home" class="btn primary">Go Back Home</a>
+      </div>
+    <% } %>
+
+  </div>
+
+</body>
+</html>

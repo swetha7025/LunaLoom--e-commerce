@@ -31,7 +31,8 @@
 <div class="product-main">
 
   <div class="product-image-box">
-    <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div id="productCarousel" class="carousel slide" data-bs-ride="carousel"  data-bs-touch="true" data-bs-interval="1500">
+
       <div class="carousel-indicators">
         <% product.images.forEach((img, index) => { %>
           <button type="button"
@@ -51,6 +52,8 @@
       </div>
     </div>
   </div>
+
+ 
 
   <div class="product-details">
 

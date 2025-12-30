@@ -778,7 +778,7 @@ async function getCart(req,res) {
   
 }
 
-//-----------------------------------------------ADD TO CART-----------------------------------------
+//-----------------------------------------------ADD TO CART-------------------------------------------
 
 
 // async function addToCart(req, res) {
@@ -857,12 +857,10 @@ async function addToCart(req, res) {
 
       return res.json({ success: true, msg: "Already in cart",alreadyInCart: true})
       
-      
     }
 
     cart.products.push({ productId, quantity: 1,price: product.price })
     
-
     await cart.save()
 
     return res.json({success: true,msg: "Added to cart",alreadyInCart: false})
@@ -875,11 +873,10 @@ async function addToCart(req, res) {
 }
 
 
-//---------------------------------------------------REMOVE FROM CART-------------------------------
+//---------------------------------------------------REMOVE FROM CART------------------------------------
 
 async function removeFromCart(req, res) {
   try {
-
 
     const userId = req.auth?.id
 
@@ -976,25 +973,24 @@ async function increaseQuantity(req, res) {
 
     const cart = await cartModel.findOne({ userId }) .populate("products.productId")
     
-
     if (!cart) {
       return res.json({ success: false, message: "Cart not found" })
     }
 
     const product = cart.products.find(
       item => item.productId._id.toString() === productId
-    );
+    )
 
     if (!product) {
       return res.json({ success: false, message: "Product not found" })
     }
 
-    product.quantity += 1;
-    await cart.save();
+    product.quantity += 1
+    await cart.save()
 
       const subtotal = cart.products.reduce((sum, item) => {
       return sum + item.quantity * item.productId.price
-      }, 0);
+      }, 0)
 
     const itemTotal = product.quantity * product.productId.price;
 
@@ -1020,14 +1016,13 @@ async function decreaseQuantity(req, res) {
 
     const cart = await cartModel.findOne({ userId }) .populate("products.productId")
 
-      
     if (!cart) {
       return res.json({ success: false, message: "Cart not found" })
     }
 
     const index = cart.products.findIndex(
       item => item.productId._id.toString() === productId
-    );
+    )
 
     if (index === -1) {
       return res.json({ success: false, message: "Product not found" })
@@ -1052,10 +1047,8 @@ async function decreaseQuantity(req, res) {
         return sum + item.quantity * item.productId.price
     }, 0)
 
-
     return res.json({success: true, quantity, itemTotal,  subtotal, removed })
       
-     
   } catch (error) {
     console.error("decreaseQuantity error:", error)
     return res.json({ success: false, message: "Server error" })
@@ -1074,7 +1067,6 @@ async function getCheckoutPage(req,res) {
   }
 
   const user = await User.findById(userId).lean()
-
 
   const addresses = await addressModel.find({userId}).lean()
 
@@ -1102,7 +1094,6 @@ async function getCheckoutPage(req,res) {
 
    const total = subtotal 
 
-  
     res.render("user/checkout", { user, addresses,cartItems, subtotal, total, success: null, error: null })
     
 } catch (error) {
@@ -1111,7 +1102,9 @@ async function getCheckoutPage(req,res) {
 }  
 }
 
- 
+//----------------------------------------------PLACE ORDER - CASH ON DELIVERY----------------------------
+
+
 
 
 
