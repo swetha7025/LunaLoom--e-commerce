@@ -298,6 +298,7 @@ async function profilePage(req, res) {
       return res.render('user/profile', {
         user: {},
         address: null,
+        orders:[],
         tab: 'orders',
         success: null,
         error: 'User not found'
@@ -307,9 +308,14 @@ async function profilePage(req, res) {
     
     const address = await addressModel.findOne({ userId });
 
+    const orders = await orderModel
+      .find({ userId })
+      .sort({ createdAt: -1 });
+
     res.render('user/profile', {
       user,
-      address,                      
+      address,      
+      orders,                
       tab: req.query.tab || 'orders',
       success: null,
       error: null
@@ -320,6 +326,7 @@ async function profilePage(req, res) {
     res.render('user/profile', {
       user: {},
       address: null,
+      orders:[],
       tab: 'orders',
       success: null,
       error: 'Something went wrong'
@@ -1147,16 +1154,19 @@ async function proceedCheckOut(req, res) {
         price: p.productId.price,
       }
     })
+     
+    const totalAmount = Number(subtotal)
 
-    const order = await orderModel.create({ userId,items: orderItems, address: addressId,  paymentMethod})
+    const order = await orderModel.create({ userId,items: orderItems, address: addressId, paymentMethod,totalAmount})
      
 
     await cartModel.updateOne( { userId }, { $set: { products: [] }})
      
     const populatedOrder = await orderModel.findById(order._id) .populate("items.product").populate("address") .lean()
       
-    return res.render("user/order", { success: "Order placed successfully",error: null, order: populatedOrder, userName: user.name, })
-      
+    //return res.render("user/order", { success: "Order placed successfully",error: null, order: populatedOrder, userName: user.name, })
+      return res.redirect(`/order/${order._id}`)
+
 
   } catch (error) {
     console.log(error)
@@ -1164,7 +1174,7 @@ async function proceedCheckOut(req, res) {
   }
 }
 
-//-----------------------------------------------------ORDER PAGE----------------------------------
+//--------------------------------------------------ORDER PAGE------------------------------------
 
 
 const orderPage = async (req, res) => {
@@ -1172,9 +1182,8 @@ const orderPage = async (req, res) => {
     const userId = req.auth?.id            
     const orderId = req.params.orderId   
 
-    const order = await orderModel.findOne({ _id: orderId, userId }).populate("items.product").lean()
+    const order = await orderModel.findOne({ _id: orderId, userId }).populate("items.product").populate("address").lean()
       
-
     if (!order) {
       return res.render("user/order", {success: false, error: "Order not found"})
        
@@ -1183,7 +1192,6 @@ const orderPage = async (req, res) => {
     res.render("user/order", {success: true, error: null, order, userName: req.auth.name})
      
     
-
   } catch (error) {
     console.error(error)
     res.render("user/order", {

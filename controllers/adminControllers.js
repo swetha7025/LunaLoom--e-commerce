@@ -1,8 +1,9 @@
 const adminModel = require('../models/admin');
 const productModel = require('../models/products')
-const User= require('../models/user')
-const couponModel = require('../models/coupon');
-const { upload } = require("../middleware/multer");
+const User = require('../models/user')
+const couponModel = require('../models/coupon')
+const orderModel = require('../models/order')
+const { upload } = require("../middleware/multer")
  const fs = require("fs");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -440,6 +441,26 @@ async function blockCustomer(req,res) {
   }
 }
 
+//------------------------------------------ORDER PAGE-------------------------------------------
+
+
+async function getOrderPage(req, res) {
+  try {
+    const orders = await orderModel.find()
+      .populate("userId", "name")
+      .populate("items.product", "name")
+      .sort({ createdAt: -1 })
+      .lean()
+
+    res.render("admin/admin-orders", { orders,success: null, error: null })
+     
+  } catch (error) {
+    console.log( error)
+
+    res.render("admin/admin-orders", {orders: [],success: null,error: "Failed to load orders" })
+     
+  }
+}
 
 
 
@@ -499,5 +520,6 @@ module.exports = {
     deleteCoupon,
     getCustomersPage,
     blockCustomer,
+    getOrderPage
   
 }

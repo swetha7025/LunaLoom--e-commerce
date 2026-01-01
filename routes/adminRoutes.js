@@ -52,7 +52,7 @@ router.get("/customers/block/:id",adminControllers.blockCustomer)
 
 router.get("/customers/unblock/:id",adminControllers.blockCustomer)
 
-
+router.get("/admin-orders",adminControllers.getOrderPage)
 
 
 

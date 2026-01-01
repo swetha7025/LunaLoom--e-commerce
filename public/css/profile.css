@@ -184,3 +184,31 @@ body {
 .remove-icon-btn:hover {
     background: #e60000;
 }
+.view-details-btn {
+  background-color: #d682b0;   /* your color */
+  color: #fff;
+  border: none;
+}
+
+.view-details-btn:hover {
+  background-color: #d682b0; 
+  color: #fff;
+}
+
+.edit-btn {
+  display: inline-block;
+  background-color: #d682b0;
+  color: #fff;
+  padding: 4px 40px;      /* small box size */
+  font-size: 13px;
+  border-radius: 4px;     /* small rounded corners */
+  border: none;
+  text-decoration: none;
+  line-height: 1.4;
+}
+
+.edit-btn:hover {
+  background-color: #c56aa0;
+  color: #fff;
+  text-decoration: none;
+}
