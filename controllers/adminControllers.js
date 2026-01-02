@@ -532,7 +532,23 @@ async function getOrderPage(req, res) {
   }
 }
 
+//------------------------------------------------UPDATE ORDER STATUS---------------------------------
 
+async function updateOrderStatus(req,res) {
+  try {
+    const {id }= req.params
+    const {orderStatus} = req.body
+
+    await orderModel.findByIdAndUpdate(id,{orderStatus:orderStatus})
+
+    res.redirect("/admin-orders")
+
+  } catch (error) {
+    console.log(error)
+    res.redirect("/admin-orders")
+  }
+  
+}
 
 
 
@@ -591,6 +607,7 @@ module.exports = {
     getCustomersPage,
     blockCustomer,
     getOrderPage,
-    pieChart
+    pieChart,
+    updateOrderStatus
   
 }

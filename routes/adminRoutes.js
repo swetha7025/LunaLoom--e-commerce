@@ -56,7 +56,7 @@ router.get("/admin-orders",adminControllers.getOrderPage)
 
 router.get("/admin/pie-chart",adminControllers.pieChart)
 
-
+router.post("/admin-orders/update/:id", adminControllers.updateOrderStatus)
 
 
 
