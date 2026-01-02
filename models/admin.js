@@ -10,10 +10,8 @@ const adminSchema = new mongoose.Schema({
         minlength : 5,
     }
 })
+
     const adminModel = mongoose.model('admin',adminSchema)
-
-
-
 
 
     module.exports = adminModel

@@ -1,92 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - LunaLoom</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - LunaLoom</title>
 
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <!-- External CSS -->
-    <link rel="stylesheet" href="/css/dashboard.css">
- <link rel="stylesheet" href="/css/admin.css">
-
-
+  <!-- External CSS -->
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <link rel="stylesheet" href="/css/admin.css">
 </head>
 
 <body>
 
-   <%- include('../partials/adminSidebar', { activePage: 'dashboard' }) %>
+  <%- include('../partials/adminSidebar', { activePage: 'dashboard' }) %>
 
-    <!-- <div class="admin-content">
-    <h1>Dashboard</h1>
-     </div> -->
+  <!-- Main Content -->
+  <div class="main-content">
 
+    <div class="header">
+      <h1>Dashboard</h1>
 
-    <!-- Main Content -->
-    <div class="main-content">
+      <div class="profile">
+        <img src="<%= adminImage || '/img/admin-avatar.png' %>" alt="Admin Avatar">
+      </div>
+    </div>
 
-        <div class="header">
-            <h1>Dashboard</h1>
+    <!-- SUCCESS MESSAGE -->
+    <% if (success) { %>
+      <div class="alert success">
+        <%= success %>
+      </div>
+    <% } %>
 
-            <div class="profile">
-                <img src="<%= adminImage %>" alt="Admin Avatar">
-            </div>
-        </div> 
+    <!-- ERROR MESSAGE -->
+    <% if (error) { %>
+      <div class="alert error">
+        <%= error %>
+      </div>
+    <% } %>
 
-        <!-- SUCCESS MESSAGE -->
-        <% if (success) { %>
-            <div class="alert success">
-                <%= success %>
-            </div>
-        <% } %>
+    <!-- Stats Section -->
+    <div class="stats-container">
 
-        <!-- ERROR MESSAGE -->
-        <% if (error) { %>
-            <div class="alert error">
-                <%= error %>
-            </div>
-        <% } %>
-
-        <!-- Stats Section -->
-        <div class="stats-container">
-
-            <div class="card">
-                <i class="fa fa-dollar-sign"></i>
-                <div>
-                    <h3>Total Sales</h3>
-                    <p><%= totalSales %></p>
-                </div>
-            </div>
-
-            <div class="card">
-                <i class="fa fa-receipt"></i>
-                <div>
-                    <h3>Total Orders</h3>
-                    <p><%= totalOrders %></p>
-                </div>
-            </div>
-
-            <div class="card">
-                <i class="fa fa-box"></i>
-                <div>
-                    <h3>Products</h3>
-                    <p><%= products %></p>
-                </div>
-            </div>
-
-            <div class="card">
-                <i class="fa fa-users"></i>
-                <div>
-                    <h3>Customers</h3>
-                    <p><%= customers %></p>
-                </div>
-            </div>
-
+      <div class="card">
+        <i class="fa fa-dollar-sign"></i>
+        <div>
+          <h3>Total Sales</h3>
+          <p><%= totalSales || 0 %></p>
         </div>
+      </div>
+
+      <div class="card">
+        <i class="fa fa-receipt"></i>
+        <div>
+          <h3>Total Orders</h3>
+          <p><%= totalOrders || 0 %></p>
+        </div>
+      </div>
+
+      <div class="card">
+        <i class="fa fa-box"></i>
+        <div>
+          <h3>Products</h3>
+          <p><%= products || 0 %></p>
+        </div>
+      </div>
+
+      <div class="card">
+        <i class="fa fa-users"></i>
+        <div>
+          <h3>Customers</h3>
+          <p><%= customers || 0 %></p>
+        </div>
+      </div>
 
     </div>
+   <div class="chart-container">
+  <h3>Product Count by Brand</h3>
+  <canvas id="brandPieChart"></canvas>
+</div>
+
+  </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+fetch('/admin/pie-chart')
+  .then(res => res.json())
+  .then(result => {
+    if (!result.success) return
+
+    const labels = result.data.map(item => item._id)
+    const counts = result.data.map(item => item.count)
+
+    new Chart(document.getElementById('brandPieChart'), {
+      type: 'pie',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: counts
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Product Count by Brand'
+          }
+        }
+      }
+    })
+  })
+</script>
 
 </body>
 </html>

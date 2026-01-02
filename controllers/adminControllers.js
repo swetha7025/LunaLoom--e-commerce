@@ -49,25 +49,70 @@ async function adminLogin(req, res) {
 
 //---------------------------------DASHBOARD---------------------------
 
-async function adminDashboard(req, res) {
-  try {
-    const admin = req.auth;
+// async function adminDashboard(req, res) {
+//   try {
+//     const admin = req.auth;
 
     
-    const totalSales = 0;
-    const totalOrders = 0;
-    const products = 0;
-    const customers = 0;
+//     const totalSales = 0;
+//     const totalOrders = 0;
+//     const products = 0;
+//     const customers = 0;
+
+//     res.render("admin/dashboard", {
+//       adminName: admin.email,
+//       adminImage: "/img/admin-avatar.png",
+
+//       totalSales: totalSales,
+//       totalOrders: totalOrders,
+//       products: products,
+//       customers: customers,
+
+//       success: null,
+//       error: null
+//     });
+
+//   } catch (error) {
+//     console.error(error);
+
+//     res.render("admin/dashboard", {
+//       adminName: null,
+//       adminImage: null,
+//       totalSales: 0,
+//       totalOrders: 0,
+//       products: 0,
+//       customers: 0,
+//       success: null,
+//       error: "Something went wrong"
+//     });
+//   }
+// }
+
+
+async function adminDashboard(req, res) {
+  try {
+    const admin = req.auth
+
+    const totalOrders = await orderModel.countDocuments()
+
+    const salesData = await orderModel.aggregate([
+      { $match: { orderStatus: "Delivered" } },
+      { $group: { _id: null, total: { $sum: "$totalAmount" } } }
+    ])
+
+    const totalSales = salesData[0]?.total || 0
+
+    const products = await productModel.countDocuments()
+   
+   const customers = await User.countDocuments()
 
     res.render("admin/dashboard", {
       adminName: admin.email,
       adminImage: "/img/admin-avatar.png",
-
-      totalSales: totalSales,
-      totalOrders: totalOrders,
-      products: products,
-      customers: customers,
-
+      totalSales,
+      totalOrders,
+      products,
+      customers,
       success: null,
       error: null
     });
@@ -87,7 +132,34 @@ async function adminDashboard(req, res) {
     });
   }
 }
+//----------------------------------PIE CHART-------------------------------
 
+
+async function pieChart(req, res) {
+  try {
+    const brandData = await productModel.aggregate([
+      {
+        $match: {
+          brand: {
+            $in: ["Zara Home", "Welspun Living", "Sleepwell"]
+          }
+        }
+      },
+      {
+        $group: {
+          _id: "$brand",
+          count: { $sum: 1 }
+        }
+      }
+    ])
+
+    res.json({ success: true, data: brandData })
+
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ success: false })
+  }
+}
 
 //---------------------------------PRODUCTS------------------------------------
 
@@ -99,8 +171,6 @@ async function adminProducts(req, res) {
 
     res.render("admin/products", { products,success: null,error: null})
       
-    
-
   } catch (err) {
     res.render("admin/products", {
       products: [],
@@ -520,6 +590,7 @@ module.exports = {
     deleteCoupon,
     getCustomersPage,
     blockCustomer,
-    getOrderPage
+    getOrderPage,
+    pieChart
   
 }

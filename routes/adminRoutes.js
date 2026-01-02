@@ -54,6 +54,7 @@ router.get("/customers/unblock/:id",adminControllers.blockCustomer)
 
 router.get("/admin-orders",adminControllers.getOrderPage)
 
+router.get("/admin/pie-chart",adminControllers.pieChart)
 
 
 
