@@ -156,7 +156,7 @@ router.post("/place-order",protectedAuth,authControllers.proceedCheckOut)
 
 router.get("/order/:orderId", protectedAuth, authControllers.orderPage)
 
-
+router.get("/about",authControllers.getAboutPage)
 
 
 

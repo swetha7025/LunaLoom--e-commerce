@@ -756,7 +756,7 @@ async function removeFromWishlist(req, res) {
 
   } catch (error) {
     console.log(error)
-    res.render('user/wishlist', {success: null, error: "Something went wrong while removing from wishlist" })
+    res.render('user/wishlist', {success: null, error: "Something went wrong " })
   
   }
 }
@@ -1201,7 +1201,16 @@ const orderPage = async (req, res) => {
   }
 }
 
-
+async function getAboutPage(req,res) {
+  try {
+    
+    res.render("user/about",{success:null,error:null})
+  } catch (error) {
+    console.log(error)
+    res.render("user/about",{success:null,error:"Something went wrong"})
+  }
+  
+}
 
 
 
@@ -1257,6 +1266,7 @@ module.exports = {
   decreaseQuantity,
   getCheckoutPage,
   proceedCheckOut,
-  orderPage
+  orderPage,
+  getAboutPage
 
 }

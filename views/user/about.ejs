@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us | LunaLoom</title>
+
+  <!-- CSS -->
+  <link rel="icon" href="/img/favicon.png">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+  <!-- Animation and carousel -->
+  <link rel="stylesheet" href="/css/animate.css">
+  <link rel="stylesheet" href="/css/owl.carousel.min.css">
+
+  <!-- Font Awesome & Icons -->
+  <link rel="stylesheet" href="/css/all.css">
+  <link rel="stylesheet" href="/css/flaticon.css">
+  <link rel="stylesheet" href="/css/themify-icons.css">
+
+  <!-- Popup & Slider -->
+  <link rel="stylesheet" href="/css/magnific-popup.css">
+  <link rel="stylesheet" href="/css/slick.css">
+
+  <!-- Shared and page-specific CSS -->
+  <link rel="stylesheet" href="/css/style.css"> <!-- main site styles (home, header, etc.) -->
+  <link rel="stylesheet" href="/css/header.css"> <!-- header/navbar styles -->
+  <link rel="stylesheet" href="/css/footer.css">
+ 
+</head>
+
+
+  <!-- EXTRA RESPONSIVE FIX -->
+  <style>
+    .about-section p,
+    .about-section h3 {
+      text-align: left;
+    }
+
+    /* Make text centered on mobile */
+    @media (max-width: 768px) {
+      .hero-cap h2 {
+        font-size: 36px;
+      }
+
+      .about-section h3 {
+        text-align: center;
+        font-size: 26px;
+      }
+
+      .about-section p {
+        text-align: center;
+        font-size: 16px;
+        line-height: 28px;
+      }
+
+      .about-section {
+        padding: 30px 15px !important;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .about-section h3 {
+        font-size: 22px;
+      }
+
+      .about-section p {
+        font-size: 15px;
+      }
+    }
+
+    .breadcrumb_part {
+    background: #b894b5;     /* lavender backdrop */
+    padding: 120px 0;
+    text-align: center;
+}
+
+.breadcrumb_part h2 {
+    color: #fff;
+    font-size: 42px;
+    font-weight: 600;
+    margin-bottom: 0;
+}
+  </style>
+
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <%- include('../partials/header') %>
+
+  <!-- MAIN CONTENT -->
+  <main style="font-family: 'Josefin Sans', sans-serif;">
+
+    <!-- HERO SECTION -->
+    
+  <section class="breadcrumb_part">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="breadcrumb_iner">
+            <h2>About Us</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+    <!-- ABOUT CONTENT -->
+    <section class="about-section" style="padding: 60px 0; background: #ffffff;">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-10">
+
+            <!-- WHO WE ARE -->
+            <h3 style="color: #8d5b9e; font-size: 32px; text-align: center; margin-bottom: 25px;">
+              Who We Are
+            </h3>
+
+            <p style="font-size: 18px; line-height: 32px; color: #333; text-align: center;">
+             LunaLoom is a premium home comfort brand specializing in high-quality bed accessories,
+              pillows, and cushions. We focus on refined design, superior materials, and lasting
+              comfort to elevate your everyday rest.
+            </p>
+
+            <hr style="margin: 50px auto; width: 80%; border-top: 2px solid #a174a9;">
+
+            <!-- MISSION -->
+            <h3 style="color: #8d5b9e; font-size: 30px; margin-bottom: 15px;">
+              Our Mission
+            </h3>
+            <p style="font-size: 18px; line-height: 32px; color: #555;">
+             At LunaLoom, our mission is to bring together the finest home comfort brands under 
+             one trusted platform. We aim to make premium bed accessories, pillows, and cushions 
+             from renowned brands like Zara Home, Sleepwell, and Welspun Living easily accessible—so 
+             you can enjoy quality, comfort, and style with confidence.
+            </p>
+
+            <hr style="margin: 40px 0; border-top: 1px solid #a174a9;">
+
+            <!-- VISION -->
+            <h3 style="color: #8d5b9e; font-size: 30px; margin-bottom: 15px;">
+              Our Vision
+            </h3>
+            <p style="font-size: 18px; line-height: 32px; color: #555;">
+             Our vision is to become a trusted destination for premium home comfort, where customers 
+             discover the best global and Indian brands that elevate everyday living through quality, 
+             style, and comfort.
+            </p>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <%- include('../partials/footer') %>
+
+
+</body>
+
+</html>
