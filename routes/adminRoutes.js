@@ -26,11 +26,8 @@ router.get("/addProducts",adminControllers.addProducts)
 
 router.post("/addProducts", upload.array("images", 10), adminControllers.addProducts);
 
-
-
 router.get("/editProducts/:id", adminControllers.editProducts);
 router.post("/editProducts/:id", upload.array("images", 4), adminControllers.editProducts);
-
 
 router.post("/deleteProducts/:id", adminControllers.deleteProduct);
 
@@ -46,15 +43,25 @@ router.get('/coupons/edit/:id', adminControllers.getEditCouponPage)
 router.post('/coupons/edit/:id',adminControllers.updateCoupon)
 router.post('/coupons/delete/:id',adminControllers.deleteCoupon)
 
+//-----------------------------------------------CUSTOMERS---------------------------------
+
 router.get("/customers",adminControllers.getCustomersPage)
 
 router.get("/customers/block/:id",adminControllers.blockCustomer)
 
 router.get("/customers/unblock/:id",adminControllers.blockCustomer)
 
-router.get("/admin-orders",adminControllers.getOrderPage)
+//------------------------------------------------CHART-----------------------------------------
 
 router.get("/admin/pie-chart",adminControllers.pieChart)
+
+router.get("/admin/bar-chart", adminControllers.barChart)
+
+router.get("/admin/line-chart", adminControllers.lineChart)
+
+//---------------------------------------ORDERS----------------------------------------
+
+router.get("/admin-orders",adminControllers.getOrderPage)
 
 router.post("/admin-orders/update/:id", adminControllers.updateOrderStatus)
 

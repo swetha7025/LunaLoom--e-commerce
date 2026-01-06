@@ -132,17 +132,45 @@ async function adminDashboard(req, res) {
     });
   }
 }
-//----------------------------------PIE CHART-------------------------------
+function getDateRange(filter) {
+  const now = new Date()
+  let startDate
 
+  switch (filter) {
+    case "weekly":
+      startDate = new Date()
+      startDate.setDate(now.getDate() - 7)
+      break
+
+    case "monthly":
+      startDate = new Date(now.getFullYear(), now.getMonth(), 1)
+      break
+
+    case "yearly":
+      startDate = new Date(now.getFullYear(), 0, 1)
+      break
+
+    case "fiveYears":
+      startDate = new Date()
+      startDate.setFullYear(now.getFullYear() - 5)
+      break
+
+    default:
+      startDate = new Date(now.getFullYear(), now.getMonth(), 1)
+  }
+
+  return startDate
+}
+
+//----------------------------------PIE CHART-------------------------------
 
 async function pieChart(req, res) {
   try {
     const brandData = await productModel.aggregate([
       {
         $match: {
-          brand: {
-            $in: ["Zara Home", "Welspun Living", "Sleepwell"]
-          }
+          brand: { $in: ["Zara Home", "Welspun Living", "Sleepwell"] }
+          // removed createdAt filter
         }
       },
       {
@@ -154,12 +182,93 @@ async function pieChart(req, res) {
     ])
 
     res.json({ success: true, data: brandData })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ success: false })
+  }
+}
+
+
+
+//--------------------------------BAR CHART---------------------------------------------
+async function barChart(req, res) {
+  try {
+    const filter = req.query.filter || "monthly"
+    const startDate = getDateRange(filter)
+
+    const categorySales = await orderModel.aggregate([
+      {
+        $match: {
+          orderStatus: "Delivered",
+          createdAt: { $gte: startDate }
+        }
+      },
+      { $unwind: "$items" },
+      {
+        $lookup: {
+          from: "products",
+          localField: "items.product",
+          foreignField: "_id",
+          as: "productDetails"
+        }
+      },
+      { $unwind: "$productDetails" },
+      {
+        $group: {
+          _id: "$productDetails.category",
+          totalSold: { $sum: "$items.quantity" }
+        }
+      }
+    ])
+
+    res.json({ success: true, data: categorySales })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ success: false })
+  }
+}
+
+
+//-----------------------------------LINE CHART--------------------------------
+
+
+async function lineChart(req, res) {
+  try {
+    
+    const filter = req.query.filter || "monthly"
+    const startDate = getDateRange(filter)
+
+    const revenueData = await orderModel.aggregate([
+      {
+        $match: {
+          orderStatus: "Delivered",
+          createdAt: { $gte: startDate }
+        }
+      },
+      {
+        $group: {
+          _id:
+            filter === "yearly" || filter === "fiveYears"
+              ? {
+                  year: { $year: "$createdAt" },
+                  month: { $month: "$createdAt" }
+                }
+              : { day: { $dayOfMonth: "$createdAt" } },
+
+          totalRevenue: { $sum: "$totalAmount" }
+        }
+      },
+      { $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1 } }
+    ])
+
+    res.json({ success: true, data: revenueData })
 
   } catch (error) {
     console.error(error)
     res.status(500).json({ success: false })
   }
 }
+
 
 //---------------------------------PRODUCTS------------------------------------
 
@@ -608,6 +717,8 @@ module.exports = {
     blockCustomer,
     getOrderPage,
     pieChart,
+    barChart,
+    lineChart,
     updateOrderStatus
   
 }

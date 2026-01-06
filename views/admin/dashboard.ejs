@@ -78,24 +78,50 @@
       </div>
 
     </div>
-      <div class="d-flex justify-content-end mb-3">
-      <select id="chartFilter" class="form-select w-auto">
-  <option value="weekly">Weekly</option>
-  <option value="monthly" selected>Monthly</option>
-  <option value="yearly">Yearly</option>
-  <option value="fiveYears">5 Years Trend</option>
-</select>
-      </div>
-   <div class="chart-container">
-  
-  <canvas id="brandPieChart"></canvas>
+
+    <div class="d-flex justify-content-end mb-3">
+     <select id="chartFilter" class="form-select chart-filter">
+    <option value="weekly">Weekly</option>
+    <option value="monthly" selected>Monthly</option>
+    <option value="yearly">Yearly</option>
+    <option value="fiveYears">5 Years Trend</option>
+    </select>
+   </div>
+<script>
+  function getFilter() {
+    return document.getElementById("chartFilter").value || "monthly"
+  }
+
+  document.getElementById("chartFilter").addEventListener("change", () => {
+    location.reload()
+  })
+</script>
+
+
+ <div class="charts-wrapper">
+  <div class="chart-container">
+    <canvas id="brandPieChart"></canvas>
+  </div>
+
+  <div class="chart-container">
+    <h3>Products Sold by Category</h3>
+    <canvas id="categoryBarChart"></canvas>
+  </div>
+
+  <div class="chart-container">
+  <h3>Daily Revenue</h3>
+  <canvas id="revenueLineChart"></canvas>
 </div>
 
   </div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+
+  </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-fetch('/admin/pie-chart')
+
+  
+fetch(`/admin/pie-chart?filter=${getFilter()}`)
   .then(res => res.json())
   .then(result => {
     if (!result.success) return
@@ -106,7 +132,7 @@ fetch('/admin/pie-chart')
     new Chart(document.getElementById('brandPieChart'), {
       type: 'pie',
       data: {
-        labels: labels,
+        labels,
         datasets: [{
           data: counts
         }]
@@ -123,6 +149,77 @@ fetch('/admin/pie-chart')
     })
   })
 </script>
+
+
+<script>
+fetch(`/admin/bar-chart?filter=${getFilter()}`)
+  .then(res => res.json())
+  .then(result => {
+    if (!result.success) return
+
+    const labels = result.data.map(item => item._id)
+    const values = result.data.map(item => item.totalSold)
+
+    new Chart(document.getElementById('categoryBarChart'), {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Products Sold',
+          data: values
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    })
+  })
+</script>
+<script>
+fetch(`/admin/line-chart?filter=${getFilter()}`)
+  .then(res => res.json())
+  .then(result => {
+    if (!result.success) return
+
+    const labels = result.data.map(item =>
+      item._id.day
+        ? `Day ${item._id.day}`
+        : `${item._id.month}/${item._id.year}`
+    )
+
+    const values = result.data.map(item => item.totalRevenue)
+
+    new Chart(document.getElementById('revenueLineChart'), {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Revenue (₹)',
+          data: values,
+          borderWidth: 2,
+          tension: 0.4,
+          fill: false,
+          pointRadius: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: value => '₹' + value
+            }
+          }
+        }
+      }
+    })
+  })
+</script>
+
 
 </body>
 </html>
