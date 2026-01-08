@@ -134,49 +134,39 @@
 
   </form>
 
-  <!-- RIGHT -->
-  <div class="checkout-right card">
+ 
+ <!-- RIGHT -->
+<div class="checkout-right card">
   <h3>Order Summary</h3>
 
   <% cartItems.forEach(item => { %>
     <div class="summary-row">
       <span><%= item.product.name %> (x<%= item.quantity %>)</span>
-      <span>₹<%= item.total %></span>
+      <span>₹<%= item.total.toFixed(2) %></span>
     </div>
   <% }) %>
 
   <hr>
 
-<!-- COUPON FORM -->
-<form action="/apply-coupon" method="POST" class="summary-row">
-  <input
-    type="text"
-    name="couponCode"
-    placeholder="Enter coupon code"
-    class="form-control"
-    required
-  />
-  <button type="submit" class="btn mt-2">Apply Coupon</button>
-</form>
-<% if (couponMessage) { %>
-  <p class="<%= couponSuccess ? 'text-success' : 'text-danger' %>" style="margin-top:8px;">
-    <%= couponMessage %>
-  </p>
-<% } %>
-
-
-
   <!-- DISCOUNT -->
-  <div class="summary-row" id="discountRow" style="display:none;">
-    <span>Discount</span>
-    <span>- ₹<span id="discountAmount">0</span></span>
-  </div>
+  <% if (discountAmount > 0) { %>
+    <div class="summary-row text-success">
+      <span>
+        Discount
+        <% if (appliedCoupon) { %>
+          (<%= appliedCoupon %>)
+        <% } %>
+      </span>
+      <span>- ₹<%= discountAmount.toFixed(2) %></span>
+    </div>
+  <% } %>
 
   <div class="summary-row total">
     <span>Total</span>
-    <span>₹<span id="finalTotal"><%= total %></span></span>
+    <span>₹<%= total.toFixed(2) %></span>
   </div>
 </div>
+
 
 
 </div>

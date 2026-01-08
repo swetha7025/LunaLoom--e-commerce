@@ -197,3 +197,30 @@ body {
 .coupon-btn:hover {
   background-color: #a174a9;
 }
+.cart-summary {
+  background: #fff;
+  border: 1px solid #eee;
+  padding: 20px;
+}
+
+.cart-summary table th {
+  background: #f6f6f6;
+  font-weight: 600;
+}
+
+.cart-summary table td,
+.cart-summary table th {
+  border: none;
+}
+
+.cart-summary h5 {
+  margin-bottom: 15px;
+}
+
+.coupon-form input {
+  height: 45px;
+}
+
+.coupon-form button {
+  padding: 10px 30px;
+}

@@ -764,28 +764,55 @@ async function removeFromWishlist(req, res) {
 
 
 //------------------------------------------------CART PAGE-------------------------------------------
-async function getCart(req,res) {
-  try {
 
+async function getCart(req, res) {
+  try {
     const userId = req.auth?.id
 
-    const cart = await cartModel.findOne({userId}).populate('products.productId', 'name price images')
-    
-    const total = cart?cart.products.reduce((sum,item)=>{
-                  const product = item.productId
-                  return sum+product.price*item.quantity
-                 },0):0
-              
-      res.render('user/cart',{cart:cart||{products:[]},total, user : req.user, success:null, error : null })
-                              
-                             
+    const cart = await cartModel
+      .findOne({ userId })
+      .populate('products.productId', 'name price images')
+
+    const subtotal = cart
+      ? cart.products.reduce((sum, item) => {
+          return sum + item.productId.price * item.quantity
+        }, 0)
+      : 0
+
+    let discountAmount = 0
+    if (cart?.couponApplied && cart.couponDiscount) {
+      discountAmount = Math.round((subtotal * cart.couponDiscount) / 100)
+    }
+
+    const finalTotal = subtotal - discountAmount
+  res.render('user/cart', {
+  cart: cart || { products: [] },
+  subtotal,
+  discountAmount,
+  total: finalTotal,   
+  user: req.user,
+  success: null,
+  error: null,
+  couponMessage: req.query.couponMessage || null,
+  couponSuccess: req.query.couponSuccess || null
+})
+
   } catch (error) {
-    
     console.log(error)
-    res.render('user/cart',{cart:{products:[]},total:0,user:req.user,success:null,error:'something went wrong'})
+    res.render('user/cart', {
+      cart: { products: [] },
+      subtotal: 0,
+      discountAmount: 0,
+      total: 0,
+      user: req.user,
+      success:null,
+      error:'something went wrong',
+      couponMessage: null,
+      couponSuccess: null
+    })
   }
-  
 }
+
 
 //-----------------------------------------------ADD TO CART-------------------------------------------
 
@@ -893,7 +920,7 @@ async function addToCart(req, res) {
 
     let cart = await cartModel.findOne({ userId })
 
-    // 1️⃣ Create cart if not exists
+    
     if (!cart) {
       await cartModel.create({
         userId,
@@ -914,7 +941,7 @@ async function addToCart(req, res) {
       })
     }
 
-    // 2️⃣ Check if product already in cart
+    
     const existingItem = cart.products.find(
       item => item.productId.toString() === productId
     )
@@ -927,14 +954,14 @@ async function addToCart(req, res) {
       })
     }
 
-    // 3️⃣ Reset coupon if cart changes
+    
     if (cart.couponApplied) {
       cart.couponApplied = false
       cart.couponCode = null
       cart.couponDiscount = 0
     }
 
-    // 4️⃣ Add product
+    
     cart.products.push({
       productId,
       quantity: 1,
@@ -1141,65 +1168,62 @@ async function decreaseQuantity(req, res) {
 
 //---------------------------------------------CHECK OUT----------------------------------------
 
-
 async function getCheckoutPage(req, res) {
   try {
-    const userId = req.auth?.id;
+    const userId = req.auth?.id
     if (!userId) return res.redirect('/login')
 
     const user = await User.findById(userId).lean()
     const addresses = await addressModel.find({ userId }).lean()
-    const cart = await cartModel.findOne({ userId }).populate("products.productId").lean()
+    const cart = await cartModel.findOne({ userId })
+      .populate("products.productId")
+      .lean()
 
     if (!cart) return res.redirect('/cart')
 
-    let subtotal = 0;
+    let subtotal = 0
 
     const cartItems = cart.products.map(item => {
-      const total = item.productId.price * item.quantity
-      subtotal += total
+      const itemTotal = item.productId.price * item.quantity
+      subtotal += itemTotal
 
       return {
-        product: {
-          name: item.productId.name
-        },
+        product: { name: item.productId.name },
         quantity: item.quantity,
-        total
+        total: itemTotal
       }
     })
 
-   
     let discountAmount = 0
     if (cart.couponApplied && cart.couponDiscount) {
       discountAmount = Math.round((subtotal * cart.couponDiscount) / 100)
     }
-
-    const total = subtotal - discountAmount
-
+    const finalTotal = subtotal - discountAmount
 
     res.render("user/checkout", {
       user,
       addresses,
       cartItems,
+      cart,
       subtotal,
-      total,
       discountAmount,
-      couponMessage: req.query.couponMessage || null,
-      couponSuccess: req.query.couponSuccess === "true" ? true : false,
+      total:finalTotal,
+      appliedCoupon: cart.couponCode,
       success: null,
       error: null
     })
   } catch (error) {
-    console.log(error);
+    console.log(error)
     return res.redirect('/checkout')
   }
 }
+
 
 //----------------------------------------------PLACE ORDER --- CASH ON DELIVERY----------------------------
 
 async function proceedCheckOut(req, res) {
   try {
-    const userId = req.auth?.id;
+    const userId = req.auth?.id
     if (!userId) return res.redirect("/login")
 
     const { addressId, paymentMethod } = req.body
@@ -1330,7 +1354,8 @@ async function getAboutPage(req,res) {
 
 //-----------------------------------------APPLY COUPON---------------------------------------
 
-const applyCoupon = async (req, res) => {
+async function applyCoupon(req,res) {
+   
   try {
     const { couponCode } = req.body
     const userId = req.auth.id
@@ -1347,29 +1372,80 @@ const applyCoupon = async (req, res) => {
     });
 
     if (!coupon) {
-      return res.redirect('/checkout?couponMessage=Invalid or expired coupon&couponSuccess=false')
+      return res.redirect('/cart?couponMessage=Invalid or expired coupon&couponSuccess=false')
     }
 
-    const cart = await cartModel.findOne({ userId });
+    const cart = await cartModel.findOne({ userId })
     if (!cart) {
-      return res.redirect('/checkout?couponMessage=Cart is empty&couponSuccess=false')
+      return res.redirect('/cart?couponMessage=Cart is empty&couponSuccess=false')
     }
 
     if (cart.couponApplied && cart.couponCode === coupon.code) {
-      return res.redirect('/checkout?couponMessage=Coupon already applied&couponSuccess=false')
+      return res.redirect('/cart?couponMessage=Coupon already applied&couponSuccess=false')
     }
 
-    cart.couponApplied = true;
-    cart.couponCode = coupon.code;
-    cart.couponDiscount = coupon.discount;
-    await cart.save();
+    cart.couponApplied = true
+    cart.couponCode = coupon.code
+    cart.couponDiscount = coupon.discount
+    await cart.save()
 
-    return res.redirect('/checkout?couponMessage=Coupon applied successfully!&couponSuccess=true')
+    return res.redirect('/cart?couponMessage=Coupon applied successfully!&couponSuccess=true')
+
   } catch (error) {
-    console.error("Apply Coupon Error:", error);
-    return res.redirect('/checkout?couponMessage=Something went wrong&couponSuccess=false')
+    console.error("Apply Coupon Error:", error)
+    return res.redirect('/cart?couponMessage=Something went wrong&couponSuccess=false')
   }
-};
+}
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
