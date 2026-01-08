@@ -63,6 +63,11 @@
   <!-- LEFT -->
   <form action="/place-order" method="POST" class="checkout-left">
 
+    <input type="hidden" name="couponCode" id="appliedCoupon">
+<input type="hidden" name="discount" id="appliedDiscount">
+<input type="hidden" name="finalAmount" id="finalAmountInput">
+
+
     <!-- DELIVERY ADDRESS -->
     <div class="card">
       <h3>Delivery Address</h3>
@@ -131,30 +136,52 @@
 
   <!-- RIGHT -->
   <div class="checkout-right card">
-    <h3>Order Summary</h3>
+  <h3>Order Summary</h3>
 
-    <% cartItems.forEach(item => { %>
-      <div class="summary-row">
-        <span><%= item.product.name %> (x<%= item.quantity %>)</span>
-        <span>₹<%= item.total %></span>
-      </div>
-    <% }) %>
-
-    <hr>
-
+  <% cartItems.forEach(item => { %>
     <div class="summary-row">
-      <span>Subtotal</span>
-      <span>₹<%= subtotal %></span>
+      <span><%= item.product.name %> (x<%= item.quantity %>)</span>
+      <span>₹<%= item.total %></span>
     </div>
+  <% }) %>
 
-    <div class="summary-row total">
-      <span>Total</span>
-      <span>₹<%= total %></span>
-    </div>
+  <hr>
+
+<!-- COUPON FORM -->
+<form action="/apply-coupon" method="POST" class="summary-row">
+  <input
+    type="text"
+    name="couponCode"
+    placeholder="Enter coupon code"
+    class="form-control"
+    required
+  />
+  <button type="submit" class="btn mt-2">Apply Coupon</button>
+</form>
+<% if (couponMessage) { %>
+  <p class="<%= couponSuccess ? 'text-success' : 'text-danger' %>" style="margin-top:8px;">
+    <%= couponMessage %>
+  </p>
+<% } %>
+
+
+
+  <!-- DISCOUNT -->
+  <div class="summary-row" id="discountRow" style="display:none;">
+    <span>Discount</span>
+    <span>- ₹<span id="discountAmount">0</span></span>
   </div>
+
+  <div class="summary-row total">
+    <span>Total</span>
+    <span>₹<span id="finalTotal"><%= total %></span></span>
+  </div>
+</div>
+
 
 </div>
 
 <%- include('../partials/footer') %>
+
 </body>
 </html>

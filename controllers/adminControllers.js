@@ -132,6 +132,9 @@ async function adminDashboard(req, res) {
     });
   }
 }
+
+//--------------------------------------------FILTER-------------------------------
+
 function getDateRange(filter) {
   const now = new Date()
   let startDate
@@ -162,7 +165,7 @@ function getDateRange(filter) {
   return startDate
 }
 
-//----------------------------------PIE CHART-------------------------------
+//----------------------------------PIE CHART---------------------------------
 
 async function pieChart(req, res) {
   try {
@@ -170,7 +173,7 @@ async function pieChart(req, res) {
       {
         $match: {
           brand: { $in: ["Zara Home", "Welspun Living", "Sleepwell"] }
-          // removed createdAt filter
+        
         }
       },
       {
@@ -486,7 +489,6 @@ async function getAddCouponPage(req, res) {
   }
 }
 
-
 async function addCoupon(req, res) {
   try {
     const { code, discount, expiryDate } = req.body
@@ -498,23 +500,32 @@ async function addCoupon(req, res) {
       })
     }
 
-      const existingCoupon = await couponModel.findOne({ code })
-
+    const existingCoupon = await couponModel.findOne({ code })
     if (existingCoupon) {
-      return res.render('admin/addCoupon', {success: null, error: 'Coupon code already exists' })
-      
+      return res.render('admin/addCoupon', {
+        success: null,
+        error: 'Coupon code already exists'
+      })
     }
 
-    await couponModel.create({ code,discount,expiryDate})
-     
-    
+    await couponModel.create({
+      code: code.trim(),
+      discount: Number(discount),
+      expiryDate: new Date(expiryDate), 
+      status: 'Active'
+    })
+
     res.redirect('/coupons')
 
   } catch (error) {
-    console.log(error)
-    res.render('admin/addCoupon', {success: null, error: 'Something went wrong'})
+    console.log("Add Coupon Error:", error)
+    res.render('admin/addCoupon', {
+      success: null,
+      error: 'Something went wrong'
+    })
   }
 }
+
 
 //-------------------------------------------EDIT COUPON---------------------------------
 

@@ -4,6 +4,7 @@ const wishlistModel = require('../models/wishlist')
 const cartModel = require('../models/cart')
 const addressModel = require('../models/address')
 const orderModel = require('../models/order')
+const couponModel = require("../models/coupon")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const nodemailer = require('nodemailer');
@@ -319,7 +320,7 @@ async function profilePage(req, res) {
       tab: req.query.tab || 'orders',
       success: null,
       error: null
-    });
+    })
 
   } catch (err) {
     console.log(err);
@@ -835,6 +836,51 @@ async function getCart(req,res) {
 //   }
 // }
 
+// async function addToCart(req, res) {
+//   try {
+//     const userId = req.auth?.id
+//     const productId = req.params.id
+
+//     const product = await productModel.findById(productId)
+//     if (!product) {
+//       return res.json({ success: false, msg: "Product not found" })
+//     }
+
+//     let cart = await cartModel.findOne({ userId })
+
+//     if (!cart) {
+//       await cartModel.create({
+//         userId, products: [{ productId, quantity: 1, price: product.price }]
+       
+//       })
+
+//       return res.json({success: true, msg: "Added to cart", alreadyInCart: false})
+       
+//     }
+
+//     const existingItem = cart.products.find(
+//       (item) => item.productId.toString() === productId
+//     )
+
+//     if (existingItem) {
+
+//       return res.json({ success: true, msg: "Already in cart",alreadyInCart: true})
+      
+//     }
+
+//     cart.products.push({ productId, quantity: 1,price: product.price })
+    
+//     await cart.save()
+
+//     return res.json({success: true,msg: "Added to cart",alreadyInCart: false})
+      
+    
+//   } catch (error) {
+//     console.log(error)
+//     return res.json({ success: false, msg: "Something went wrong" })
+//   }
+// }
+
 async function addToCart(req, res) {
   try {
     const userId = req.auth?.id
@@ -847,35 +893,64 @@ async function addToCart(req, res) {
 
     let cart = await cartModel.findOne({ userId })
 
+    // 1️⃣ Create cart if not exists
     if (!cart) {
       await cartModel.create({
-        userId, products: [{ productId, quantity: 1, price: product.price }]
-       
+        userId,
+        products: [{
+          productId,
+          quantity: 1,
+          price: product.price
+        }],
+        couponApplied: false,
+        couponCode: null,
+        couponDiscount: 0
       })
 
-      return res.json({success: true, msg: "Added to cart", alreadyInCart: false})
-       
+      return res.json({
+        success: true,
+        msg: "Added to cart",
+        alreadyInCart: false
+      })
     }
 
+    // 2️⃣ Check if product already in cart
     const existingItem = cart.products.find(
-      (item) => item.productId.toString() === productId
+      item => item.productId.toString() === productId
     )
 
     if (existingItem) {
-
-      return res.json({ success: true, msg: "Already in cart",alreadyInCart: true})
-      
+      return res.json({
+        success: true,
+        msg: "Already in cart",
+        alreadyInCart: true
+      })
     }
 
-    cart.products.push({ productId, quantity: 1,price: product.price })
-    
+    // 3️⃣ Reset coupon if cart changes
+    if (cart.couponApplied) {
+      cart.couponApplied = false
+      cart.couponCode = null
+      cart.couponDiscount = 0
+    }
+
+    // 4️⃣ Add product
+    cart.products.push({
+      productId,
+      quantity: 1,
+      price: product.price
+    })
+
     await cart.save()
 
-    return res.json({success: true,msg: "Added to cart",alreadyInCart: false})
-      
-    
+    return res.json({
+      success: true,
+      msg: "Added to cart",
+      alreadyInCart: false
+    })
+
   } catch (error) {
-    console.log(error)
+    console.log("Add To Cart Error:", error)
     return res.json({ success: false, msg: "Something went wrong" })
   }
 }
@@ -1066,111 +1141,150 @@ async function decreaseQuantity(req, res) {
 
 //---------------------------------------------CHECK OUT----------------------------------------
 
-async function getCheckoutPage(req,res) {
- try {
-  const userId = req.auth?.id
 
-  if(!userId){
-    return res.redirect('/login')
-  }
+async function getCheckoutPage(req, res) {
+  try {
+    const userId = req.auth?.id;
+    if (!userId) return res.redirect('/login')
 
-  const user = await User.findById(userId).lean()
+    const user = await User.findById(userId).lean()
+    const addresses = await addressModel.find({ userId }).lean()
+    const cart = await cartModel.findOne({ userId }).populate("products.productId").lean()
 
-  const addresses = await addressModel.find({userId}).lean()
+    if (!cart) return res.redirect('/cart')
 
-  const cart = await cartModel.findOne({userId}).populate("products.productId").lean()
+    let subtotal = 0;
 
-  if(!cart){
-    return res.redirect('/cart')
-  }
- 
-  let subtotal = 0
+    const cartItems = cart.products.map(item => {
+      const total = item.productId.price * item.quantity
+      subtotal += total
 
-  const cartItems = cart.products.map(item=>{
-    
-    const total = item.productId.price*item.quantity
-    subtotal+= total
-
-    return {
+      return {
         product: {
           name: item.productId.name
         },
         quantity: item.quantity,
         total
       }
-  })
+    })
 
-   const total = subtotal 
+   
+    let discountAmount = 0
+    if (cart.couponApplied && cart.couponDiscount) {
+      discountAmount = Math.round((subtotal * cart.couponDiscount) / 100)
+    }
 
-    res.render("user/checkout", { user, addresses,cartItems, subtotal, total, success: null, error: null })
-    
-} catch (error) {
-  console.log(error)
-  return res.redirect('/checkout')
-}  
+    const total = subtotal - discountAmount
+
+
+    res.render("user/checkout", {
+      user,
+      addresses,
+      cartItems,
+      subtotal,
+      total,
+      discountAmount,
+      couponMessage: req.query.couponMessage || null,
+      couponSuccess: req.query.couponSuccess === "true" ? true : false,
+      success: null,
+      error: null
+    })
+  } catch (error) {
+    console.log(error);
+    return res.redirect('/checkout')
+  }
 }
 
 //----------------------------------------------PLACE ORDER --- CASH ON DELIVERY----------------------------
 
-
 async function proceedCheckOut(req, res) {
   try {
-    const userId = req.auth?.id
-
+    const userId = req.auth?.id;
     if (!userId) return res.redirect("/login")
 
     const { addressId, paymentMethod } = req.body
 
     const user = await User.findById(userId).lean()
-
     const addresses = await addressModel.find({ userId }).lean()
 
     const cart = await cartModel.findOne({ userId }).populate("products.productId").lean()
-    
 
     if (!cart || !cart.products || cart.products.length === 0) {
-
-      return res.render("user/checkout", {user, addresses, cartItems: [],subtotal: 0, total: 0,success: null, error: "Cart is empty"})
-       
+      return res.render("user/checkout", {
+        user,
+        addresses,
+        cartItems: [],
+        subtotal: 0,
+        total: 0,
+        success: null,
+        error: "Cart is empty"
+      });
     }
 
-    const address = await addressModel.findById(addressId).lean()
-
+    const address = await addressModel.findById(addressId).lean();
     if (!address) {
-
-      return res.render("user/checkout", {user, addresses, cartItems: [],subtotal: 0,total: 0,success: null, error: "Invalid address selected"})
-      
+      return res.render("user/checkout", {
+        user,
+        addresses,
+        cartItems: [],
+        subtotal: 0,
+        total: 0,
+        success: null,
+        error: "Invalid address selected"
+      });
     }
 
-    let subtotal = 0
-
+    
+    let subtotal = 0;
     const orderItems = cart.products.map(p => {
-      const itemTotal = p.productId.price * p.quantity
-      subtotal += itemTotal
+      const itemTotal = p.productId.price * p.quantity;
+      subtotal += itemTotal;
 
       return {
         product: p.productId._id,
         quantity: p.quantity,
-        price: p.productId.price,
+        price: p.productId.price
+      };
+    });
+
+    
+    let totalAmount = subtotal
+    let appliedCoupon = null
+
+    if (cart.couponApplied && cart.couponDiscount) {
+      const discountAmount = Math.round((subtotal * cart.couponDiscount) / 100);
+      totalAmount = subtotal - discountAmount;
+      appliedCoupon = {
+        code: cart.couponCode,
+        discount: cart.couponDiscount,
+        discountAmount
+      };
+    }
+
+    const order = await orderModel.create({
+      userId,
+      items: orderItems,
+      address: addressId,
+      paymentMethod,
+      totalAmount,
+      coupon: appliedCoupon
+    });
+
+   
+    await cartModel.updateOne({ userId }, {
+      $set: {
+        products: [],
+        couponApplied: false,
+        couponCode: null,
+        couponDiscount: 0
       }
-    })
-     
-    const totalAmount = Number(subtotal)
+    });
 
-    const order = await orderModel.create({ userId,items: orderItems, address: addressId, paymentMethod,totalAmount})
-     
-
-    await cartModel.updateOne( { userId }, { $set: { products: [] }})
-     
-    const populatedOrder = await orderModel.findById(order._id) .populate("items.product").populate("address") .lean()
-      
-    //return res.render("user/order", { success: "Order placed successfully",error: null, order: populatedOrder, userName: user.name, })
-      return res.redirect(`/order/${order._id}`)
-
-
+    
+    return res.redirect(`/order/${order._id}`);
   } catch (error) {
-    console.log(error)
-    return res.redirect("/checkout")
+    console.log("Checkout Error:", error);
+    return res.redirect("/checkout");
   }
 }
 
@@ -1201,6 +1315,8 @@ const orderPage = async (req, res) => {
   }
 }
 
+//----------------------------------------------ABOUT PAGE-------------------------------------
+
 async function getAboutPage(req,res) {
   try {
     
@@ -1212,18 +1328,48 @@ async function getAboutPage(req,res) {
   
 }
 
+//-----------------------------------------APPLY COUPON---------------------------------------
 
+const applyCoupon = async (req, res) => {
+  try {
+    const { couponCode } = req.body
+    const userId = req.auth.id
 
+    if (!couponCode) {
+      return res.redirect('/checkout?couponMessage=Please enter a coupon code&couponSuccess=false')
+      
+    }
 
+    const coupon = await couponModel.findOne({
+      code: couponCode.trim(),
+      status: 'Active',
+      expiryDate: { $gte: new Date() }
+    });
 
+    if (!coupon) {
+      return res.redirect('/checkout?couponMessage=Invalid or expired coupon&couponSuccess=false')
+    }
 
+    const cart = await cartModel.findOne({ userId });
+    if (!cart) {
+      return res.redirect('/checkout?couponMessage=Cart is empty&couponSuccess=false')
+    }
 
+    if (cart.couponApplied && cart.couponCode === coupon.code) {
+      return res.redirect('/checkout?couponMessage=Coupon already applied&couponSuccess=false')
+    }
 
+    cart.couponApplied = true;
+    cart.couponCode = coupon.code;
+    cart.couponDiscount = coupon.discount;
+    await cart.save();
 
-
-
-
-
+    return res.redirect('/checkout?couponMessage=Coupon applied successfully!&couponSuccess=true')
+  } catch (error) {
+    console.error("Apply Coupon Error:", error);
+    return res.redirect('/checkout?couponMessage=Something went wrong&couponSuccess=false')
+  }
+};
 
 
 
@@ -1267,6 +1413,7 @@ module.exports = {
   getCheckoutPage,
   proceedCheckOut,
   orderPage,
-  getAboutPage
+  getAboutPage,
+  applyCoupon
 
 }

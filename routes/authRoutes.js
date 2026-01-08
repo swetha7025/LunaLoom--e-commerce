@@ -158,8 +158,7 @@ router.get("/order/:orderId", protectedAuth, authControllers.orderPage)
 
 router.get("/about",authControllers.getAboutPage)
 
-
-
+router.post("/apply-coupon", protectedAuth, authControllers.applyCoupon)
 
 
 
