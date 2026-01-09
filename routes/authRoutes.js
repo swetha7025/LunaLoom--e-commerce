@@ -161,6 +161,10 @@ router.get("/about",authControllers.getAboutPage)
 router.post("/apply-coupon", protectedAuth, authControllers.applyCoupon)
 
 
+router.get('/cart/coupon-remove', protectedAuth,authControllers.removeCoupon)
+
+router.post('/cart/coupon-remove', protectedAuth,authControllers.removeCoupon)
+
 
 
 

@@ -767,51 +767,53 @@ async function removeFromWishlist(req, res) {
 
 async function getCart(req, res) {
   try {
-    const userId = req.auth?.id
+    const userId = req.auth?.id;
 
     const cart = await cartModel
       .findOne({ userId })
-      .populate('products.productId', 'name price images')
+      .populate('products.productId', 'name price images');
 
     const subtotal = cart
-      ? cart.products.reduce((sum, item) => {
-          return sum + item.productId.price * item.quantity
-        }, 0)
-      : 0
+      ? cart.products.reduce((sum, item) => sum + item.productId.price * item.quantity, 0)
+      : 0;
 
-    let discountAmount = 0
+    let discountAmount = 0;
     if (cart?.couponApplied && cart.couponDiscount) {
-      discountAmount = Math.round((subtotal * cart.couponDiscount) / 100)
+      discountAmount = Math.round((subtotal * cart.couponDiscount) / 100);
     }
 
-    const finalTotal = subtotal - discountAmount
-  res.render('user/cart', {
-  cart: cart || { products: [] },
-  subtotal,
-  discountAmount,
-  total: finalTotal,   
-  user: req.user,
-  success: null,
-  error: null,
-  couponMessage: req.query.couponMessage || null,
-  couponSuccess: req.query.couponSuccess || null
-})
+    const finalTotal = subtotal - discountAmount;
+
+   
+    const success = req.flash('success')[0] || null;
+    const error = req.flash('error')[0] || null;
+
+    res.render('user/cart', {
+      cart: cart || { products: [] },
+      subtotal,
+      discountAmount,
+      total: finalTotal,
+      user: req.user,
+      
+    });
 
   } catch (error) {
-    console.log(error)
+    console.log(error);
+    const errorMsg = req.flash('error')[0] || 'Something went wrong';
     res.render('user/cart', {
       cart: { products: [] },
       subtotal: 0,
       discountAmount: 0,
       total: 0,
       user: req.user,
-      success:null,
-      error:'something went wrong',
+      success: null,
+      error: errorMsg,
       couponMessage: null,
       couponSuccess: null
-    })
+    });
   }
 }
+
 
 
 //-----------------------------------------------ADD TO CART-------------------------------------------
@@ -1354,34 +1356,37 @@ async function getAboutPage(req,res) {
 
 //-----------------------------------------APPLY COUPON---------------------------------------
 
-async function applyCoupon(req,res) {
-   
+
+async function applyCoupon(req, res) {
   try {
     const { couponCode } = req.body
     const userId = req.auth.id
 
     if (!couponCode) {
-      return res.redirect('/checkout?couponMessage=Please enter a coupon code&couponSuccess=false')
-      
+      req.flash('error', 'Please enter a coupon code')
+      return res.redirect('/checkout')
     }
 
     const coupon = await couponModel.findOne({
       code: couponCode.trim(),
       status: 'Active',
       expiryDate: { $gte: new Date() }
-    });
+    })
 
     if (!coupon) {
-      return res.redirect('/cart?couponMessage=Invalid or expired coupon&couponSuccess=false')
+      req.flash('error', 'Invalid or expired coupon')
+      return res.redirect('/cart')
     }
 
     const cart = await cartModel.findOne({ userId })
     if (!cart) {
-      return res.redirect('/cart?couponMessage=Cart is empty&couponSuccess=false')
+      req.flash('error', 'Cart is empty')
+      return res.redirect('/cart')
     }
 
     if (cart.couponApplied && cart.couponCode === coupon.code) {
-      return res.redirect('/cart?couponMessage=Coupon already applied&couponSuccess=false')
+      req.flash('error', 'Coupon already applied')
+      return res.redirect('/cart')
     }
 
     cart.couponApplied = true
@@ -1389,17 +1394,51 @@ async function applyCoupon(req,res) {
     cart.couponDiscount = coupon.discount
     await cart.save()
 
-    return res.redirect('/cart?couponMessage=Coupon applied successfully!&couponSuccess=true')
+    req.flash('success', 'Coupon applied successfully!')
+    return res.redirect('/cart')
 
   } catch (error) {
-    console.error("Apply Coupon Error:", error)
-    return res.redirect('/cart?couponMessage=Something went wrong&couponSuccess=false')
+    console.error('Apply Coupon Error:', error)
+    req.flash('error', 'Something went wrong')
+    return res.redirect('/cart')
   }
 }
 
 
 
+//-------------------------------------REMOVE COUPOON---------------------------------
 
+async function removeCoupon(req, res) {
+  try {
+    const userId = req.auth.id
+
+    const cart = await cartModel.findOne({ userId })
+
+    if (!cart) {
+      req.flash('error', 'Cart not found')
+      return res.redirect('/cart')
+    }
+
+    if (!cart.couponApplied) {
+      req.flash('error', 'No coupon applied')
+      return res.redirect('/cart')
+    }
+
+    cart.couponApplied = false
+    cart.couponCode = null
+    cart.couponDiscount = 0
+
+    await cart.save()
+
+    req.flash('success', 'Coupon removed successfully')
+    return res.redirect('/cart')
+
+  } catch (error) {
+    console.error('Remove Coupon Error:', error)
+    req.flash('error', 'Something went wrong')
+    return res.redirect('/cart')
+  }
+}
 
 
 
@@ -1490,6 +1529,7 @@ module.exports = {
   proceedCheckOut,
   orderPage,
   getAboutPage,
-  applyCoupon
+  applyCoupon,
+  removeCoupon
 
 }
