@@ -170,38 +170,40 @@
 
 
           <!-- COUPON -->
-          <% if (cart.couponApplied) { %>
-            <form method="POST" action="/cart/coupon-remove">
-              <button class="btn btn-outline-danger btn-block">
-                Remove Coupon
-              </button>
-            </form>
-          <% } else { %>
-            <h5>Apply Coupon</h5>
-           <form action="/apply-coupon" method="POST">
-          <input class="form-control mb-2 coupon-input"
-         name="couponCode"
-         placeholder="Coupon"
-         required>
+         <% if (cart.couponApplied) { %>
+  <div class="alert alert-info text-center">
+    Coupon "<strong><%= cart.couponCode %></strong>" is already applied
+  </div>
 
-        <button class="btn apply-coupon-btn btn-block">
-           APPLY
-        </button>
-        </form> 
-
-          <% } %>
+  <form method="POST" action="/cart/coupon-remove">
+    <button class="btn btn-outline-danger btn-block">
+      Remove Coupon
+    </button>
+  </form>
+  <% } else { %>
+  <h5>Apply Coupon</h5>
+  <form action="/apply-coupon" method="POST">
+    <input
+      class="form-control mb-2 coupon-input"
+      name="couponCode"
+      placeholder="Coupon"
+      required
+    >
+    <button class="btn apply-coupon-btn btn-block">
+      APPLY
+    </button>
+  </form>
+  <% } %>
 
         </div>
       </div>
         <% if (cart.products.length > 0) { %>
-  <div class="cart-action-buttons mt-4">
-     <a href="/product_list" class="btn_1">Continue Shopping</a>
-     <a href="/checkout" class="btn_1 checkout_btn_1">Proceed to Checkout</a>
-  </div>
+      <div class="cart-action-buttons mt-4">
+         <a href="/product_list" class="btn_1">Continue Shopping</a>
+         <a href="/checkout" class="btn_1 checkout_btn_1">Proceed to Checkout</a>
+      </div>
   <% } %>
     </div>
-
-   
 
 </section>
 
@@ -250,15 +252,35 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", () => {
 
   const updateCartDisplay = (productId, data) => {
-    if (data.removed) {
-      const row = document.getElementById(`row-${productId}`);
-      if (row) row.remove();
-    } else {
-      document.getElementById(`qty-${productId}`).value = data.quantity;
-      document.getElementById(`total-${productId}`).innerText = `₹${data.itemTotal.toFixed(2)}`;
-    }
-    document.getElementById("cart-subtotal").innerText = `₹${data.subtotal.toFixed(2)}`;
-  };
+  // Remove product row if removed
+  if (data.removed) {
+    const row = document.getElementById(`row-${productId}`);
+    if (row) row.remove();
+  } else {
+    // Update quantity
+    const qtyInput = document.getElementById(`qty-${productId}`);
+    if (qtyInput) qtyInput.value = data.quantity;
+
+    // Update item total
+    const itemTotalCell = document.getElementById(`total-${productId}`);
+    if (itemTotalCell) itemTotalCell.innerText = `₹${data.itemTotal.toFixed(2)}`;
+  }
+
+  // Update subtotal
+  const subtotalCell = document.getElementById("cart-subtotal");
+  if (subtotalCell) subtotalCell.innerText = `₹${data.subtotal.toFixed(2)}`;
+
+  // Update discount (if any)
+  const discountCell = document.querySelector(".cart-summary .text-success");
+  if (discountCell && data.discountAmount !== undefined) {
+    discountCell.innerText = `-₹${data.discountAmount.toFixed(2)}`;
+  }
+
+  // Update total
+  const totalCell = document.querySelector(".cart-summary .font-weight-bold td");
+  if (totalCell) totalCell.innerText = `₹${data.total.toFixed(2)}`;
+};
+
 
   document.querySelectorAll(".input-number-increment").forEach(btn => {
     btn.addEventListener("click", async (e) => {

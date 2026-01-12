@@ -100,10 +100,9 @@ router.post('/resetPassword',authControllers.resetPassword)
 //-----------------------------------PROFILE------------------------------
 
 
-router.get('/profile', protectedAuth,authControllers.profilePage);
+router.get('/profile', protectedAuth,authControllers.profilePage)
 
-
-router.get("/logout", authControllers.logoutUser);
+router.get("/logout", authControllers.logoutUser)
 
 router.get('/editProfile',protectedAuth, authControllers.editProfile)
 
@@ -133,7 +132,6 @@ router.get("/singleProduct",authControllers.getSingleProduct)
 
 router.get('/wishlist',protectedAuth,authControllers.getWishlist)
 
-
 router.get('/wishlist/add/:id', protectedAuth, authControllers.addToWishlist)
 
 router.post('/wishlist/remove/:id', protectedAuth, authControllers.removeFromWishlist);
@@ -156,10 +154,13 @@ router.post("/place-order",protectedAuth,authControllers.proceedCheckOut)
 
 router.get("/order/:orderId", protectedAuth, authControllers.orderPage)
 
+//-------------------------------------ABOUT US--------------------------
+
 router.get("/about",authControllers.getAboutPage)
 
-router.post("/apply-coupon", protectedAuth, authControllers.applyCoupon)
+//---------------------------------COUPON--------------------------------------
 
+router.post("/apply-coupon", protectedAuth, authControllers.applyCoupon)
 
 router.get('/cart/coupon-remove', protectedAuth,authControllers.removeCoupon)
 

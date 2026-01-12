@@ -16,7 +16,7 @@ async function protectedAuth(req,res,next) {
     try {
         const payload = jwt.verify(token,process.env.JWT_SECRET)
         req.auth = payload
-        console.log('Token verified');
+        // console.log('Token verified');
         next()
 
     } catch (error) {
@@ -27,9 +27,6 @@ async function protectedAuth(req,res,next) {
      
 }
  
-
-
-
 
 
 async function protectedAuthAdmin(req, res, next) {

@@ -1073,41 +1073,34 @@ async function removeFromCart(req, res) {
 //     return res.redirect("/cart")
 //   }
 // }
-
 async function increaseQuantity(req, res) {
   try {
     const userId = req.auth?.id
     const productId = req.params.id
 
-    if (!userId) {
-      return res.json({ success: false, message: "Not logged in" })
-    }
+    if (!userId) return res.json({ success: false, message: "Not logged in" })
 
-    const cart = await cartModel.findOne({ userId }) .populate("products.productId")
-    
-    if (!cart) {
-      return res.json({ success: false, message: "Cart not found" })
-    }
+    const cart = await cartModel.findOne({ userId }).populate("products.productId")
+    if (!cart) return res.json({ success: false, message: "Cart not found" })
 
-    const product = cart.products.find(
-      item => item.productId._id.toString() === productId
-    )
-
-    if (!product) {
-      return res.json({ success: false, message: "Product not found" })
-    }
+    const product = cart.products.find(item => item.productId._id.toString() === productId)
+    if (!product) return res.json({ success: false, message: "Product not found" })
 
     product.quantity += 1
     await cart.save()
 
-      const subtotal = cart.products.reduce((sum, item) => {
-      return sum + item.quantity * item.productId.price
-      }, 0)
+    // Calculate totals
+    const subtotal = cart.products.reduce((sum, item) => sum + item.quantity * item.productId.price, 0)
+    let discountAmount = 0
+    if (cart.couponApplied && cart.couponDiscount) {
+      discountAmount = Math.round((subtotal * cart.couponDiscount) / 100)
+    }
+    const total = subtotal - discountAmount
 
-    const itemTotal = product.quantity * product.productId.price;
+    const itemTotal = product.quantity * product.productId.price
 
-    return res.json({success: true,quantity: product.quantity,itemTotal, subtotal })
-      
+    return res.json({ success: true, quantity: product.quantity, itemTotal, subtotal, discountAmount, total })
+
   } catch (error) {
     console.error("increaseQuantity error:", error)
     return res.json({ success: false, message: "Server error" })
@@ -1116,29 +1109,18 @@ async function increaseQuantity(req, res) {
 
 //--------------------------------------DECREASE QUANTITY-------------------------------------
 
-
 async function decreaseQuantity(req, res) {
   try {
     const userId = req.auth?.id
     const productId = req.params.id
 
-    if (!userId) {
-      return res.json({ success: false, message: "Not logged in" })
-    }
+    if (!userId) return res.json({ success: false, message: "Not logged in" })
 
-    const cart = await cartModel.findOne({ userId }) .populate("products.productId")
+    const cart = await cartModel.findOne({ userId }).populate("products.productId")
+    if (!cart) return res.json({ success: false, message: "Cart not found" })
 
-    if (!cart) {
-      return res.json({ success: false, message: "Cart not found" })
-    }
-
-    const index = cart.products.findIndex(
-      item => item.productId._id.toString() === productId
-    )
-
-    if (index === -1) {
-      return res.json({ success: false, message: "Product not found" })
-    }
+    const index = cart.products.findIndex(item => item.productId._id.toString() === productId)
+    if (index === -1) return res.json({ success: false, message: "Product not found" })
 
     let removed = false
     let quantity = 0
@@ -1155,12 +1137,16 @@ async function decreaseQuantity(req, res) {
 
     await cart.save()
 
-      const subtotal = cart.products.reduce((sum, item) => {
-        return sum + item.quantity * item.productId.price
-    }, 0)
+    // Calculate totals
+    const subtotal = cart.products.reduce((sum, item) => sum + item.quantity * item.productId.price, 0)
+    let discountAmount = 0
+    if (cart.couponApplied && cart.couponDiscount) {
+      discountAmount = Math.round((subtotal * cart.couponDiscount) / 100)
+    }
+    const total = subtotal - discountAmount
 
-    return res.json({success: true, quantity, itemTotal,  subtotal, removed })
-      
+    return res.json({ success: true, quantity, itemTotal, subtotal, discountAmount, total, removed })
+
   } catch (error) {
     console.error("decreaseQuantity error:", error)
     return res.json({ success: false, message: "Server error" })
@@ -1356,7 +1342,7 @@ async function getAboutPage(req,res) {
 
 //-----------------------------------------APPLY COUPON---------------------------------------
 
-
+ 
 async function applyCoupon(req, res) {
   try {
     const { couponCode } = req.body
@@ -1366,7 +1352,7 @@ async function applyCoupon(req, res) {
       req.flash('error', 'Please enter a coupon code')
       return res.redirect('/checkout')
     }
-
+         
     const coupon = await couponModel.findOne({
       code: couponCode.trim(),
       status: 'Active',
@@ -1383,11 +1369,12 @@ async function applyCoupon(req, res) {
       req.flash('error', 'Cart is empty')
       return res.redirect('/cart')
     }
-
+    
     if (cart.couponApplied && cart.couponCode === coupon.code) {
-      req.flash('error', 'Coupon already applied')
-      return res.redirect('/cart')
-    }
+    req.flash('error', 'This coupon is already applied')
+    return res.redirect('/cart')
+   }
+
 
     cart.couponApplied = true
     cart.couponCode = coupon.code
@@ -1405,8 +1392,8 @@ async function applyCoupon(req, res) {
 }
 
 
-
 //-------------------------------------REMOVE COUPOON---------------------------------
+
 
 async function removeCoupon(req, res) {
   try {
