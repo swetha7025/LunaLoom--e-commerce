@@ -3,6 +3,7 @@ const productModel = require('../models/products')
 const User = require('../models/user')
 const couponModel = require('../models/coupon')
 const orderModel = require('../models/order')
+const bannerModel = require('../models/banner')
 const { upload } = require("../middleware/multer")
  const fs = require("fs");
 const jwt = require('jsonwebtoken');
@@ -671,10 +672,77 @@ async function updateOrderStatus(req,res) {
 }
 
 
+//--------------------------------------------BANNER-------------------------------
 
+async function getBannerPage(req,res) {
+  
+ const banners = await bannerModel.find()
 
+  res.render("admin/banner",{banners,success : null, error : null})
 
+ 
+}
 
+//--------------------------------UPLOAD BANNER------------------------------------
+
+async function uploadBanner(req, res) {
+  try {
+    const { main, sub } = req.body
+
+    if (!req.file) {
+      return res.redirect('/banner')
+    }
+
+    const bannerImage = `/img/${req.file.filename}`
+
+    await bannerModel.create({ main, sub,bannerImage })
+     
+    return res.redirect('/banner')
+
+  } catch (error) {
+    console.log(error)
+    return res.redirect('/banner')
+  }
+}
+
+//-------------------------------------------DELETE BANNER-----------------------------
+
+async function deleteBanner(req,res) {
+  try {
+    const bannerId = req.params.id
+    await bannerModel.findByIdAndDelete(bannerId)
+
+    return res.redirect("/banner")
+
+  } catch (error) {
+    console.log(error)
+    return res.redirect("/banner")
+  }
+}
+
+//-------------------------------------------UPDATE BANNER--------------------------
+async function updateBanner(req, res) {
+  try {
+
+    const bannerId = req.params.id
+    const { main, sub } = req.body
+
+    const updateData = { main, sub }
+
+    
+    if (req.file) {
+      updateData.bannerImage = `/img/${req.file.filename}`
+    }
+
+    await bannerModel.findByIdAndUpdate( bannerId,updateData, { new: true } )
+     
+    return res.redirect('/banner')
+
+  } catch (error) {
+    console.log(error)
+    return res.redirect('/banner')
+  }
+}
 
 
 
@@ -730,6 +798,10 @@ module.exports = {
     pieChart,
     barChart,
     lineChart,
-    updateOrderStatus
+    updateOrderStatus,
+    getBannerPage,
+    uploadBanner,
+    deleteBanner,
+    updateBanner
   
 }

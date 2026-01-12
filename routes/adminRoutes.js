@@ -66,7 +66,17 @@ router.get("/admin-orders",adminControllers.getOrderPage)
 
 router.post("/admin-orders/update/:id", adminControllers.updateOrderStatus)
 
+//-------------------------------------BANNER----------------------------------------
 
+router.get("/banner",adminControllers.getBannerPage)
+
+router.post( "/admin/banners/add", upload.single("bannerImage"),  adminControllers.uploadBanner)
+
+router.post("/admin/banners/delete/:id",adminControllers.deleteBanner)
+
+router.post("/admin/banners/edit/:id", upload.single('bannerImage'),adminControllers.updateBanner)
+ 
+ 
 
 
 
