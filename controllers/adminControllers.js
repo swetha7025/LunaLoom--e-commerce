@@ -689,14 +689,18 @@ async function uploadBanner(req, res) {
   try {
     const { main, sub } = req.body
 
-    if (!req.file) {
+    if (!req.files) {
       return res.redirect('/banner')
     }
 
-    const bannerImage = `/img/${req.file.filename}`
+    const banners = req.files.map(file => ({
+      main,
+      sub,
+      bannerImage: `/img/${file.filename}`
+    }))
 
-    await bannerModel.create({ main, sub,bannerImage })
-     
+    await bannerModel.insertMany(banners)
+
     return res.redirect('/banner')
 
   } catch (error) {
@@ -704,6 +708,7 @@ async function uploadBanner(req, res) {
     return res.redirect('/banner')
   }
 }
+
 
 //-------------------------------------------DELETE BANNER-----------------------------
 
@@ -731,7 +736,7 @@ async function updateBanner(req, res) {
 
     
     if (req.file) {
-      updateData.bannerImage = `/img/${req.file.filename}`
+      updateData.bannerImage = `/img/${req.files.filename}`
     }
 
     await bannerModel.findByIdAndUpdate( bannerId,updateData, { new: true } )

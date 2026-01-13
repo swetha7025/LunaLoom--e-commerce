@@ -5,6 +5,7 @@ const cartModel = require('../models/cart')
 const addressModel = require('../models/address')
 const orderModel = require('../models/order')
 const couponModel = require("../models/coupon")
+const bannerModel = require("../models/banner")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const nodemailer = require('nodemailer');
@@ -232,21 +233,23 @@ async function loadHome(req,res) {
     
      const token = req.cookies?.token || null
 
+     const banners = await bannerModel.find().sort({_id: -1 })
+    
      if(!token){
 
-      return res.render('user/home',{user : null, success : null, error : null})
+      return res.render('user/home',{user : null, banners, success : null, error : null})
      }
 
       const payload = jwt.verify(token,process.env.JWT_SECRET)
 
-      res.render('user/home',{user : payload, success : null, error : null})
+      res.render('user/home',{user : payload, banners, success : null, error : null})
 
       
   } catch (error) {
     
     res.clearCookie("token");
 
-    return res.render('user/home',{user : null, success : null,  error : null})
+    return res.render('user/home',{user : null, banners:[], success : null,  error : null})
   }
   
 }
