@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contact Us</title>
+    <link rel="icon" href="/img/LL.png">
+
+   <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+  <!-- Animation and carousel -->
+  <link rel="stylesheet" href="/css/animate.css">
+  <link rel="stylesheet" href="/css/owl.carousel.min.css">
+
+  <!-- Font Awesome & Icons -->
+  <link rel="stylesheet" href="/css/all.css">
+  <link rel="stylesheet" href="/css/flaticon.css">
+  <link rel="stylesheet" href="/css/themify-icons.css">
+
+  <!-- Popup & Slider -->
+  <link rel="stylesheet" href="/css/magnific-popup.css">
+  <link rel="stylesheet" href="/css/slick.css">
+
+  <!-- Shared and page-specific CSS -->
+  <link rel="stylesheet" href="/css/style.css"> <!-- main site styles (home, header, etc.) -->
+  <link rel="stylesheet" href="/css/header.css"> <!-- header/navbar styles -->
+  <link rel="stylesheet" href="/css/footer.css">
+</head>
+<style>
+
+
+    .breadcrumb_part {
+    background: #b894b5;     
+    padding: 120px 0;
+    text-align: center;
+    height: 90px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.breadcrumb_part h2 {
+    color: #fff;
+    font-size: 42px;
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.custom-submit-btn {
+  background-color: #a174a9;
+  color: #fff;
+  border: none;
+}
+
+.custom-submit-btn:hover {
+  background-color: #8d5b9e;
+  color: #fff;
+}
+
+
+</style>
+<body>
+ <%- include('../partials/header') %>
+
+ <section class="breadcrumb_part">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="breadcrumb_iner">
+            <h2>Contact Us</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+
+    <!-- LEFT : CONTACT FORM -->
+    <div class="col-lg-7">
+
+      <h2 class="mb-3">Have you any question?</h2>
+    
+    <% if (success && success.length > 0) { %>
+  <div class="alert alert-success">
+    <%= success[0] %>
+  </div>
+<% } %>
+
+<% if (error && error.length > 0) { %>
+  <div class="alert alert-danger">
+    <%= error[0] %>
+  </div>
+<% } %>
+
+      <form action="/contact" method="POST">
+        <div class="row">
+
+          <div class="col-md-6 mb-3">
+            <input
+              type="text"
+              name="name"
+              class="form-control"
+              placeholder="Name"
+              required
+            >
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <input
+              type="email"
+              name="email"
+              class="form-control"
+              placeholder="Email"
+              required
+            >
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <input
+              type="text"
+              name="phone"
+              class="form-control"
+              placeholder="Phone"
+            >
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <input
+              type="text"
+              name="subject"
+              class="form-control"
+              placeholder="Subject"
+            >
+          </div>
+
+          <div class="col-12 mb-3">
+            <textarea
+              name="message"
+              rows="5"
+              class="form-control"
+              placeholder="Message"
+              required
+            ></textarea>
+          </div>
+
+          <div class="col-12">
+           <button type="submit" class="btn custom-submit-btn px-4">
+            SUBMIT
+          </button>
+
+          </div>
+
+        </div>
+      </form>
+    </div>
+
+    <!-- RIGHT : CONTACT INFO -->
+    <div class="col-lg-4 offset-lg-1">
+
+      <div class="p-4 bg-light mb-4">
+        <h5>📍 Shop Address</h5>
+        <p class="mb-0">
+          34/8, East Hukupara<br>
+          Gifrtok, Sadan<br>
+          Country Name
+        </p>
+      </div>
+
+      <div class="p-4 bg-light mb-4">
+        <h5>⏰ Shop Hours</h5>
+        <p class="mb-1">MON - FRIDAY: 8 to 9 PM</p>
+        <p class="mb-0">SAT - SUN: 10 to 8 PM</p>
+      </div>
+
+      <div class="p-4 bg-light">
+        <h5>📞 Contact</h5>
+        <p class="mb-1">Phone: +00 111 222 3333</p>
+        <p class="mb-0">Email: support@lunaloom.com</p>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+<%- include('../partials/footer') %>
+</body>
+</html>

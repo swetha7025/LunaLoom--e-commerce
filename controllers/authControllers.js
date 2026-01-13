@@ -6,6 +6,7 @@ const addressModel = require('../models/address')
 const orderModel = require('../models/order')
 const couponModel = require("../models/coupon")
 const bannerModel = require("../models/banner")
+const enquiryModel = require("../models/enquiry")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const nodemailer = require('nodemailer');
@@ -1298,7 +1299,6 @@ async function proceedCheckOut(req, res) {
     
     return res.redirect(`/order/${order._id}`);
   } catch (error) {
-    console.log("Checkout Error:", error);
     return res.redirect("/checkout");
   }
 }
@@ -1431,8 +1431,44 @@ async function removeCoupon(req, res) {
 }
 
 
+//--------------------------------------------------CONTACT US------------------------------
 
+async function getContactPage(req, res) {
 
+  const userId = req.auth?.id;
+
+  if (!userId) {
+    return res.render("user/login")
+  }
+
+  return res.render("user/contact")
+    
+}
+
+//-------------------------------------------POST ENQUIRY----------------------------------
+
+async function postEnquiry(req,res) {
+  try {
+    
+    const {message, name, email, subject} = req.body
+
+    if(!message && !name && !email && !subject){
+       req.flash('error', 'Must fill all the fields')
+
+      return res.redirect("/contact")
+    }
+
+    await enquiryModel.create({name:name,email:email,subject:subject,message:message,status:'Pending'})
+
+    req.flash('success', 'Your enquiry sent successfully, will reply soon')
+    return res.redirect("/contact")
+
+  } catch (error) {
+    console.log(error)
+    return res.redirect("/contact")
+  }
+  
+}
 
  
 
@@ -1520,6 +1556,8 @@ module.exports = {
   orderPage,
   getAboutPage,
   applyCoupon,
-  removeCoupon
+  removeCoupon,
+  getContactPage,
+  postEnquiry
 
 }

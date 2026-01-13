@@ -16,7 +16,7 @@ const bannerSchema = new mongoose.Schema({
         type: String,
         required: true
     }
-})
+},{timestamps:true})
 
 
 const bannerModel = mongoose.model('banner',bannerSchema)

@@ -166,9 +166,9 @@ router.get('/cart/coupon-remove', protectedAuth,authControllers.removeCoupon)
 
 router.post('/cart/coupon-remove', protectedAuth,authControllers.removeCoupon)
 
+router.get("/contact",protectedAuth,authControllers.getContactPage)
 
-
-
+router.post("/contact",authControllers.postEnquiry)
 
 
 
