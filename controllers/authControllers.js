@@ -9,7 +9,7 @@ const bannerModel = require("../models/banner")
 const enquiryModel = require("../models/enquiry")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
-const nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer')
 const user = require('../models/user')
 
 require('dotenv').config();

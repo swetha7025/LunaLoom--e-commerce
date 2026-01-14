@@ -6,10 +6,11 @@ const orderModel = require('../models/order')
 const bannerModel = require('../models/banner')
 const enquiryModel = require('../models/enquiry')
 const { upload } = require("../middleware/multer")
- const fs = require("fs");
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-const { error } = require('console');
+const nodemailer = require('nodemailer')
+ const fs = require("fs")
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
+const { error } = require('console')
 
 
 //--------------------------------ADMIN LOGIN------------------------------------
@@ -760,9 +761,57 @@ async function getSupportPage(req,res) {
 
 }
 
+//-----------------------------------SEND REPPLY------------------------------------
+
+async function sendReply(req,res) {
+  try {
+
+    const {email,reply,enquiryId} = req.body
+      
+   if (!email || !reply || !enquiryId){
+      req.flash('error','Invalid input')
+     return res.redirect("/support")
+    }
+    
+    const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+  })
 
 
+    await transporter.sendMail({
+     from: `"LunaLoom" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: 'Support reply',
+      text:reply
+    })
 
+   await enquiryModel.findByIdAndUpdate(
+   enquiryId,
+  { reply: true, status: 'Resolved' },
+  { new: true }
+  )
+
+    return res.redirect("/support")
+
+  } catch (error) {
+    console.log(error)
+   return res.redirect("/support")
+  }
+  
+}
+
+
+//--------------------------------------LOGOUT--------------------------------------------
+
+async function logoutAdmin(req,res) {
+  res.clearCookie('adminToken')
+res.redirect('/adminLogin')
+
+}
 
 
 
@@ -817,6 +866,8 @@ module.exports = {
     uploadBanner,
     deleteBanner,
     updateBanner,
-    getSupportPage
+    getSupportPage,
+    sendReply,
+    logoutAdmin
   
 }

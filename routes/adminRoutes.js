@@ -77,10 +77,11 @@ router.post("/admin/banners/delete/:id",adminControllers.deleteBanner)
 
 router.post("/admin/banners/edit/:id", upload.array('bannerImage',4),adminControllers.updateBanner)
  
- router.get("/support",adminControllers.getSupportPage)
+router.get("/support",adminControllers.getSupportPage)
 
+router.post('/support/reply',adminControllers.sendReply)
 
-
+router.post('/admin/logout',adminControllers.logoutAdmin)
 
 
 
