@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const adminControllers = require("../controllers/adminControllers");
 const {protectedAuthAdmin} = require("../middleware/auth")
-const {upload} = require('../middleware/multer')
+const {upload} = require('../middleware/multer');
+const { route } = require('./authRoutes');
 
 
 //-------------------------ADMIN LOGIN----------------------------
@@ -76,7 +77,7 @@ router.post("/admin/banners/delete/:id",adminControllers.deleteBanner)
 
 router.post("/admin/banners/edit/:id", upload.array('bannerImage',4),adminControllers.updateBanner)
  
- 
+ router.get("/support",adminControllers.getSupportPage)
 
 
 

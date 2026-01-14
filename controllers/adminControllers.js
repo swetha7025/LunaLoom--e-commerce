@@ -4,6 +4,7 @@ const User = require('../models/user')
 const couponModel = require('../models/coupon')
 const orderModel = require('../models/order')
 const bannerModel = require('../models/banner')
+const enquiryModel = require('../models/enquiry')
 const { upload } = require("../middleware/multer")
  const fs = require("fs");
 const jwt = require('jsonwebtoken');
@@ -749,7 +750,15 @@ async function updateBanner(req, res) {
   }
 }
 
+//---------------------------------------------SUPPORT------------------------------
 
+async function getSupportPage(req,res) {
+
+ const enquiries = await enquiryModel.find()
+
+  res.render("admin/support",{enquiries,success : null, error : null})
+
+}
 
 
 
@@ -807,6 +816,7 @@ module.exports = {
     getBannerPage,
     uploadBanner,
     deleteBanner,
-    updateBanner
+    updateBanner,
+    getSupportPage
   
 }

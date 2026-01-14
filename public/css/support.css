@@ -1,0 +1,122 @@
+/* ===============================
+   SUPPORT PAGE LAYOUT FIX
+================================ */
+
+/* Main content should stay beside sidebar */
+.admin-main {
+    margin-left: 240px;              /* MUST match sidebar width */
+    max-width: calc(100% - 240px);
+    padding: 20px 24px;
+    overflow-x: hidden;
+}
+
+/* ===============================
+   SUPPORT CARD
+================================ */
+
+.support-card {
+    background: #ffffff;
+    border-radius: 10px;
+    border: none;
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* ===============================
+   SUPPORT TABLE
+================================ */
+
+.support-table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.support-table thead th {
+    font-size: 14px;
+    font-weight: 600;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e6e6e6;
+    color: #000;
+}
+
+.support-table tbody td {
+    font-size: 14px;
+    color: #333;
+    vertical-align: middle;
+}
+
+/* Prevent long message overflow */
+.message-col {
+    max-width: 320px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ===============================
+   STATUS BADGES
+================================ */
+
+.badge {
+    font-size: 12px;
+    border-radius: 16px;
+    padding: 6px 12px;
+}
+
+/* ===============================
+   ACTION BUTTONS
+================================ */
+
+.support-table .btn {
+    font-size: 13px;
+    padding: 5px 12px;
+    white-space: nowrap;
+}
+
+/* ===============================
+   EMPTY STATE
+================================ */
+
+.support-empty {
+    margin-top: 30px;
+}
+
+.support-empty h6 {
+    font-weight: 600;
+    color: #333;
+}
+
+.support-empty p {
+    font-size: 14px;
+    color: #777;
+}
+
+/* ===============================
+   MODAL
+================================ */
+
+.support-modal .modal-content {
+    border-radius: 10px;
+    border: none;
+}
+
+.support-modal .modal-header {
+    background-color: #dc3545;
+    color: #ffffff;
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 992px) {
+    .admin-main {
+        margin-left: 0;
+        max-width: 100%;
+        padding: 16px;
+    }
+
+    .message-col {
+        max-width: 180px;
+    }
+}
