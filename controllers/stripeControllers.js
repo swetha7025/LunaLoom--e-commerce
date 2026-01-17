@@ -100,8 +100,19 @@ async function stripeWebhook(req,res) {
           }
 
           
-          await cartModel.findOneAndDelete({ userId: order.userId });
-        }
+          await cartModel.updateOne(
+        { userId: order.userId },
+     {
+     $set: {
+      products: [],
+      couponApplied: false,
+      couponCode: null,
+      couponDiscount: 0
+    }
+    }
+   )
+
+    }
 
         console.log("checkout.session.completed handled for order:", orderId);
         break;
@@ -163,6 +174,17 @@ async function stripeSuccess(req, res) {
 
       await order.save()
     }
+    await cartModel.updateOne(
+  { userId: order.userId._id },
+  {
+    $set: {
+      products: [],
+      couponApplied: false,
+      couponCode: null,
+      couponDiscount: 0
+    }
+  }
+);
 
     const userName =
       order.userId?.name ||

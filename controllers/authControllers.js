@@ -1401,30 +1401,50 @@ async function proceedCheckOut(req, res) {
       paymentStatus: paymentMethod === "COD" ? "Pending" : "Initiated"
     })
 
-    
     if (paymentMethod === "COD") {
-      await cartModel.updateOne({ userId }, {
-        $set: {
-          products: [],
-          couponApplied: false,
-          couponCode: null,
-          couponDiscount: 0
-        }
-      })
-     return res.redirect(`/order/${order._id}`)
 
+ 
+  for (const item of orderItems) {
+    const product = await productModel.findById(item.product)
+
+    if (!product) {
+      throw new Error("Product not found")
     }
 
-    
+    if (product.stock < item.quantity) {
+      throw new Error(`${product.name} is out of stock`)
+    }
+
+    product.stock -= item.quantity
+    await product.save()
+  }
+
+  
+  await cartModel.updateOne(
+    { userId },
+    {
+      $set: {
+        products: [],
+        couponApplied: false,
+        couponCode: null,
+        couponDiscount: 0
+      }
+    }
+   )
+
+  return res.redirect(`/order/${order._id}`)
+ }
+
     return res.redirect(`/order/payment/${order._id}`)
 
-  } catch (error) {
+  }  catch (error) {
     console.log("Checkout Error:", error)
     return res.redirect("/checkout")
   }
 }
 
 //--------------------------------------------------ORDER PAGE------------------------------------
+
 const orderPage = async (req, res) => {
   try {
     const userId = req.auth?.id;
@@ -1615,8 +1635,6 @@ async function postEnquiry(req,res) {
 
 
 async function rating(req,res) {
-  
-
   try {
  
     const userId = req.auth?.id
@@ -1675,7 +1693,17 @@ async function rating(req,res) {
       (totalRating / product.totalReviews).toFixed(1)
     )
 
-   
+   const deliveredOrder = await orderModel.findOne({
+  userId,
+  orderStatus: 'Delivered',
+  'items.product': productId
+})
+
+if (!deliveredOrder) {
+  req.flash('error', 'You can rate this product only after delivery')
+  return res.redirect('/profile')
+}
+
     await product.save()
 
     req.flash('success', 'Thank you for rating this product')
