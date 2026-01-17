@@ -538,7 +538,7 @@ async function getEditCouponPage(req, res) {
 
     const coupon = await couponModel.findById(id)
 
-    if (!coupon) {
+    if (!coupon) { 
       return res.redirect('/coupons')
     }
 

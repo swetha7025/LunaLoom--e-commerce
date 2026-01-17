@@ -41,12 +41,13 @@ app.set("views",path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 
 const authRoutes = require("./routes/authRoutes");
-const adminRoutes = require("./routes/adminRoutes")
+const adminRoutes = require("./routes/adminRoutes");
+const stripeRoutes = require('./routes/stripeRoutes');
 
 app.use(authRoutes);
-app.use(adminRoutes)
+app.use(adminRoutes);
 
-
+app.use('/', stripeRoutes);
 
 
 

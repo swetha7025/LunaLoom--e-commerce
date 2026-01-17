@@ -170,6 +170,8 @@ router.get("/contact",protectedAuth,authControllers.getContactPage)
 
 router.post("/contact",authControllers.postEnquiry)
 
+router.post("/product/rating", protectedAuth,authControllers.rating)
+
 
 
 
