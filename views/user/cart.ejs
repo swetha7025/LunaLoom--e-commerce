@@ -170,30 +170,45 @@
 
 
           <!-- COUPON -->
-         <% if (cart.couponApplied) { %>
-  <div class="alert alert-info text-center">
-    Coupon "<strong><%= cart.couponCode %></strong>" is already applied
-  </div>
+        <!-- COUPON SECTION -->
+<div class="coupon-section mt-4">
 
-  <form method="POST" action="/cart/coupon-remove">
-    <button class="btn btn-outline-danger btn-block">
-      Remove Coupon
-    </button>
-  </form>
+  <% if (cart.couponApplied) { %>
+    <div class="alert alert-info text-center">
+      Coupon "<strong><%= cart.couponCode %></strong>" applied successfully
+    </div>
+
+    <form method="POST" action="/cart/coupon-remove">
+      <button class="btn btn-outline-danger btn-block">
+        Remove Coupon
+      </button>
+    </form>
+
   <% } else { %>
-  <h5>Apply Coupon</h5>
-  <form action="/apply-coupon" method="POST">
-    <input
-      class="form-control mb-2 coupon-input"
-      name="couponCode"
-      placeholder="Coupon"
-      required
-    >
-    <button class="btn apply-coupon-btn btn-block">
-      APPLY
-    </button>
-  </form>
+    <h3>Apply Coupon</h3>
+
+    <div class="coupon-form-wrap">
+      <form action="/apply-coupon" method="POST">
+        <input
+          type="text"
+          class="form-control mb-2"
+          placeholder="Coupon"
+          name="couponCode"
+          required
+        >
+
+        <% if (couponMsg) { %>
+          <p class="text-danger coupon-error-msg"><%= couponMsg %></p>
+        <% } %>
+
+        <button type="submit" class="btn apply-coupon-btn btn-block">
+          Apply
+        </button>
+      </form>
+    </div>
   <% } %>
+
+</div>
 
         </div>
       </div>

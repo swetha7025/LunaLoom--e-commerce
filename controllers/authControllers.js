@@ -770,7 +770,6 @@ async function removeFromWishlist(req, res) {
 
 
 //------------------------------------------------CART PAGE-------------------------------------------
-
 async function getCart(req, res) {
   try {
     const userId = req.auth?.id;
@@ -780,7 +779,10 @@ async function getCart(req, res) {
       .populate('products.productId', 'name price images');
 
     const subtotal = cart
-      ? cart.products.reduce((sum, item) => sum + item.productId.price * item.quantity, 0)
+      ? cart.products.reduce(
+          (sum, item) => sum + item.productId.price * item.quantity,
+          0
+        )
       : 0;
 
     let discountAmount = 0;
@@ -790,32 +792,33 @@ async function getCart(req, res) {
 
     const finalTotal = subtotal - discountAmount;
 
-   
-    const success = req.flash('success')[0] || null;
-    const error = req.flash('error')[0] || null;
-
     res.render('user/cart', {
       cart: cart || { products: [] },
       subtotal,
       discountAmount,
       total: finalTotal,
       user: req.user,
-      
+
+      // ✅ ADD THESE
+      couponMsg: req.flash('couponError')[0] || null,
+      success: req.flash('success')[0] || null,
+      error: req.flash('error')[0] || null
     });
 
   } catch (error) {
     console.log(error);
-    const errorMsg = req.flash('error')[0] || 'Something went wrong';
+
     res.render('user/cart', {
       cart: { products: [] },
       subtotal: 0,
       discountAmount: 0,
       total: 0,
       user: req.user,
+
+      // ✅ DEFINE HERE TOO
+      couponMsg: req.flash('couponError')[0] || null,
       success: null,
-      error: errorMsg,
-      couponMessage: null,
-      couponSuccess: null
+      error: 'Something went wrong'
     });
   }
 }
@@ -1298,7 +1301,6 @@ async function getCheckoutPage(req, res) {
 //     return res.redirect("/checkout");
 //   }
 // }
-
 async function proceedCheckOut(req, res) {
   try {
     const userId = req.auth?.id
@@ -1306,11 +1308,9 @@ async function proceedCheckOut(req, res) {
 
     const { addressId, paymentMethod } = req.body
 
-    
     const user = await User.findById(userId).lean()
     const addresses = await addressModel.find({ userId }).lean()
 
-    
     const cart = await cartModel
       .findOne({ userId })
       .populate("products.productId")
@@ -1330,7 +1330,6 @@ async function proceedCheckOut(req, res) {
       })
     }
 
-    
     const address = await addressModel.findById(addressId).lean()
     if (!address) {
       return res.render("user/checkout", {
@@ -1347,10 +1346,10 @@ async function proceedCheckOut(req, res) {
       })
     }
 
-    
+    // 🔹 CALCULATE ITEMS & SUBTOTAL
     let subtotal = 0
     const orderItems = cart.products
-      .filter(p => p.productId) 
+      .filter(p => p.productId)
       .map(p => {
         subtotal += p.productId.price * p.quantity
         return {
@@ -1375,7 +1374,7 @@ async function proceedCheckOut(req, res) {
       })
     }
 
-    
+    // 🔹 APPLY COUPON
     let totalAmount = subtotal
     let appliedCoupon = null
     let discountAmount = 0
@@ -1383,6 +1382,7 @@ async function proceedCheckOut(req, res) {
     if (cart.couponApplied && cart.couponDiscount) {
       discountAmount = Math.round((subtotal * cart.couponDiscount) / 100)
       totalAmount -= discountAmount
+
       appliedCoupon = {
         code: cart.couponCode,
         discount: cart.couponDiscount,
@@ -1390,7 +1390,7 @@ async function proceedCheckOut(req, res) {
       }
     }
 
-    
+    // 🔹 CREATE ORDER
     const order = await orderModel.create({
       userId,
       items: orderItems,
@@ -1401,47 +1401,55 @@ async function proceedCheckOut(req, res) {
       paymentStatus: paymentMethod === "COD" ? "Pending" : "Initiated"
     })
 
+    // 🟢 COD FLOW
     if (paymentMethod === "COD") {
 
- 
-  for (const item of orderItems) {
-    const product = await productModel.findById(item.product)
+      // 🔹 UPDATE PRODUCT STOCK
+      for (const item of orderItems) {
+        const product = await productModel.findById(item.product)
 
-    if (!product) {
-      throw new Error("Product not found")
-    }
+        if (!product) throw new Error("Product not found")
+        if (product.stock < item.quantity) {
+          throw new Error(`${product.name} is out of stock`)
+        }
 
-    if (product.stock < item.quantity) {
-      throw new Error(`${product.name} is out of stock`)
-    }
-
-    product.stock -= item.quantity
-    await product.save()
-  }
-
-  
-  await cartModel.updateOne(
-    { userId },
-    {
-      $set: {
-        products: [],
-        couponApplied: false,
-        couponCode: null,
-        couponDiscount: 0
+        product.stock -= item.quantity
+        await product.save()
       }
+
+      // 🔥 MARK COUPON AS USED (THIS WAS MISSING)
+      if (appliedCoupon?.code) {
+        await couponModel.updateOne(
+          { code: appliedCoupon.code },
+          { $addToSet: { usedBy: userId } }
+        )
+      }
+
+      // 🔹 CLEAR CART
+      await cartModel.updateOne(
+        { userId },
+        {
+          $set: {
+            products: [],
+            couponApplied: false,
+            couponCode: null,
+            couponDiscount: 0
+          }
+        }
+      )
+
+      return res.redirect(`/order/${order._id}`)
     }
-   )
 
-  return res.redirect(`/order/${order._id}`)
- }
-
+    // 🟡 CARD → Redirect to payment
     return res.redirect(`/order/payment/${order._id}`)
 
-  }  catch (error) {
+  } catch (error) {
     console.log("Checkout Error:", error)
     return res.redirect("/checkout")
   }
 }
+
 
 //--------------------------------------------------ORDER PAGE------------------------------------
 
@@ -1504,18 +1512,17 @@ async function getAboutPage(req,res) {
 }
 
 //-----------------------------------------APPLY COUPON---------------------------------------
-
- 
 async function applyCoupon(req, res) {
   try {
     const { couponCode } = req.body
-    const userId = req.auth.id
+    const userId = req.auth?.id
 
     if (!couponCode) {
-      req.flash('error', 'Please enter a coupon code')
-      return res.redirect('/checkout')
+      req.flash('couponError', 'Please enter a coupon code')
+      return res.redirect('/cart')
     }
-         
+
+    // 🔍 Validate coupon
     const coupon = await couponModel.findOne({
       code: couponCode.trim(),
       status: 'Active',
@@ -1523,37 +1530,44 @@ async function applyCoupon(req, res) {
     })
 
     if (!coupon) {
-      req.flash('error', 'Invalid or expired coupon')
+      req.flash('couponError', 'Invalid or expired coupon')
       return res.redirect('/cart')
     }
 
+    // 🚫 Block reuse (AFTER order is placed once)
+    if (coupon.usedBy.includes(userId)) {
+      req.flash('couponError', 'You have already used this coupon')
+      return res.redirect('/cart')
+    }
+
+    // 🛒 Get cart
     const cart = await cartModel.findOne({ userId })
-    if (!cart) {
-      req.flash('error', 'Cart is empty')
+    if (!cart || cart.products.length === 0) {
+      req.flash('couponError', 'Cart is empty')
       return res.redirect('/cart')
     }
-    
-    if (cart.couponApplied && cart.couponCode === coupon.code) {
-    req.flash('error', 'This coupon is already applied')
-    return res.redirect('/cart')
-   }
 
+    // 🚫 Coupon already applied in cart
+    if (cart.couponApplied) {
+      req.flash('couponError', 'Coupon already applied')
+      return res.redirect('/cart')
+    }
 
+    // ✅ Apply coupon
     cart.couponApplied = true
     cart.couponCode = coupon.code
-    cart.couponDiscount = coupon.discount
+    cart.couponDiscount = Number(coupon.discount)
     await cart.save()
 
-    req.flash('success', 'Coupon applied successfully!')
+    req.flash('success', 'Coupon applied successfully')
     return res.redirect('/cart')
 
   } catch (error) {
     console.error('Apply Coupon Error:', error)
-    req.flash('error', 'Something went wrong')
+    req.flash('couponError', 'Something went wrong')
     return res.redirect('/cart')
   }
 }
-
 
 //-------------------------------------REMOVE COUPOON---------------------------------
 

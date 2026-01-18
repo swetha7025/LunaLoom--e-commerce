@@ -1,8 +1,13 @@
 .banner_part {
     width: 100%;
-    padding: 120px 0;
+    padding: 60px 0 120px; /* less space on top, keep bottom */
+
     background: #f8f9fa;
 }
+.banner_part .owl-stage-outer {
+    padding-top: 0 !important;
+}
+
 
 /* Single slide */
 .single_banner_slide {
@@ -11,7 +16,7 @@
 
 /* Align content vertically */
 .single_banner_slide .row {
-    min-height: 500px; /* Increase banner height here */
+    min-height: 650px; /* Increase banner height here */
     align-items: center;
 }
 
@@ -29,14 +34,16 @@
 
 /* Image container */
 .banner_img {
-    width: 100%;
-    text-align: right;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
 }
 
 /* Image FIX */
-.banner_img img:first-child {
+.banner_img img {
     width: 100%;
-    max-height: 700px;   /* increase this */
+    max-height: 650px;   /* safe size */
     object-fit: contain;
 }
 
@@ -44,4 +51,16 @@
 /* Pattern image (optional) */
 .pattern_img {
     display: none;
+}
+@media (min-width: 992px) {
+    .banner_img img {
+        transform: scale(1.1);
+    }
+}
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+h1, h2, h3 {
+    font-family: 'Playfair Display', serif;
 }
