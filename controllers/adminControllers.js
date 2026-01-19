@@ -197,6 +197,7 @@ async function pieChart(req, res) {
 
 
 //--------------------------------BAR CHART---------------------------------------------
+
 async function barChart(req, res) {
   try {
     const filter = req.query.filter || "monthly"

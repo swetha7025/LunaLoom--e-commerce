@@ -52,7 +52,7 @@ async function getStripePayment(req, res) {
 
 
 async function stripeWebhook(req,res) {
-    {
+  
   console.log("stripeWebhook - received event");
 
   const sig = req.headers["stripe-signature"];
@@ -99,20 +99,28 @@ async function stripeWebhook(req,res) {
             );
           }
 
+          if (order.coupon && order.coupon.code) {
+            const couponModel = require('../models/coupon');
+            await couponModel.updateOne(
+              { code: order.coupon.code },
+              { $addToSet: { usedBy: order.userId } }
+            );
+          }
+
           
           await cartModel.updateOne(
-        { userId: order.userId },
-     {
-     $set: {
-      products: [],
-      couponApplied: false,
-      couponCode: null,
-      couponDiscount: 0
-    }
-    }
-   )
+            { userId: order.userId },
+            {
+              $set: {
+                products: [],
+                couponApplied: false,
+                couponCode: null,
+                couponDiscount: 0
+              }
+            }
+          );
 
-    }
+        }
 
         console.log("checkout.session.completed handled for order:", orderId);
         break;
@@ -141,9 +149,6 @@ async function stripeWebhook(req,res) {
 
   
   res.json({ received: true });
- }
-
-    
 }  
 
 
@@ -173,6 +178,14 @@ async function stripeSuccess(req, res) {
         session.payment_intent?.id || null
 
       await order.save()
+
+      if (order.coupon && order.coupon.code) {
+        const couponModel = require('../models/coupon');
+        await couponModel.updateOne(
+          { code: order.coupon.code },
+          { $addToSet: { usedBy: order.userId } }
+        );
+      }
     }
     await cartModel.updateOne(
   { userId: order.userId._id },

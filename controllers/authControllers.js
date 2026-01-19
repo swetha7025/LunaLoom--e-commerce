@@ -568,6 +568,7 @@ async function updateAddress(req,res) {
 //     });
 //   }
 // }
+
 async function productList(req, res) {
   try {
     const { category, brand, page } = req.query;
@@ -770,13 +771,14 @@ async function removeFromWishlist(req, res) {
 
 
 //------------------------------------------------CART PAGE-------------------------------------------
+
 async function getCart(req, res) {
   try {
-    const userId = req.auth?.id;
+    const userId = req.auth?.id
 
     const cart = await cartModel
       .findOne({ userId })
-      .populate('products.productId', 'name price images');
+      .populate('products.productId', 'name price images')
 
     const subtotal = cart
       ? cart.products.reduce(
@@ -799,7 +801,7 @@ async function getCart(req, res) {
       total: finalTotal,
       user: req.user,
 
-      // ✅ ADD THESE
+    
       couponMsg: req.flash('couponError')[0] || null,
       success: req.flash('success')[0] || null,
       error: req.flash('error')[0] || null
@@ -815,11 +817,11 @@ async function getCart(req, res) {
       total: 0,
       user: req.user,
 
-      // ✅ DEFINE HERE TOO
+      
       couponMsg: req.flash('couponError')[0] || null,
       success: null,
       error: 'Something went wrong'
-    });
+    })
   }
 }
 
@@ -945,11 +947,8 @@ async function addToCart(req, res) {
         couponDiscount: 0
       })
 
-      return res.json({
-        success: true,
-        msg: "Added to cart",
-        alreadyInCart: false
-      })
+      return res.json({ success: true, msg: "Added to cart", alreadyInCart: false })
+        
     }
 
     
@@ -958,28 +957,17 @@ async function addToCart(req, res) {
     )
 
     if (existingItem) {
-      return res.json({
-        success: true,
-        msg: "Already in cart",
-        alreadyInCart: true
-      })
+      return res.json({ success: true, msg: "Already in cart",alreadyInCart: true })
+       
     }
 
-    
-    
-    cart.products.push({
-      productId,
-      quantity: 1,
-      price: product.price
-    })
+    cart.products.push({ productId, quantity: 1, price: product.price })
+     
 
     await cart.save()
 
-    return res.json({
-      success: true,
-      msg: "Added to cart",
-      alreadyInCart: false
-    })
+    return res.json({success: true, msg: "Added to cart", alreadyInCart: false })
+     
 
   } catch (error) {
     console.log("Add To Cart Error:", error)
@@ -1301,6 +1289,7 @@ async function getCheckoutPage(req, res) {
 //     return res.redirect("/checkout");
 //   }
 // }
+
 async function proceedCheckOut(req, res) {
   try {
     const userId = req.auth?.id
@@ -1346,7 +1335,6 @@ async function proceedCheckOut(req, res) {
       })
     }
 
-    // 🔹 CALCULATE ITEMS & SUBTOTAL
     let subtotal = 0
     const orderItems = cart.products
       .filter(p => p.productId)
@@ -1374,7 +1362,7 @@ async function proceedCheckOut(req, res) {
       })
     }
 
-    // 🔹 APPLY COUPON
+
     let totalAmount = subtotal
     let appliedCoupon = null
     let discountAmount = 0
@@ -1390,7 +1378,7 @@ async function proceedCheckOut(req, res) {
       }
     }
 
-    // 🔹 CREATE ORDER
+   
     const order = await orderModel.create({
       userId,
       items: orderItems,
@@ -1401,10 +1389,10 @@ async function proceedCheckOut(req, res) {
       paymentStatus: paymentMethod === "COD" ? "Pending" : "Initiated"
     })
 
-    // 🟢 COD FLOW
+  
     if (paymentMethod === "COD") {
 
-      // 🔹 UPDATE PRODUCT STOCK
+      
       for (const item of orderItems) {
         const product = await productModel.findById(item.product)
 
@@ -1417,7 +1405,7 @@ async function proceedCheckOut(req, res) {
         await product.save()
       }
 
-      // 🔥 MARK COUPON AS USED (THIS WAS MISSING)
+      
       if (appliedCoupon?.code) {
         await couponModel.updateOne(
           { code: appliedCoupon.code },
@@ -1425,7 +1413,7 @@ async function proceedCheckOut(req, res) {
         )
       }
 
-      // 🔹 CLEAR CART
+     
       await cartModel.updateOne(
         { userId },
         {
@@ -1441,7 +1429,7 @@ async function proceedCheckOut(req, res) {
       return res.redirect(`/order/${order._id}`)
     }
 
-    // 🟡 CARD → Redirect to payment
+   
     return res.redirect(`/order/payment/${order._id}`)
 
   } catch (error) {
@@ -1453,8 +1441,8 @@ async function proceedCheckOut(req, res) {
 
 //--------------------------------------------------ORDER PAGE------------------------------------
 
-const orderPage = async (req, res) => {
-  try {
+async function orderPage(req,res) {
+    try {
     const userId = req.auth?.id;
     const orderId = req.params.orderId;
 
@@ -1470,32 +1458,32 @@ const orderPage = async (req, res) => {
       .findOne({ _id: orderId, userId })
       .populate("items.product")
       .populate("address")   
-      .lean();
+      .lean()
 
     if (!order) {
       return res.render("user/order", {
         order: null,
         userName: null,
         error: "Order not found"
-      });
+      })
     }
 
     return res.render("user/order", {
       order,
       userName: req.auth?.name || "Customer",
       error: null
-    });
+    })
 
   } catch (error) {
-    console.error("Order Page Error:", error);
+    console.error("Order Page Error:", error)
 
     return res.render("user/order", {
       order: null,
       userName: null,
       error: "Failed to load order confirmation"
-    });
+    })
   }
-};
+}
 
 
 //----------------------------------------------ABOUT PAGE-------------------------------------
@@ -1512,6 +1500,7 @@ async function getAboutPage(req,res) {
 }
 
 //-----------------------------------------APPLY COUPON---------------------------------------
+
 async function applyCoupon(req, res) {
   try {
     const { couponCode } = req.body
@@ -1522,7 +1511,6 @@ async function applyCoupon(req, res) {
       return res.redirect('/cart')
     }
 
-    // 🔍 Validate coupon
     const coupon = await couponModel.findOne({
       code: couponCode.trim(),
       status: 'Active',
@@ -1534,26 +1522,24 @@ async function applyCoupon(req, res) {
       return res.redirect('/cart')
     }
 
-    // 🚫 Block reuse (AFTER order is placed once)
-    if (coupon.usedBy.includes(userId)) {
+    const isUsed = coupon.usedBy.some(id => id.toString() === userId.toString());
+    if (isUsed) {
       req.flash('couponError', 'You have already used this coupon')
       return res.redirect('/cart')
     }
 
-    // 🛒 Get cart
+    
     const cart = await cartModel.findOne({ userId })
     if (!cart || cart.products.length === 0) {
       req.flash('couponError', 'Cart is empty')
       return res.redirect('/cart')
     }
 
-    // 🚫 Coupon already applied in cart
     if (cart.couponApplied) {
       req.flash('couponError', 'Coupon already applied')
       return res.redirect('/cart')
     }
 
-    // ✅ Apply coupon
     cart.couponApplied = true
     cart.couponCode = coupon.code
     cart.couponDiscount = Number(coupon.discount)
@@ -1569,7 +1555,7 @@ async function applyCoupon(req, res) {
   }
 }
 
-//-------------------------------------REMOVE COUPOON---------------------------------
+//-------------------------------------REMOVE COUPOON-------------------------------------
 
 
 async function removeCoupon(req, res) {
@@ -1647,7 +1633,6 @@ async function postEnquiry(req,res) {
 //-----------------------------------------RATINGS--------------------------------------
 
 
-
 async function rating(req,res) {
   try {
  
@@ -1657,10 +1642,8 @@ async function rating(req,res) {
       return res.redirect('/login')
     }
 
-    
     const { productId, rating, comment } = req.body
 
-  
     if (!productId || !rating) {
       req.flash('error', 'Product and rating are required')
       return res.redirect('/profile')
@@ -1672,7 +1655,6 @@ async function rating(req,res) {
       return res.redirect('/profile')
     }
 
-   
     const product = await productModel.findById(productId)
     if (!product) {
       req.flash('error', 'Product not found')
@@ -1707,36 +1689,28 @@ async function rating(req,res) {
       (totalRating / product.totalReviews).toFixed(1)
     )
 
-   const deliveredOrder = await orderModel.findOne({
-  userId,
-  orderStatus: 'Delivered',
-  'items.product': productId
-})
+     const deliveredOrder = await orderModel.findOne({
+      userId,
+      orderStatus: 'Delivered',
+     'items.product': productId
+   })
 
-if (!deliveredOrder) {
-  req.flash('error', 'You can rate this product only after delivery')
-  return res.redirect('/profile')
-}
+     if (!deliveredOrder) {
+      req.flash('error', 'You can rate this product only after delivery')
+       return res.redirect('/profile')
+    }
 
     await product.save()
 
     req.flash('success', 'Thank you for rating this product')
     return res.redirect('/profile')
 
-  } catch (error) {
+ } catch (error) {
     console.error('Error from rating:', error)
     req.flash('error', 'Something went wrong while submitting rating')
     return res.redirect('/profile')
   }
 }
-
-
-
-
-
-
-
-
 
 
 

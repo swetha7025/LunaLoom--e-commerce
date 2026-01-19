@@ -142,6 +142,10 @@ router.get('/cart',protectedAuth,authControllers.getCart)
 
 router.post('/cart/add/:id',protectedAuth,authControllers.addToCart)
 
+
+router.get('/cart/add/:id',protectedAuth,authControllers.addToCart)
+
+
 router.get('/cart/remove/:id',protectedAuth,authControllers.removeFromCart)
 
 router.get("/cart/increase/:id", protectedAuth, authControllers.increaseQuantity)

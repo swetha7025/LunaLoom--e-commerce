@@ -16,7 +16,7 @@
 
 /* Align content vertically */
 .single_banner_slide .row {
-    min-height: 650px; /* Increase banner height here */
+    min-height: 800px; /* Increase banner height here */
     align-items: center;
 }
 
@@ -43,7 +43,7 @@
 /* Image FIX */
 .banner_img img {
     width: 100%;
-    max-height: 650px;   /* safe size */
+    max-height: 800px;   /* safe size */
     object-fit: contain;
 }
 

@@ -91,8 +91,8 @@
                       <span class="ml-3"><%= item.productId.title %></span>
                     </td>
 
-                    <td>₹<%= item.productId.price.toFixed(2) %></td>
-
+                    <td>₹ <%= item.price %> %></td>
+                                         
                     <td>
                       <div class="product_count">
                         <a href="/cart/decrease/<%= item.productId._id %>"
@@ -169,22 +169,22 @@
           </table>
 
 
-          <!-- COUPON -->
+        
         <!-- COUPON SECTION -->
-<div class="coupon-section mt-4">
+        <div class="coupon-section mt-4">
 
-  <% if (cart.couponApplied) { %>
-    <div class="alert alert-info text-center">
+      <% if (cart.couponApplied) { %>
+      <div class="alert alert-info text-center">
       Coupon "<strong><%= cart.couponCode %></strong>" applied successfully
-    </div>
+      </div>
 
-    <form method="POST" action="/cart/coupon-remove">
+      <form method="POST" action="/cart/coupon-remove">
       <button class="btn btn-outline-danger btn-block">
         Remove Coupon
       </button>
-    </form>
+      </form>
 
-  <% } else { %>
+    <% } else { %>
     <h3>Apply Coupon</h3>
 
     <div class="coupon-form-wrap">
@@ -204,11 +204,11 @@
         <button type="submit" class="btn apply-coupon-btn btn-block">
           Apply
         </button>
-      </form>
-    </div>
-  <% } %>
+       </form>
+      </div>
+    <% } %>
 
-</div>
+   </div>
 
         </div>
       </div>
