@@ -149,6 +149,18 @@ input {
     }
 }
 
+@media (max-width: 480px) {
+    .left-box, .right-box {
+        padding: 30px 20px;
+    }
+    .left-box h1 {
+        font-size: 24px;
+    }
+    .right-box h2 {
+        font-size: 22px;
+    }
+}
+
 .google-btn {
   display: flex;
   align-items: center;

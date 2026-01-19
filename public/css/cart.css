@@ -264,7 +264,35 @@ body {
 }
 
 /* Coupon Input Outline */
-.coupon-input:focus {
-  border-color: #b894b5;
-  box-shadow: 0 0 0 0.2rem rgba(132, 106, 134, 0.25);
+@media (max-width: 991px) {
+  .cart_inner .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .cart-action-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  .cart-action-buttons .btn_1 {
+      width: 100%;
+      margin-bottom: 10px;
+  }
+  
+  .cart_area .col-lg-4 {
+      margin-left: 0; /* Reset margin on mobile */
+  }
+  
+  .cart-summary {
+      margin: 20px auto 0;
+      width: 100%;
+      max-width: 100%;
+  }
+  
+  .coupon-box {
+      flex-direction: column;
+  }
+  .coupon-btn {
+      width: 100%;
+  }
 }

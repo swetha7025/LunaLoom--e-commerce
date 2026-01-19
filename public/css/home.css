@@ -64,3 +64,36 @@ body {
 h1, h2, h3 {
     font-family: 'Playfair Display', serif;
 }
+
+@media (max-width: 991px) {
+    .banner_part {
+        padding: 40px 0 60px;
+    }
+    .single_banner_slide .row {
+        min-height: auto; 
+        padding-top: 40px;
+    }
+    .banner_text_iner h1 {
+        font-size: 36px;
+    }
+    .banner_img img {
+        margin-top: 40px;
+        max-height: 400px;
+    }
+    .banner_img {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .banner_text_iner h1 {
+        font-size: 28px;
+    }
+    .banner_text_iner p {
+        font-size: 15px;
+    }
+    .btn_1 {
+        padding: 10px 24px;
+        font-size: 14px;
+    }
+}

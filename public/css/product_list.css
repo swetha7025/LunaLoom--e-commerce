@@ -296,6 +296,21 @@
 }
 
 /* Responsive */
+@media (max-width: 991px) {
+    .product_sidebar {
+        width: 100%;
+        margin-bottom: 30px;
+        background: #fdfdfd; 
+    }
+    .breadcrumb_part {
+        height: auto !important;
+        padding: 60px 0;
+    }
+    .breadcrumb_part h2 {
+        font-size: 32px;
+    }
+}
+
 @media (max-width: 768px) {
     .product_sidebar {
         padding: 15px;

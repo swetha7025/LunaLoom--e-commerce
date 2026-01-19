@@ -212,3 +212,20 @@ body {
   color: #fff;
   text-decoration: none;
 }
+
+@media (max-width: 768px) {
+    .profile-container {
+        margin-top: 20px;
+    }
+    .sidebar {
+        margin-bottom: 30px;
+        text-align: center;
+    }
+    .profile-icon {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .orders-section {
+        padding: 20px;
+    }
+}

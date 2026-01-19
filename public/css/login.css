@@ -81,3 +81,18 @@
   width: 30px;
   height: 30px;
 }
+
+@media (max-width: 768px) {
+  .login_part_text, .login_part_form {
+    padding: 20px;
+  }
+  .login_part_text {
+      margin-bottom: 20px;
+  }
+  .login_part_text_iner h2 {
+      font-size: 24px;
+  }
+  .login_part_form_iner h3 {
+      font-size: 22px;
+  }
+}

@@ -123,3 +123,34 @@
 .footer-social a:hover {
   color: #a174a9;
 }
+
+@media (max-width: 768px) {
+    .footer-container {
+        grid-template-columns: 1fr; /* Stack vertically */
+        text-align: center;
+    }
+    .footer-col h4::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .subscribe-form {
+        flex-direction: column;
+    }
+    .subscribe-form input {
+        margin-bottom: 10px;
+        width: 100%;
+        border-radius: 4px;
+    }
+    .subscribe-form button {
+        width: 100%;
+        padding: 10px 0;
+        border-radius: 4px;
+    }
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+    }
+    .footer-social {
+        margin-top: 15px;
+    }
+}

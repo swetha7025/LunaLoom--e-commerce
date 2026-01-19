@@ -14,7 +14,8 @@
   background: white;
   box-shadow: 0 2px 8px purple;
   text-align: center;
-  width: 600px;
+  width: 90%;
+  max-width: 600px;
 }
 
 
@@ -50,7 +51,7 @@
   color: white;
   padding: 15px;
   border: none;
- border-radius: 5px; 
+  border-radius: 5px; 
   cursor: pointer;
   margin-bottom: 10px;
 }
@@ -63,4 +64,14 @@
   display: block;
   color: #007bff;
   text-decoration: none;
+}
+
+@media (max-width: 576px) {
+    .container {
+        padding: 30px 20px;
+        border-width: 2px;
+    }
+    .btn {
+        width: 100%;
+    }
 }

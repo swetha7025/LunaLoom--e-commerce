@@ -52,6 +52,7 @@
   color: #007bff;
 }
 
+
 /* Mobile adjustments */
 @media (max-width: 991px) {
   .navbar-nav {
@@ -63,6 +64,21 @@
   .navbar-nav .nav-item {
     margin: 10px 0;
   }
+  
+  .hearer_icon {
+      margin-left: auto;
+      margin-right: 15px; 
+  }
+}
+
+@media (max-width: 576px) {
+    .navbar-brand img {
+       max-width: 30px;
+    }
+    .header_icon a {
+       font-size: 18px;
+       margin-left: 10px;
+    }
 }
 
 .nav-link i,

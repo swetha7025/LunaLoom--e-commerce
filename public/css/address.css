@@ -40,3 +40,8 @@
   background-color:#A4859F;
 }
 
+@media (max-width: 576px) {
+    .address-card {
+        max-width: 100%;
+    }
+}
