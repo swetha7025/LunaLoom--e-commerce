@@ -731,19 +731,22 @@ async function deleteBanner(req,res) {
 //-------------------------------------------UPDATE BANNER--------------------------
 async function updateBanner(req, res) {
   try {
-
     const bannerId = req.params.id
     const { main, sub } = req.body
 
     const updateData = { main, sub }
 
-    
-    if (req.file) {
-      updateData.bannerImage = `/img/${req.files.filename}`
+    // upload.array() → req.files (array)
+    if (req.files && req.files.length > 0) {
+      updateData.bannerImage = `/img/${req.files[0].filename}`
     }
 
-    await bannerModel.findByIdAndUpdate( bannerId,updateData, { new: true } )
-     
+    await bannerModel.findByIdAndUpdate(
+      bannerId,
+      updateData,
+      { new: true }
+    )
+
     return res.redirect('/banner')
 
   } catch (error) {
@@ -751,6 +754,7 @@ async function updateBanner(req, res) {
     return res.redirect('/banner')
   }
 }
+
 
 //---------------------------------------------SUPPORT------------------------------
 

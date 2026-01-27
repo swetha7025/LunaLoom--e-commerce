@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+
 const User = require('../models/user')
 const productModel = require('../models/products')
 const wishlistModel = require('../models/wishlist')
@@ -12,6 +14,9 @@ const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const nodemailer = require('nodemailer')
 const user = require('../models/user')
+const getAIRecommendations = require("../utils/getAIRecommendations")
+const ensureEmbeddingForProduct = require("../utils/ensureEmbedding")
+const cosineSimilarity = require("../utils/similarity")
 
 require('dotenv').config();
 
@@ -56,6 +61,7 @@ async function signupUser(req,res) {
 
 
 //----------------------------------LOGIN------------------------------------
+
 async function loginUser(req,res) {
 
   try {
@@ -315,7 +321,7 @@ async function profilePage(req, res) {
     const address = await addressModel.findOne({ userId });
   const orders = await orderModel
   .find({ userId })
-  .populate('items.product')   // ⭐ REQUIRED for rating
+  .populate('items.product')   
   .sort({ createdAt: -1 })
   .lean()
 
@@ -626,28 +632,99 @@ async function productList(req, res) {
 
 // ------------------------------------------ SINGLE PRODUCT -----------------------------------
 
-async function getSingleProduct(req, res) {
-  try {
-    const productId = req.params.id
+// async function getSingleProduct(req, res) {
+//   try {
+//     const productId = req.params.id
 
-    const product = await productModel.findById(productId)
+//     const product = await productModel.findById(productId)
 
-    if (!product) {
-      return res.render("user/product_list", { product: null,success: null, error: 'Product not found' })
+//     if (!product) {
+//       return res.render("user/product_list", { product: null,success: null, error: 'Product not found' })
        
-    }
+//     }
 
-    return res.render("user/singleProduct", {product,success: null,error: null})
+//     return res.render("user/singleProduct", {product,success: null,error: null})
      
 
-  } catch (error) {
-    console.log(error);
+//   } catch (error) {
+//     console.log(error);
 
-    return res.render("user/singleProduct", {
-      product: null,
-      success: null,
-      error: 'Something went wrong'
-    });
+//     return res.render("user/singleProduct", {
+//       product: null,
+//       success: null,
+//       error: 'Something went wrong'
+//     });
+//   }
+// }
+
+async function getSingleProduct(req, res) {
+  try {
+    const id = req.params.id
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).send('Invalid id')
+    }
+
+    let freshProduct = null
+
+    const product = await productModel.findById(id).lean()
+    if (!product) {
+      return res.status(404).render('user/404')
+    }
+
+    freshProduct = product
+
+    try {
+      const productDoc = await productModel.findById(id)
+      await ensureEmbeddingForProduct(productDoc)
+      freshProduct = await productModel.findById(id).lean()
+    } catch (embeddingErr) {
+      console.warn('AI failed, using fallback')
+    }
+
+    let suggestions = []
+
+    if (!freshProduct.embedding || freshProduct.embedding.length === 0) {
+      suggestions = await productModel.find({
+        _id: { $ne: freshProduct._id },
+        category: freshProduct.category
+      })
+        .limit(6)
+        .lean()
+
+      return res.render('user/singleProduct', {
+        user: req.user || null,
+        product: freshProduct,
+        suggestions
+      })
+    }
+    
+    const agg = [
+      {
+        $search: {
+          index: 'default',
+          knnBeta: {
+            vector: freshProduct.embedding,
+            path: 'embedding',
+            k: 6
+          }
+        }
+      },
+      { $match: { _id: { $ne: freshProduct._id } } },
+      { $limit: 4 }
+    ]
+
+    suggestions = await productModel.aggregate(agg)
+
+    res.render('user/singleProduct', {
+      user: req.user || null,
+      product: freshProduct,
+      suggestions
+    })
+
+  } catch (err) {
+    console.error('single product error', err)
+    res.status(500).send('Server error')
   }
 }
 

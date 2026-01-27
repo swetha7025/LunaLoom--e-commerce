@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= product.name || "Product" %></title>
+ <title><%= typeof product !== "undefined" && product ? product.name : "Product" %></title>
+
 
   <link rel="icon" href="/img/LL.png">
   <link rel="stylesheet" href="/css/themify-icons.css">
@@ -25,7 +26,13 @@
 </head>
 
 <body>
-
+<% if (!product) { %>
+  <div style="padding: 60px; text-align: center;">
+    <h2>Product not found</h2>
+    <p>Please try another product.</p>
+  </div>
+<% } else { %>
+     
 <%- include('../partials/header') %>
 
 <div class="product-main">
@@ -131,7 +138,26 @@
     </a>
 
   </div>
-</div>
+  
+ </div>
+ <% if (suggestions && suggestions.length > 0) { %>
+  <section class="recommended-section">
+    <h3 class="section-title">Recommended for you</h3>
+
+    <div class="recommended-grid">
+      <% suggestions.forEach(item => { %>
+        <div class="recommended-card">
+          <a href="/product/<%= item._id %>">
+            <img src="<%= item.images[0] %>" alt="<%= item.name %>">
+            <h4><%= item.name %></h4>
+            <p>₹ <%= item.price %></p>
+          </a>
+        </div>
+      <% }) %>
+    </div>
+  </section>                                             
+ <% } %>
+  
 
 <%- include('../partials/footer') %>
 
@@ -230,6 +256,7 @@
       });
   }
 </script>
+<% } %>
 
 </body>
 </html>

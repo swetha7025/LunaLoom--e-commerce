@@ -97,3 +97,95 @@ h1, h2, h3 {
         font-size: 14px;
     }
 }
+/* ================= RESPONSIVE ONLY (NO STRUCTURE CHANGES) ================= */
+
+/* ---------- Tablets (≤ 991px) ---------- */
+@media (max-width: 991px) {
+
+  /* Banner */
+  .single_banner_slide .row {
+    min-height: auto;
+    text-align: center;
+  }
+
+  .banner_text_iner {
+    margin-bottom: 30px;
+  }
+
+  .banner_img {
+    justify-content: center;
+  }
+
+  .banner_img img {
+    max-height: 420px;
+  }
+
+  /* Product list */
+  .single_product_iner {
+    margin-bottom: 60px;
+  }
+
+  .single_product_content {
+    margin-top: 30px;
+    text-align: center;
+  }
+
+  /* Feature section */
+  .feature_part_tittle,
+  .feature_part_content {
+    text-align: center;
+  }
+}
+
+/* ---------- Mobile (≤ 576px) ---------- */
+@media (max-width: 576px) {
+
+  /* Banner */
+  .banner_text_iner h1 {
+    font-size: 26px;
+    line-height: 1.3;
+  }
+
+  .banner_text_iner p {
+    font-size: 14px;
+  }
+
+  .banner_img img {
+    max-height: 300px;
+  }
+
+  /* Product list */
+  .single_product_img img {
+    width: 100%;
+  }
+
+  .single_product_content h2 {
+    font-size: 18px;
+  }
+
+  /* Trending items */
+  .single_product_item {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  /* Client review */
+  .single_client_review p {
+    font-size: 14px;
+  }
+
+  /* Subscribe */
+  .subscribe_form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .subscribe_form input {
+    width: 100%;
+  }
+
+  .subscribe_form .btn_1 {
+    width: 100%;
+  }
+}

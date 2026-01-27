@@ -8716,3 +8716,53 @@ h6 {
   align-items: center;
 }
 
+/* ========== FORCE HEADER MOBILE LAYOUT FIX (CSS ONLY) ========== */
+
+@media (max-width: 991px) {
+
+  /* Force navbar row */
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Logo left */
+  .navbar-brand {
+    margin: 0;
+    padding: 0;
+    flex-shrink: 0;
+  }
+
+  /* Fake space for missing toggler */
+  .navbar::after {
+    content: '';
+    width: 40px;
+    height: 40px;
+  }
+
+  /* Icons right */
+  .hearer_icon {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  /* Menu always below */
+  .navbar-collapse {
+    width: 100%;
+    order: 10;
+    background: #fff;
+    margin-top: 15px;
+  }
+
+  .navbar-nav {
+    text-align: center;
+  }
+
+  .navbar-nav .nav-link {
+    margin-right: 0;
+    padding: 12px 0;
+  }
+}

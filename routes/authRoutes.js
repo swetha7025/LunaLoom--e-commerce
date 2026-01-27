@@ -12,6 +12,8 @@ const cartModel = require('../models/cart');
 
 
 
+
+
 //---------------------------SIGNUP-----------------------------------------
 
 
@@ -56,6 +58,7 @@ router.get(
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
+const jwt = require("jsonwebtoken");
 
 router.get(
   "/auth/google/callback",
@@ -63,9 +66,29 @@ router.get(
     failureRedirect: "/login?error=auth_failed",
   }),
   (req, res) => {
-    res.redirect("/home"); 
+    const user = req.user; // Google-authenticated user
+
+    const token = jwt.sign(
+      {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        googleId: user.googleId,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    res.redirect("/home");
   }
 );
+
 
 
 //----------------------------------------FORGOT PASSWORD----------------------
@@ -175,13 +198,6 @@ router.get("/contact",protectedAuth,authControllers.getContactPage)
 router.post("/contact",authControllers.postEnquiry)
 
 router.post("/product/rating", protectedAuth,authControllers.rating)
-
-
-
-
-
-
-
 
 
 

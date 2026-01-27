@@ -104,3 +104,115 @@
     color: #e60000;
     transform: scale(1.15);
 }
+/* ========== HEADER MOBILE ALIGNMENT FIX (NO STRUCTURE CHANGE) ========== */
+
+@media (max-width: 991px) {
+  .navbar {
+    display: flex;
+    flex-wrap: wrap; /* Ensure spanning full width for menu */
+    justify-content: space-between;
+    padding: 15px 0;
+  }
+
+  /* 1. Logo on the Left */
+  .navbar-brand {
+    order: 1;
+    margin-right: auto;
+  }
+
+  /* 2. Icons section - positioned to the right of logo, but left of toggler */
+  .hearer_icon {
+    order: 2;
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* Pushes this group to the right */
+    margin-right: 15px; /* Spacing between icons and toggler */
+  }
+
+  /* 3. Toggler (Hamburger) - Far right */
+  .navbar-toggler {
+    order: 3;
+    outline: none;
+    box-shadow: none;
+  }
+
+  /* 4. Navigation Menu - Breaks to new line */
+  .navbar-collapse {
+    order: 4;
+    width: 100%;
+    flex-basis: 100%;
+    margin-top: 15px;
+  }
+  
+  .navbar-nav {
+    text-align: center;
+    background: #fff;
+    width: 100%;
+  }
+
+  .navbar-nav .nav-item {
+     margin: 5px 0;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 576px) {
+
+  .hearer_icon {
+    gap: 10px;
+  }
+
+  .navbar-brand img {
+    max-width: 26px;
+  }
+}
+/* ========== FORCE HEADER MOBILE LAYOUT FIX (CSS ONLY) ========== */
+
+@media (max-width: 991px) {
+
+  /* Force navbar row */
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Logo left */
+  .navbar-brand {
+    margin: 0;
+    padding: 0;
+    flex-shrink: 0;
+  }
+
+  /* Fake space for missing toggler */
+  .navbar::after {
+    content: '';
+    width: 40px;
+    height: 40px;
+  }
+
+  /* Icons right */
+  .hearer_icon {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  /* Menu always below */
+  .navbar-collapse {
+    width: 100%;
+    order: 10;
+    background: #fff;
+    margin-top: 15px;
+  }
+
+  .navbar-nav {
+    text-align: center;
+  }
+
+  .navbar-nav .nav-link {
+    margin-right: 0;
+    padding: 12px 0;
+  }
+}
