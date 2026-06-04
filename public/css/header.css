@@ -1,5 +1,5 @@
-* ===== Header Styles ===== */
- 
+/* ===== Header Styles ===== */
+
 .main_menu {
   background: #fff;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
@@ -7,22 +7,19 @@
   top: 0;
   z-index: 999;
 }
- 
+
 .navbar {
   padding: 15px 0;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
 }
- 
-/* ===== Logo ===== */
+
+
 .navbar-brand img {
-  max-width: 38px;
+  max-width: 38px; 
   height: auto;
-  display: block;
 }
  
-/* ===== Nav Links ===== */
+
+
 .navbar-light .navbar-nav .nav-link {
   color: #333;
   font-weight: 500;
@@ -30,11 +27,60 @@
   text-transform: capitalize;
   transition: color 0.3s ease;
 }
- 
+
 .navbar-light .navbar-nav .nav-link:hover {
   color: #007bff;
 }
- 
+
+.navbar-toggler {
+  border: none;
+}
+
+.menu_icon i {
+  color: #333;
+  font-size: 22px;
+}
+
+.header_icon a {
+  color: #333;
+  font-size: 20px;
+  margin-left: 15px;
+  transition: color 0.3s ease;
+}
+
+.header_icon a:hover {
+  color: #007bff;
+}
+
+
+/* Mobile adjustments */
+@media (max-width: 991px) {
+  .navbar-nav {
+    background: #fff;
+    text-align: center;
+    padding: 10px 0;
+  }
+
+  .navbar-nav .nav-item {
+    margin: 10px 0;
+  }
+  
+  .hearer_icon {
+      margin-left: auto;
+      margin-right: 15px; 
+  }
+}
+
+@media (max-width: 576px) {
+    .navbar-brand img {
+       max-width: 30px;
+    }
+    .header_icon a {
+       font-size: 18px;
+       margin-left: 10px;
+    }
+}
+
 .nav-link i,
 .nav-link svg {
   width: 24px;
@@ -42,143 +88,131 @@
   color: #333;
   transition: 0.3s;
 }
- 
+
 .nav-link:hover i,
 .nav-link:hover svg {
   color: #000;
 }
- 
-/* ===== Dropdown ===== */
-.dropdown-menu {
-  border: none;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-}
- 
-/* ===== Header Right Icons ===== */
-.hearer_icon {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
- 
-.hearer_icon a {
-  color: #333;
-  font-size: 20px;
-  text-decoration: none;
-  transition: color 0.3s ease;
-  display: flex;
-  align-items: center;
-}
- 
-.hearer_icon a:hover {
-  color: #007bff;
-}
- 
-/* ===== Wishlist Icon ===== */
+
 .header-wishlist i {
-  font-size: 20px;
-  color: #ff4d4d;
-  transition: color 0.3s, transform 0.3s;
+    font-size: 22px;
+    color: #ff4d4d;
+    transition: 0.3s;
 }
- 
+
 .header-wishlist:hover i {
-  color: #e60000 !important;
-  transform: scale(1.15);
+    color: #e60000;
+    transform: scale(1.15);
 }
- 
-/* ===== Hamburger Toggle ===== */
-.navbar-toggler {
-  border: none;
-  outline: none;
-  box-shadow: none;
-  padding: 6px 8px;
-}
- 
-.navbar-toggler:focus {
-  box-shadow: none;
-}
- 
-/* ===== Collapsed Menu ===== */
-.navbar-collapse {
-  width: 100%;
-  flex-basis: 100%;
-}
- 
-/* ===== Tablet & Mobile (≤991px) ===== */
+/* ========== HEADER MOBILE ALIGNMENT FIX (NO STRUCTURE CHANGE) ========== */
+
 @media (max-width: 991px) {
   .navbar {
+    display: flex;
+    flex-wrap: wrap; /* Ensure spanning full width for menu */
     justify-content: space-between;
-    padding: 12px 0;
+    padding: 15px 0;
   }
- 
-  /* 1 — Logo: far left */
+
+  /* 1. Logo on the Left */
   .navbar-brand {
     order: 1;
-    flex-shrink: 0;
-    margin-right: 0;
+    margin-right: auto;
   }
- 
-  /* 2 — Icons: right of logo, left of toggler */
+
+  /* 2. Icons section - positioned to the right of logo, but left of toggler */
   .hearer_icon {
     order: 2;
-    margin-left: auto;
-    margin-right: 12px;
-    gap: 14px;
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* Pushes this group to the right */
+    margin-right: 15px; /* Spacing between icons and toggler */
   }
- 
-  /* 3 — Toggler: far right */
+
+  /* 3. Toggler (Hamburger) - Far right */
   .navbar-toggler {
     order: 3;
-    flex-shrink: 0;
+    outline: none;
+    box-shadow: none;
   }
- 
-  /* 4 — Nav menu: full-width row below */
+
+  /* 4. Navigation Menu - Breaks to new line */
   .navbar-collapse {
     order: 4;
-    margin-top: 10px;
-    border-top: 1px solid #f0f0f0;
-    padding-top: 8px;
+    width: 100%;
+    flex-basis: 100%;
+    margin-top: 15px;
   }
- 
+  
   .navbar-nav {
     text-align: center;
     background: #fff;
     width: 100%;
-    padding: 8px 0;
   }
- 
+
   .navbar-nav .nav-item {
-    margin: 4px 0;
-  }
- 
-  .navbar-light .navbar-nav .nav-link {
-    margin-right: 0;
-    padding: 10px 16px;
-    display: block;
-  }
- 
-  /* Dropdown: full-width on mobile */
-  .dropdown-menu {
-    box-shadow: none;
-    border-radius: 0;
-    background: #f8f9fa;
-    text-align: center;
+     margin: 5px 0;
   }
 }
- 
-/* ===== Small Mobile (≤576px) ===== */
+
+/* Extra small devices */
 @media (max-width: 576px) {
-  .navbar-brand img {
-    max-width: 30px;
-  }
- 
+
   .hearer_icon {
     gap: 10px;
   }
- 
-  .hearer_icon a {
-    font-size: 18px;
+
+  .navbar-brand img {
+    max-width: 26px;
   }
 }
- 
+/* ========== FORCE HEADER MOBILE LAYOUT FIX (CSS ONLY) ========== */
+
+@media (max-width: 991px) {
+
+  /* Force navbar row */
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Logo left */
+  .navbar-brand {
+    margin: 0;
+    padding: 0;
+    flex-shrink: 0;
+  }
+
+  /* Fake space for missing toggler */
+  .navbar::after {
+    content: '';
+    width: 40px;
+    height: 40px;
+  }
+
+  /* Icons right */
+  .hearer_icon {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  /* Menu always below */
+  .navbar-collapse {
+    width: 100%;
+    order: 10;
+    background: #fff;
+    margin-top: 15px;
+  }
+
+  .navbar-nav {
+    text-align: center;
+  }
+
+  .navbar-nav .nav-link {
+    margin-right: 0;
+    padding: 12px 0;
+  }
+}
